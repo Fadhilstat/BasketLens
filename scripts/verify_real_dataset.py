@@ -89,7 +89,7 @@ def main() -> None:
 
     from streamlit.testing.v1 import AppTest
     os.environ["BASKETLENS_DATA_DIR"] = str(args.fpgrowth.resolve())
-    app = AppTest.from_file("app/streamlit_app.py", default_timeout=90).run()
+    app = AppTest.from_file(str(Path(__file__).resolve().parents[1] / "app" / "streamlit_app.py"), default_timeout=90).run()
     if app.exception:
         raise AssertionError(f"Streamlit runtime raised exceptions: {app.exception}")
     if len(app.metric) < 3:

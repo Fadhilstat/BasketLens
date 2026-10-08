@@ -53,3 +53,7 @@ Do not claim sales or profit uplift from historical co-occurrence. Product trial
 ## CI full-source quality gate
 
 GitLab MR CI runs `scripts/source_conflict_audit.py` before full-data builds. On the initial full-data attempt, the fail-closed invoice consistency check detected 83 invoices with conflicting dates or countries. The revised CI job records date and country conflict counts and the fraction of eligible sale lines that would be lost. It fails if the affected fraction exceeds 1%. Only when the cap passes does the job explicitly use `--inconsistent-policy quarantine` for both pairwise and FP-Growth, then compares matching one-to-one rules and runs Streamlit headless. All published evidence is aggregate. A green unit test job alone is not the real-source release gate. Browser/mobile QA and actual public deployment remain distinct release tasks.
+
+## Browser-level release smoke
+
+The CI full-source job also starts the real-data Streamlit server and runs Chromium Playwright on desktop (1440x900) and mobile (390x844). It checks the main heading, the four primary tabs and product affinity controls, keyboard focus, runtime error visibility, and exports screenshots as short-lived CI artifacts. Browser smoke does not replace a full WCAG audit or user acceptance testing. Do not call the site publicly deployed before a real hosting URL is verified.

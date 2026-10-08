@@ -2,6 +2,7 @@ image: python:3.11-slim
 
 stages:
   - test
+  - verify
 
 unit_tests:
   stage: test
@@ -9,9 +10,30 @@ unit_tests:
     - python -m pip install --upgrade pip
     - python -m pip install -e ".[dev]"
   script:
-    - python -m compileall -q src app
+    - python -m compileall -q src app scripts
     - python -m pytest -q
     - python -m pip check
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+
+real_dataset_audit:
+  stage: verify
+  needs: [unit_tests]
+  before_script:
+    - python -m pip install --upgrade pip
+    - python -m pip install -e ".[dev]"
+  script:
+    - python -m basketlens.cli download
+    - python -m basketlens.cli build --algorithm pairwise --output .audit/pairwise
+    - python -m basketlens.cli verify --output .audit/pairwise
+    - python -m basketlens.cli build --algorithm fpgrowth --output .audit/fpgrowth
+    - python -m basketlens.cli verify --output .audit/fpgrowth
+    - python scripts/verify_real_dataset.py --pairwise .audit/pairwise --fpgrowth .audit/fpgrowth --report reports
+  artifacts:
+    when: always
+    expire_in: 7 days
+    paths:
+      - reports/real_dataset_audit.json
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'

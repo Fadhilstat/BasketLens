@@ -4,7 +4,7 @@
 
 BasketLens is an end-to-end research application that turns historical UK retailer invoice lines into auditable product association rules, checks whether the rules persist in later orders, and allows analysts to explore cross-sell candidates through a Streamlit interface.
 
-**Current status:** Local source prototype. The analytical core and CLI have automated tests using explicitly synthetic test fixtures; optional FP-Growth and Streamlit integration tests require their real packages. The official 1,067,371-row dataset has **not yet been successfully downloaded or analysed in this environment**. The Streamlit interface has not been launched or browser-tested here. See `RUN_STATE.md` for the exact verified state. No live dashboard, actual dataset results, revenue improvements, or completed deployment are claimed.
+**Current status:** Source code is available on GitLab and GitHub feature branches for release review. GitLab CI passed 25 tests with real installed dependencies. A full UCI dataset audit is in progress; the first attempt detected 83 source invoices with conflicting dates and/or countries and failed closed. A new CI audit measures the precise exclusion fraction before explicitly quarantining inconsistent invoices. No validated full-data report or public dashboard is claimed until that CI evidence passes.
 
 ## Business problem
 
@@ -175,7 +175,7 @@ python -m pytest -q
 
 Tests cover schema adaptation, source-sheet invoice identity, cancellations/returns, missing IDs, non-finite values, explicit invoice quarantine, service-line exclusions, support denominators, candidate coverage, pairwise rule calculations, holdout-aware recommendations, Wilson intervals, affinity graph construction, temporal leakage prevention, holdout confidence/lift, tampered-artifact detection, end-to-end CLI calls, and rerun replacement. Optional full-library integration tests for actual mlxtend and Streamlit run only when installed. See [verification protocol](docs/verification.md).
 
-CI workflows will run tests when the repository is pushed with separate explicit approval. Their presence does not imply that GitLab CI or GitHub Actions has already executed.
+GitLab CI and GitHub Actions have run the unit tests. GitLab release checks additionally download UCI data, evaluate the source invoice conflict rate, run full-data pairwise and FP-Growth, and verify the Streamlit application headlessly. See current pipeline results for the evidence of completion; job configuration alone is not proof of success.
 
 ## Security and privacy
 

@@ -49,3 +49,7 @@ The `verify` command requires a processed artifact directory. Without a real wor
 - [ ] Repository, release, and screenshots match actual verified functionality
 
 Do not claim sales or profit uplift from historical co-occurrence. Product trials would require prospective randomized experiments.
+
+## CI full-source quality gate
+
+GitLab MR CI runs `scripts/source_conflict_audit.py` before full-data builds. On the initial full-data attempt, the fail-closed invoice consistency check detected 83 invoices with conflicting dates or countries. The revised CI job records date and country conflict counts and the fraction of eligible sale lines that would be lost. It fails if the affected fraction exceeds 1%. Only when the cap passes does the job explicitly use `--inconsistent-policy quarantine` for both pairwise and FP-Growth, then compares matching one-to-one rules and runs Streamlit headless. All published evidence is aggregate. A green unit test job alone is not the real-source release gate. Browser/mobile QA and actual public deployment remain distinct release tasks.

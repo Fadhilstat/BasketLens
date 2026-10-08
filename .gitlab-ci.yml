@@ -1,0 +1,17 @@
+image: python:3.11-slim
+
+stages:
+  - test
+
+unit_tests:
+  stage: test
+  before_script:
+    - python -m pip install --upgrade pip
+    - python -m pip install -e ".[dev]"
+  script:
+    - python -m compileall -q src app
+    - python -m pytest -q
+    - python -m pip check
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'

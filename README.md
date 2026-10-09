@@ -241,3 +241,16 @@ verified analytics build. The public display is curated; full-data counts
 in its manifest and quality report refer to the offline historical analysis,
 not to the number of display rules. UCI credit: Daqing Chen (2019),
 DOI 10.24432/C5CG6D, CC BY 4.0.
+
+## Audience-first reading experience (M4)
+
+The Streamlit frontend follows an editorial retail research design with a forest-green and
+warm-paper palette. It keeps the four tested workflows but prioritises plain-language explanations.
+The country filter appears in the sales overview. Pairings can be searched by product or stock
+code; confidence and lift are explained using ordinary shopping examples; the basket builder has
+a one-click example and still exports evidence-ranked candidates.
+
+A new `docs/experience.md` explains layout decisions, accessibility, empty states and the
+non-causal boundaries. Source data, the 1,500-rule public exhibit, checksum, and computation
+methods are unchanged. The current release has been tested with synthetic fixtures locally;
+a real-data GitLab/browser CI rerun is required before merging.

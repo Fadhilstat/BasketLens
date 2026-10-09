@@ -32,3 +32,15 @@ Candidate SKUs capped by frequency; the public 1,500 rules are a curated trainin
 
 ## Next action
 After GitLab MR !2 and GitHub PR #2 CI pass, merge approved release into main and verify source/data parity. Then use authenticated https://share.streamlit.io to create an app from GitHub Fadhilstat/BasketLens, branch main, entrypoint app/streamlit_app.py. Use Python 3.11 or 3.12 and no secrets. Open the actual app URL and smoke-test charts, explorer, basket builder and exports. Do not claim deployed until URL and hosted app are verified. Record the URL in README and RUN_STATE in a separate documentation-only approved commit once verified.
+
+## M4 Frontend reader experience (2026-10-09)
+The original historic-data algorithms, privacy rules and public exhibit remain unchanged.
+The new app/assets/basketlens.css and src/basketlens/presentation.py introduce a
+responsive editorial layout, country-scope KPIs, plain-English insights, literal SKU
+search, a training-derived example cart and explicit confidence/lift explanations.
+docs/experience.md records the design and anti-slop decisions.
+Unit tests cover view arithmetic, literal search, example basket and rule units.
+scripts/browser_smoke.py checks reading order, search, builder interaction, tabs,
+focus and viewport overflow on desktop/mobile in both full-data and public mode.
+The headless runner must confirm all new flows before the M4 branch is merged.
+Streamlit Cloud URL is not yet verified in this conversation.

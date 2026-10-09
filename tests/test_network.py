@@ -21,6 +21,7 @@ def test_network_omits_multi_sku_antecedents_and_deduplicates_directions():
     assert len(limited) == 1
     figure = network_figure(edges, {"A": "Mug", "B": "Tray", "C": "Vase"})
     assert len(figure.data) == len(edges) + 1
+    assert set(figure.data[-1].text) == {"Mug", "Tray", "Vase"}
 
 
 def test_empty_network_works():

@@ -2,8 +2,8 @@
 
 Project: BasketLens
 Phase: 2
-Milestone: M3 Public Streamlit Deployment
-Status: PUBLIC_EXHIBIT_REVIEW
+Milestone: M4 Audience-first Frontend Experience
+Status: CI_IN_PROGRESS
 GitLab source of truth: https://gitlab.com/fadhilrusydih/basketlens
 GitHub public mirror: https://github.com/Fadhilstat/BasketLens
 Branch: feat/basketlens-streamlit-deploy
@@ -34,3 +34,17 @@ Expected encoded characters: 241100; compressed bytes: 180823; published rules: 
 SHA256 of compressed exhibit: 5303df81bb5d8c5c4eb452a774d1c9d42233ff9bf56d6319021eefc6dfd69b20
 Source pipeline: GitLab #2928955184, real_dataset_audit job #17049067522.
 NEXT_ACTION: Run final CI comparing the committed exhibit with freshly recomputed UCI output, then sync and merge GitLab MR !2 and GitHub PR #2 after green gates. Streamlit Cloud first-time app creation still needs authenticated account access; do not claim live URL until observed.
+
+
+## M4 UX checkpoint (2026-10-09)
+Branch: feat/basketlens-m4-audience-ux
+Base GitLab main: 9b1d1b88a366430f28f147458b278c5f712c7b29
+GitHub main before sync: ce854e4f51450f9b9715b046b0ef77878c3e2c4a
+Changed: reader-first Streamlit app, responsive CSS, literal product search,
+training-derived sample basket, plain-language glossary, human-readable network,
+quality context, design rationale, and expanded browser QA.
+Local QA: 29 passed, 2 skipped (mlxtend and Streamlit not installed locally).
+Browser/mobile tests: pending GitLab real-data CI. No new hosted deployment claim.
+The UCI public data bundle remains unchanged.
+NEXT_ACTION M4: GitLab MR CI including real/public desktop+mobile UX checks.
+Only after green QA, sync GitHub and promote main, then verify hosted Streamlit URL.

@@ -303,3 +303,8 @@ The Streamlit interface now uses a calmer, more cohesive research-dashboard desi
 ## M5.4 readability and layout release (2026-10-09)
 
 Following live Streamlit screenshot feedback, the main interface now uses one consolidated CSS source, clearer tab navigation, larger labels and actual metric values, more readable tables and a five-step ordered methodology flow. The native filters, interactive charts, basket builder, association evidence and downloads remain functional. See [M5.4 design QA](docs/design-m54.md). The unchanged verified public UCI exhibit remains the only deployed data source.
+
+
+## M5.5 screenshot-approved methodology refinement (2026-10-09)
+
+The methodology view uses the native Streamlit quality metrics with source-specific document, check, exclusion and quarantine pictograms. Its five ordered validation stages are legible cards with meaningful desktop connectors, and the source quality ledger has a muted-green header, alternating rows and right-aligned counts. Mobile navigation visibly presents four tabs in two columns. No source UCI data, algorithms, published exhibit or customer-level detail changed. CI validates the actual data-backed Streamlit screen at desktop and mobile; a static preview alone is not release evidence. See [M5.5 design specification](docs/design-m55.md).

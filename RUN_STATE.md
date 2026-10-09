@@ -123,3 +123,16 @@ Scope: consolidate CSS, enlarge data-quality values and captions, improve real t
 Local layout prototype: 1920/1440/1024/390px tested; no horizontal document overflow. Real Streamlit CI still required.
 The UCI source, algorithms, verified public exhibit and checksum are unchanged.
 NEXT_ACTION M5.4: confirm fast public UI and full UCI GitLab MR CI plus GitHub Actions. Merge only with green QA. After release, check deployed UI and capture actual Streamlit screenshot.
+
+
+## M5.5 screenshot-approved methodology UI release (2026-10-09)
+Milestone: M5.5 evidence-first UI, methodology reference edition
+Status: PUSHED_PENDING_CI
+Branch: feat/basketlens-m55-reference-ui
+Base GitLab main: f893f8546c7039f212c83e21f646d6efbac03e20
+Base GitHub main: d507742501c23c813c76fe2d66bd698cb111e286
+User explicitly granted APPROVE PUSH and APPROVE MERGE for this milestone.
+Changes: accessible native KPI icons, five-stage evidence flow, right-aligned quality counts, clearer desktop/mobile navigation and new Streamlit browser regression checks.
+Unchanged: official UCI dataset, chronological holdout, cleaning, association mining, public exhibit hash, privacy safeguards.
+Local approved-reference preview: 9 style checks passed and Chromium responsive checks at 1440, 1024, 390 and 320 pixels; real runtime CI remains mandatory.
+NEXT_ACTION: verify GitLab MR unit, public QA, full UCI/browser and public parity; GitHub Actions. Merge only on green, verify main parity and Streamlit Cloud after rollout.

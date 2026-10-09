@@ -57,8 +57,20 @@ def main() -> None:
                     page.get_by_role("tab", name="Sales overview").wait_for(timeout=90000)
                     page.get_by_text("Start with what the baskets tell us").wait_for(timeout=60000)
                     page.get_by_role("combobox", name="Show sales for").wait_for(timeout=30000)
-                    page.locator('[data-testid="stMetric"]').first.wait_for(timeout=30000)
                     page.get_by_text("Sales over time", exact=True).wait_for(timeout=60000)
+                    # Streamlit batches widget messages; one visible metric does
+                    # not establish that the entire four-column layout has rendered.
+                    try:
+                        page.wait_for_function(
+                            "() => document.querySelectorAll('[data-testid=stMetric]').length >= 4",
+                            timeout=90000,
+                        )
+                    except Exception as exc:
+                        page.screenshot(path=str(args.report / f"{label}-missing-metrics.png"),
+                                        full_page=False, animations="disabled")
+                        raise AssertionError(
+                            f"{label}: fewer than 4 overview metrics after render wait"
+                        ) from exc
                     metric_count = page.locator('[data-testid="stMetric"]').count()
                     if metric_count < 4:
                         raise AssertionError(f"{label}: expected 4 data-backed KPI cards")
@@ -135,8 +147,15 @@ def main() -> None:
                     page.get_by_role("tab", name="Data quality & methodology").click(timeout=30000)
                     page.get_by_text("What can we trust in this analysis?").wait_for(timeout=60000)
                     quality_kpis = page.locator(".st-key-quality_kpis [data-testid='stMetric']")
-                    if quality_kpis.count() != 4:
-                        raise AssertionError(f"{label}: expected 4 legible quality KPIs")
+                    try:
+                        page.wait_for_function(
+                            "() => document.querySelectorAll('.st-key-quality_kpis [data-testid=stMetric]').length === 4",
+                            timeout=60000,
+                        )
+                    except Exception as exc:
+                        page.screenshot(path=str(args.report / f"{label}-quality-missing.png"),
+                                        full_page=False, animations="disabled")
+                        raise AssertionError(f"{label}: missing quality KPI after render wait") from exc
                     quality_value = quality_kpis.first.locator(
                         '[data-testid="stMetricValue"]').evaluate(
                         "el => parseFloat(getComputedStyle(el).fontSize)")

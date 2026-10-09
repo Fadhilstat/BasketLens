@@ -195,7 +195,13 @@ def main() -> None:
                                 gap_center = ((stage["x"] + stage["width"]
                                                + symmetry[i+1]["x"]) / 2)
                                 if abs(arrow_center - gap_center) > 3:
-                                    raise AssertionError(f"{label}: connector {i+1} off-center")
+                                    raise AssertionError(
+                                        f"{label}: connector {i+1} off-center: "
+                                        f"arrow={arrow_center:.2f} gap={gap_center:.2f}, "
+                                        f"card x={stage['x']:.2f} w={stage['width']:.2f}, "
+                                        f"right={stage['connectorRight']:.2f}, "
+                                        f"width={stage['connectorWidth']:.2f}, "
+                                        f"next x={symmetry[i+1]['x']:.2f}")
 
                     if label != "mobile":
                         quality_icon = quality_cards.first.evaluate(

@@ -66,3 +66,22 @@ NEXT_ACTION M5: Check GitLab CI on exact M5 HEAD, browser smoke for both full-da
 and public exhibit on desktop/mobile, scan secrets/diffs, then reconcile GitHub
 and merge both platforms only on green verification. Verify postmerge CI.
 Hosted Streamlit Community Cloud status unknown pending actual authenticated URL.
+
+
+## M5.1 release checkpoint (2026-10-09)
+
+Milestone: M5.1 screenshot-driven live layout repair
+Status: PUSHED_PENDING_CI
+GitLab branch: feat/basketlens-m51-live-layout-fix
+GitLab base main SHA: 88c469e026d470bc8b881682c0e547928492db04
+GitHub base main SHA: 7f0e91a57b93bbb3446977c1133bea7ff5fac15d
+User authorized APPROVE PUSH and APPROVE MERGE in current conversation.
+Local QA: 38 passed, 2 optional skipped; compile, ZIP CRC, all 10 SHA-256 paths passed.
+Changes: remove overlapping absolute shortcut rail, replace negative-offset
+main layout, increase card/table legibility, show four unique top product
+pairings, collapse noisy network with adjacency list, improve methodology.
+Source UCI and public data exhibit are unchanged.
+NEXT_ACTION: Verify GitLab CI against real UCI and Streamlit desktop/mobile,
+compare GitHub source parity and CI, review security/diffs, then merge both
+repositories only on fully green results. Confirm the hosted Streamlit
+https://basketlens-retail.streamlit.app after GitHub main updates.

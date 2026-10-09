@@ -21,9 +21,22 @@ def test_network_omits_multi_sku_antecedents_and_deduplicates_directions():
     assert len(limited) == 1
     figure = network_figure(edges, {"A": "Mug", "B": "Tray", "C": "Vase"})
     assert len(figure.data) == len(edges) + 1
-    assert set(figure.data[-1].text) == {"Mug", "Tray", "Vase"}
+    assert figure.data[-1].mode == "markers"
+    assert all("SKU:" in text for text in figure.data[-1].hovertext)
 
 
 def test_empty_network_works():
     assert affinity_edges(pd.DataFrame()).empty
     assert len(network_figure(pd.DataFrame(), {}).data) == 0
+
+
+def test_affinity_network_does_not_overlap_product_labels():
+    from basketlens.network import network_figure
+    import pandas as pd
+    edges = pd.DataFrame([{"product_a": "A", "product_b": "B", "joint_count": 100,
+                           "lift": 2.3, "confidence_ab": .6}])
+    fig = network_figure(edges, {"A": "JUMBO PINK BAG", "B": "JUMBO RED BAG"})
+    assert fig.data[-1].mode == "markers"
+    assert "text" not in fig.data[-1].mode
+    assert all("SKU:" in text for text in fig.data[-1].hovertext)
+    assert fig.layout.height == 410

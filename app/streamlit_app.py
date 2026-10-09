@@ -14,11 +14,13 @@ import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 
-from basketlens.dashboard_ui import dashboard_header, dashboard_intro, highlight_kpi_text, panel_title, study_status
+from basketlens.dashboard_ui import (dashboard_header, dashboard_intro, highlight_kpi_text,
+                                    pairing_cards, panel_title, study_status)
 from basketlens.insights import annotate_evidence, recommend_with_holdout
 from basketlens.network import affinity_edges, network_figure
 from basketlens.presentation import (
     compact_rule_table, example_basket_seed, filter_rule_view, lift_meaning, product_name,
+    top_unique_pairs,
     quality_reason_label, snapshot_from_rollup,
 )
 from basketlens.public_demo import PUBLIC_FILENAME, load_public_demo
@@ -85,8 +87,8 @@ def chart_layout(fig: go.Figure, *, height: int = 340) -> go.Figure:
 
 
 def rule_badge(rule: pd.Series, names: dict[str, str]) -> None:
-    antecedent = product_name(str(rule["antecedent"]), names, limit=42)
-    consequent = product_name(str(rule["consequent"]), names, limit=42)
+    antecedent = product_name(str(rule["antecedent"]), names, limit=42).title()
+    consequent = product_name(str(rule["consequent"]), names, limit=42).title()
     description = lift_meaning(float(rule["lift"]))
     st.markdown(
         '<section class="bl-rule-spotlight">'
@@ -257,7 +259,7 @@ with overview:
             "Ranked across the entire historical dataset, even when a country is selected.",
             overline="Product mix"), unsafe_allow_html=True)
         best = products.nlargest(10, "sales_gbp").copy()
-        best["product"] = best["description"].astype(str).str.slice(0, 38)
+        best["product"] = best["description"].fillna("Unknown product").astype(str).str.title().str.slice(0, 29)
         if best.empty:
             st.info("No aggregate product ranking is available for this research build.")
         else:
@@ -315,33 +317,51 @@ with explorer:
             singles = filtered.loc[(filtered["antecedent_size"] == 1) &
                                    (filtered["consequent_size"] == 1)]
             rule_badge(singles.iloc[0] if not singles.empty else filtered.iloc[0], names)
-            st.markdown("#### Compare the strongest displayed pairings")
-            top = compact_rule_table(filtered.head(80))
-            st.dataframe(top, hide_index=True, use_container_width=True, height=330,
-                         column_config={
-                             "Purchased together": st.column_config.NumberColumn(format="%d"),
-                             "Confidence (%)": st.column_config.NumberColumn(format="%.1f%%"),
-                             "Lift (x)": st.column_config.NumberColumn(format="%.2fx"),
-                         })
-            st.caption(f"Showing up to 80 of {len(filtered):,} matching rules, ordered by training co-purchases. "
-                       "Download contains all filtered rules.")
-            st.download_button("Download these rules (CSV)",
+            st.markdown("#### Most frequent product pairings")
+            cards = top_unique_pairs(filtered, names, limit=4)
+            if cards:
+                st.markdown(pairing_cards(cards), unsafe_allow_html=True)
+                st.caption("Each card represents one unique product pair from earlier baskets. "
+                           "Confidence is directional; the reverse rule can have a different value.")
+            else:
+                st.caption("No one-to-one product pair qualifies. Check the full rule table below.")
+            with st.expander(f"Browse all matching rules ({len(filtered):,})", expanded=False):
+                st.caption("Full training-period rule details. Many pairs also have a reverse-direction rule.")
+                top = compact_rule_table(filtered.head(80))
+                st.dataframe(top, hide_index=True, use_container_width=True, height=335,
+                             column_config={
+                                 "Purchased together": st.column_config.NumberColumn(format="%d"),
+                                 "Confidence (%)": st.column_config.NumberColumn(format="%.1f%%"),
+                                 "Lift (x)": st.column_config.NumberColumn(format="%.2fx"),
+                             })
+                st.caption(f"Showing the first 80 of {len(filtered):,} matching rules. "
+                           "The CSV contains all filtered rules.")
+            st.download_button("Download matching rules (CSV)",
                                data=filtered[["antecedent", "consequent", "joint_count", "support",
                                               "confidence", "lift"]].to_csv(index=False).encode("utf-8"),
                                file_name="basketlens_pairings.csv", mime="text/csv")
-        with st.expander("Product affinity map", expanded=True):
-            st.caption("Lines connect two products seen in the same earlier basket. "
-                       "This is an exploratory network, not a geographic map or a predictor.")
-            edge_limit = st.slider("Connections shown", 5, 40, 24,
-                                   help="Reduce the number for a cleaner, easier-to-read network.")
-            edges = affinity_edges(filtered, max_edges=edge_limit, max_nodes=22, min_joint=1)
+        with st.expander("Optional: product connection network", expanded=False):
+            st.caption("Dots represent products; lines connect pairs seen together. "
+                       "Hover or tap on a dot for its name. The connection list below "
+                       "provides a readable alternative. Spacing has no statistical meaning.")
+            edge_limit = st.slider("Connections shown", 4, 20, 12,
+                                   help="Fewer connections are easier to inspect on small screens.")
+            edges = affinity_edges(filtered, max_edges=edge_limit, max_nodes=14, min_joint=1)
             if edges.empty:
                 st.info("No two-product connections satisfy the current filters.")
             else:
                 fig = network_figure(edges, names)
                 st.plotly_chart(fig, use_container_width=True,
                                 config={"displayModeBar": False})
-                st.caption(f"Showing {len(edges)} unique pairs. Position and distance do not represent a metric.")
+                st.markdown("**Connections as a list**")
+                connection_table = edges.head(10).copy()
+                connection_table["First product"] = connection_table["product_a"].map(
+                    lambda code: product_name(str(code), names).title())
+                connection_table["Second product"] = connection_table["product_b"].map(
+                    lambda code: product_name(str(code), names).title())
+                st.dataframe(connection_table[["First product", "Second product", "joint_count", "lift"]]
+                             .rename(columns={"joint_count": "Together in baskets", "lift": "Training lift"}),
+                             hide_index=True, use_container_width=True, height=240)
     st.markdown("#### Did these pairings appear in later orders?")
     st.caption("A later time window checks whether the co-occurrence was repeated. It is not an A/B test.")
     evaluation = d["evaluation"]
@@ -412,7 +432,9 @@ with builder:
                               placeholder="Search for an item by name or code",
                               key="basket_products")
     if not selected:
-        st.info("Select a product, or use the example basket to see how this analysis works.")
+        reading_note("Start with one product.",
+                     "Choose an item above, or select the example basket to explore "
+                     "historical co-purchases.")
     elif d["rules"].empty:
         st.warning("No association rules were generated for this research build.")
     else:
@@ -475,14 +497,14 @@ with quality_tab:
         for reason, count in quality["reason_counts"].items()
     ]
     reasons = pd.DataFrame(reason_rows)
-    st.dataframe(reasons, hide_index=True, use_container_width=True,
-                 column_config={"Source lines": st.column_config.NumberColumn(format="%d")})
+    reasons["Source lines"] = reasons["Source lines"].map(lambda value: f"{value:,}")
+    st.table(reasons)
     if show_notes:
         reading_note("Important distinction.",
                      "Excluded lines come from invalid or non-sale records. Quarantined lines are "
                      "otherwise eligible rows from invoices with conflicting source metadata, "
                      "so they are reported separately instead of counting the same line twice.")
-    with st.expander("Methodology, definitions and honest limitations", expanded=True):
+    with st.expander("Read the methodology, definitions and limitations", expanded=False):
         st.markdown("""
 - **Positive eligible sales, not net revenue:** cancellations, nonpositive amounts and selected service codes are excluded. Historical returns and profit are not reconciled.
 - **Basket:** one invoice within its source year, including baskets with a single product.
@@ -495,9 +517,10 @@ with quality_tab:
 - **Scope:** historical UK giftware transactions from 2009 to 2011. Patterns may not apply to today's shoppers.
         """)
     if published:
-        st.info(f"This public dashboard displays {published['visible_rule_count']:,} "
-                "training-selected rules, not the complete rule universe. "
-                "The 40,280-basket analytics totals describe the full eligible historical dataset.")
+        reading_note("What this public edition includes.",
+                     f"It displays {int(published['visible_rule_count']):,} training-selected rules, "
+                     "not the entire rule universe. The 40,280-basket totals describe "
+                     "the full eligible historical dataset.")
     st.download_button("Download data quality summary (JSON)",
                        json.dumps(quality, indent=2).encode("utf-8"),
                        file_name="basketlens_quality.json", mime="application/json")

@@ -99,6 +99,48 @@ def example_basket_seed(rules: pd.DataFrame, allowed_skus: list[str]) -> str | N
     return None
 
 
+def top_unique_pairs(view: pd.DataFrame, lookup: dict[str, str], limit: int = 4) -> list[dict]:
+    """Top distinct 1-to-1 pairs from earlier training, never selected by holdout.
+
+    Symmetric A->B and B->A rules describe one co-purchase pair. Keep the
+    orientation of the first highest-frequency record for its confidence.
+    """
+    if limit < 1:
+        raise ValueError("Pair count must be positive")
+    if view.empty:
+        return []
+    required = {"antecedent", "consequent", "antecedent_size", "consequent_size",
+                "joint_count", "confidence", "lift"}
+    if not required.issubset(view.columns):
+        raise ValueError("Missing rule columns for pairing cards")
+    singles = view.loc[(view["antecedent_size"] == 1) &
+                       (view["consequent_size"] == 1)].sort_values(
+        ["joint_count", "confidence", "lift", "antecedent", "consequent"],
+        ascending=[False, False, False, True, True], kind="mergesort")
+    cards: list[dict] = []
+    seen: set[tuple[str, str]] = set()
+    for rule in singles.itertuples(index=False):
+        a, b = str(rule.antecedent), str(rule.consequent)
+        if not a or not b or a == b or "||" in a or "||" in b:
+            continue
+        key = tuple(sorted((a, b)))
+        if key in seen:
+            continue
+        seen.add(key)
+        cards.append({
+            "antecedent": str(lookup.get(a, "Unknown product")).strip().title(),
+            "consequent": str(lookup.get(b, "Unknown product")).strip().title(),
+            "antecedent_sku": a,
+            "consequent_sku": b,
+            "baskets": int(rule.joint_count),
+            "confidence_pct": float(rule.confidence) * 100,
+            "lift": float(rule.lift),
+        })
+        if len(cards) >= limit:
+            break
+    return cards
+
+
 def compact_rule_table(view: pd.DataFrame) -> pd.DataFrame:
     """Return human-oriented table columns with explicit historical units."""
     if view.empty:

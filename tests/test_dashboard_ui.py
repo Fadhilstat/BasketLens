@@ -12,12 +12,16 @@ def test_header_uses_real_resources_and_is_accessible():
     assert 'aria-label="Open official UCI dataset"' in page
     assert SOURCE_URL in page and CODE_URL in page
     assert "Curated public research" in page
-    assert page.count("href=") == 4
+    assert page.count("href=") == 3
+    assert 'class="bl-header-links"' in page
+    assert 'bl-resource-rail' not in page
+    assert 'position: absolute' not in page
     assert "Welcome Back" not in page and "wallet" not in page.lower()
 
 
 def test_header_escapes_source_metadata():
-    markup = dashboard_header('<img src=x onerror="alert(1)">', "Dec 2011", True)
+    from basketlens.dashboard_ui import dashboard_intro
+    markup = dashboard_intro('<img src=x onerror="alert(1)">', "Dec 2011", 1500)
     assert "&lt;img" in markup
     assert '<img src=x' not in markup
     assert 'onerror="alert(1)"' not in markup
@@ -61,7 +65,23 @@ def test_design_is_responsive_and_respects_reduced_motion():
     assert "@media (max-width: 480px)" in css
     assert "prefers-reduced-motion: reduce" in css
     assert ":focus-visible" in css
-    assert "bl-resource-rail { display:none; }" in css
+    assert ".bl-header-links" in css
+    assert "position: absolute" not in css
+    assert "margin-left:-" not in css
+    assert ".bl-pair-grid" in css
     assert "max-width: 100%" in css
     assert "backdrop-filter" not in css
     assert "\u2014" not in css
+
+
+def test_pair_card_escapes_user_supplied_source_labels():
+    from basketlens.dashboard_ui import pairing_cards
+    html = pairing_cards([{
+        "antecedent": '<script>alert("bad")</script>', "consequent": "Jumbo bag",
+        "antecedent_sku": "<1>", "consequent_sku": "2", "baskets": 1166,
+        "confidence_pct": 63.1, "lift": 6.24,
+    }])
+    assert "<script>" not in html and "&lt;script&gt;" in html
+    assert "1,166" in html and "6.24x" in html and "63.1%" in html
+    assert 'role="listitem"' in html
+    assert "PAIR 01" in html

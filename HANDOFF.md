@@ -61,3 +61,20 @@ M5 patch ZIP source manifest/CRC. Static HTML desktop/mobile concept is
 illustrative only. Native Streamlit real-data and public-mode browser QA
 remains a required CI gate before merging.
 No public Streamlit Cloud URL has been confirmed.
+
+
+## M5.1 live layout repair
+
+Observed Streamlit screenshots showed floating rail icons overlapping the hero,
+negative header margins, too-dense rule tables and unreadable network labels.
+M5.1 corrects those issues in the app and CSS, leaves the existing real-data
+UCI analytics and public exhibit unchanged, and extends browser QA on actual
+element geometry, resource navigation, rule cards, keyboard and mobile overflow.
+The full filtered rules are still accessible and downloadable inside a
+deliberate expander. See docs/layout-repair-m51.md.
+Branch: feat/basketlens-m51-live-layout-fix
+Base GitLab main: 88c469e026d470bc8b881682c0e547928492db04
+Base GitHub main: 7f0e91a57b93bbb3446977c1133bea7ff5fac15d
+Local: 38 passed, 2 optional skipped. CI and hosted verification pending.
+User has approved push and merge; do not merge failing CI or substitute
+preview/mockup tests for actual Streamlit browser regression.

@@ -85,3 +85,15 @@ NEXT_ACTION: Verify GitLab CI against real UCI and Streamlit desktop/mobile,
 compare GitHub source parity and CI, review security/diffs, then merge both
 repositories only on fully green results. Confirm the hosted Streamlit
 https://basketlens-retail.streamlit.app after GitHub main updates.
+
+
+## M5.2 release checkpoint (2026-10-09)
+Milestone: M5.2 Anonymous Hosted Release Gate
+Status: PUSHED_PENDING_CI
+Branch: feat/basketlens-m52-hosted-release-gate
+Base GitLab main SHA: aa6f4f3bcb171c173f9d3bf903a138a1bf4973eb
+Base GitHub main SHA: 9d3870f7b893b62cb321234ce6453c69af83db10
+Approved: APPROVE PUSH and APPROVE MERGE on 2026-10-09.
+Scope: credential-free Chromium hosted smoke, deterministic unit tests, runbook, continuity update. No UCI/model/public exhibit changes.
+Production: ACCESS_NOT_VERIFIED because anonymous Streamlit URL redirects to login.
+NEXT_ACTION M5.2: verify real-UCI GitLab CI and GitHub Actions on committed source; merge only on green results; owner to make Streamlit public and rerun hosted smoke before declaring production verified.

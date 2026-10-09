@@ -288,3 +288,8 @@ See [layout repair and QA](docs/layout-repair-m51.md). The historic UCI source,
 cleaning and chronology, rule generation, public-exhibit checksum, and business
 interpretations remain unchanged. Real-data desktop/mobile browser CI must pass
 on this exact feature commit before merge. Hosted app verification is separate.
+
+
+## M5.2 hosted release verification
+
+Use `python scripts/hosted_smoke.py --url https://basketlens-retail.streamlit.app/` with Playwright and Chromium to run an anonymous desktop/mobile QA. See [M5.2 runbook](docs/hosted-verification-m52.md). M5.1 is merged on both GitLab and GitHub. The hosted site still redirects anonymous access to login, so public production readiness is not verified.

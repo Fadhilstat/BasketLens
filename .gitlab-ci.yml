@@ -34,7 +34,8 @@ real_dataset_audit:
     - python -m basketlens.cli verify --output .audit/fpgrowth
     - python scripts/verify_real_dataset.py --pairwise .audit/pairwise --fpgrowth .audit/fpgrowth --report reports
     - python scripts/browser_smoke.py --data .audit/fpgrowth --report reports/screenshots
-    - python scripts/build_public_demo.py --input .audit/fpgrowth --output data/public_demo --emit
+    - python scripts/build_public_demo.py --input .audit/fpgrowth --output .audit/public_demo
+    - python scripts/verify_public_parity.py --published data/public_demo/basketlens_public_v1.b64 --generated .audit/public_demo/basketlens_public_v1.b64
     - python scripts/browser_smoke.py --data data/processed --report reports/screenshots-public
   artifacts:
     when: always

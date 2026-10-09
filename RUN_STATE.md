@@ -3,7 +3,7 @@
 Project: BasketLens
 Phase: 2
 Milestone: M3 Public Streamlit Deployment
-Status: IN_PROGRESS
+Status: PUBLIC_EXHIBIT_REVIEW
 GitLab source of truth: https://gitlab.com/fadhilrusydih/basketlens
 GitHub public mirror: https://github.com/Fadhilstat/BasketLens
 Branch: feat/basketlens-streamlit-deploy
@@ -29,6 +29,8 @@ Streamlit Community Cloud deployment requires an authenticated Cloud account;
 no deployed URL or hosted smoke test should be claimed without verification.
 
 No VPS. User has explicitly approved push and merge for this deployment work.
-NEXT_ACTION: Run CI, extract privacy-reviewed packed exhibit, commit it to
-the feature branch, stop CI emission of bundle, rerun release gates,
-merge GitLab and GitHub, deploy to Streamlit Community Cloud if authenticated.
+PUBLIC_EXHIBIT_V1: generated from full UCI in GitLab CI and committed for release.
+Expected encoded characters: 241100; compressed bytes: 180823; published rules: 1500.
+SHA256 of compressed exhibit: 5303df81bb5d8c5c4eb452a774d1c9d42233ff9bf56d6319021eefc6dfd69b20
+Source pipeline: GitLab #2928955184, real_dataset_audit job #17049067522.
+NEXT_ACTION: Run final CI comparing the committed exhibit with freshly recomputed UCI output, then sync and merge GitLab MR !2 and GitHub PR #2 after green gates. Streamlit Cloud first-time app creation still needs authenticated account access; do not claim live URL until observed.

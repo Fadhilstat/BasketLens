@@ -54,4 +54,4 @@ def test_real_browser_checks_actual_card_and_arrow_centers():
     for expected in ("flow cards have uneven heights", "flow cards have uneven widths",
                      "index/icon off-center", "label off-center", "connector", "gap_center"):
         assert expected in SMOKE
-    assert "REAL_DATA_BROWSER_QA_PASS wide desktop mobile M5.6" in SMOKE
+    assert "REAL_DATA_BROWSER_QA_PASS wide desktop mobile M6" in SMOKE

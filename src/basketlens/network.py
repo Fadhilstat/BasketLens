@@ -61,19 +61,23 @@ def network_figure(edges: pd.DataFrame, name_map: dict[str, str]) -> go.Figure:
                  f"{row.joint_count:,} co-purchase baskets<br>Training lift: {row.lift:.2f}")
         width = 1.0 + 2.5 * math.log1p(row.joint_count) / math.log1p(max_count)
         fig.add_trace(go.Scatter(x=[start[0], end[0]], y=[start[1], end[1]],
-                                 mode="lines", line={"color": "#bdac97", "width": width},
+                                 mode="lines", line={"color": "#afc2b5", "width": width},
                                  text=[label, label], hovertemplate="%{text}<extra></extra>",
                                  showlegend=False))
     nodes = sorted(graph.nodes())
     node_text = [f"{name_map.get(node, 'Unknown product')}<br>SKU: {node}<br>"
                  f"Links shown: {graph.degree(node)}" for node in nodes]
+    node_labels = []
+    for node in nodes:
+        label = str(name_map.get(node, "Unknown product")).strip().title()
+        node_labels.append(label if len(label) <= 19 else label[:18].rstrip() + "…")
     fig.add_trace(go.Scatter(x=[positions[node][0] for node in nodes],
                              y=[positions[node][1] for node in nodes], mode="markers+text",
-                             text=nodes, textposition="top center", hovertext=node_text,
+                             text=node_labels, textposition="top center", hovertext=node_text,
                              hovertemplate="%{hovertext}<extra></extra>",
-                             marker={"color": "#597265", "size": [13 + graph.degree(node) * 2 for node in nodes],
-                                     "line": {"color": "#f8f6f0", "width": 1.5}},
-                             textfont={"size": 10, "color": "#252a26"}, showlegend=False))
+                             marker={"color": "#426a57", "size": [13 + graph.degree(node) * 2 for node in nodes],
+                                     "line": {"color": "#fffefa", "width": 1.5}},
+                             textfont={"size": 10, "color": "#27362e"}, showlegend=False))
     fig.update_layout(height=490, margin={"l": 10, "r": 10, "t": 10, "b": 10},
                       paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
                       xaxis={"visible": False}, yaxis={"visible": False},

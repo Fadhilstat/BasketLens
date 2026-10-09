@@ -156,11 +156,17 @@ def main() -> None:
                         page.get_by_text("related product candidates").wait_for(timeout=60000)
                     page.get_by_role("tab", name="Data quality & methodology").click(timeout=30000)
                     page.get_by_text("What can we trust in this analysis?").wait_for(timeout=60000)
-                    # M5.5 approves real Streamlit presentation, not a mock screenshot.
+                    # Streamlit renders tab content asynchronously, especially in full-data
+                    # mobile mode. Wait for all four cards, then verify their count.
+                    page.wait_for_function(
+                        "() => document.querySelectorAll('.st-key-quality_kpis [data-testid=stMetric]').length === 4",
+                        timeout=60000,
+                    )
                     quality_cards = page.locator(".st-key-quality_kpis [data-testid='stMetric']")
                     if quality_cards.count() != 4:
                         raise AssertionError(f"{label}: four quality cards are required")
                     flow_steps = page.get_by_role("list", name="Validation sequence").locator("li")
+                    flow_steps.first.wait_for(timeout=30000)
                     if flow_steps.count() != 5:
                         raise AssertionError(f"{label}: five methodological stages are required")
                     # M5.6: check rendered card geometry, not just CSS declarations.

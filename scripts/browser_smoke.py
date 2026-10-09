@@ -62,6 +62,26 @@ def main() -> None:
                     metric_count = page.locator('[data-testid="stMetric"]').count()
                     if metric_count < 4:
                         raise AssertionError(f"{label}: expected 4 data-backed KPI cards")
+                    # Real Streamlit computed-style contract for M5.3.
+                    if page.locator(".st-key-sales_kpis").count() != 1:
+                        raise AssertionError(f"{label}: scoped KPI group missing")
+                    for panel_key in ("sales_trend_panel", "basket_mix_panel", "product_mix_panel"):
+                        if page.locator(".st-key-" + panel_key).count() != 1:
+                            raise AssertionError(f"{label}: missing analytics panel {panel_key}")
+                    metric_radius = page.locator('[data-testid="stMetric"]').first.evaluate(
+                        "el => parseFloat(getComputedStyle(el).borderTopLeftRadius)")
+                    if metric_radius < 17:
+                        raise AssertionError(f"{label}: KPI surface is not rounded")
+                    tab_radius = page.get_by_role("tab", name="Sales overview").evaluate(
+                        "el => parseFloat(getComputedStyle(el).borderTopLeftRadius)")
+                    if tab_radius < 10:
+                        raise AssertionError(f"{label}: tab treatment missing")
+                    if label == "desktop":
+                        first_icon = page.locator(".st-key-sales_kpis [data-testid='stMetric']").first.evaluate(
+                            "el => getComputedStyle(el, '::before').backgroundImage")
+                        if "data:image/svg+xml" not in first_icon:
+                            raise AssertionError("Desktop KPI icon treatment did not render")
+
                     page.screenshot(path=str(args.report / f"{label}-overview.png"),
                                     full_page=False, animations="disabled")
                     # Layout regression: the old absolute-positioned icon rail
@@ -119,7 +139,7 @@ def main() -> None:
                     page.close()
             finally:
                 browser.close()
-        print("REAL_DATA_BROWSER_QA_PASS desktop mobile M5.1 aligned header pairing cards search basket keyboard viewport")
+        print("REAL_DATA_BROWSER_QA_PASS desktop mobile M5.3 smooth surfaces KPI icons responsive tabs search basket keyboard viewport")
     finally:
         server.terminate()
         try:

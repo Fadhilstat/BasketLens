@@ -78,3 +78,8 @@ Base GitHub main: 7f0e91a57b93bbb3446977c1133bea7ff5fac15d
 Local: 38 passed, 2 optional skipped. CI and hosted verification pending.
 User has approved push and merge; do not merge failing CI or substitute
 preview/mockup tests for actual Streamlit browser regression.
+
+
+## M5.2 Hosted QA gate
+
+Added `scripts/hosted_smoke.py`, `tests/test_hosted_smoke.py`, and `docs/hosted-verification-m52.md`. An anonymous fresh-browser workflow checks the live Streamlit UI at desktop/mobile dimensions. Login redirects, failed app loads, missing KPI/pair cards, broken workflows and layout regressions fail the gate. Redacted redirect URLs exclude sign-in payloads. Base GitLab main aa6f4f3bcb171c173f9d3bf903a138a1bf4973eb, GitHub main 9d3870f7b893b62cb321234ce6453c69af83db10. Anonymous deployment access remains unverified and requires owner-side sharing verification.

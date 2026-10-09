@@ -31,7 +31,7 @@ def test_process_visuals_remain_ordered_not_fake_buttons():
 def test_ledger_is_readable_and_numeric():
     assert '[data-testid="stTable"]' in CSS
     assert 'font-variant-numeric:tabular-nums' in CSS
-    assert 'text-align:right' in CSS
+    assert 'text-align:right !important' in CSS
     assert "evidence counts must align right" in SMOKE
 
 

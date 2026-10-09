@@ -1036,3 +1036,13 @@ html { font-size: 16px; }
     scroll-behavior:auto!important;
   }
 }
+
+/* Streamlit Styler can set a cell's inline text-align. Keep figures right-aligned. */
+[data-testid="stTable"] table tbody tr td:last-child,
+[data-testid="stTable"] table thead tr th:last-child {
+  text-align:right !important;
+  font-variant-numeric:tabular-nums;
+}
+[data-testid="stTable"] table tbody tr td:last-child * {
+  text-align:right !important;
+}

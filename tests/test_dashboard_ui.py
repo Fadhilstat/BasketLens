@@ -66,7 +66,9 @@ def test_design_is_responsive_and_respects_reduced_motion():
     assert "prefers-reduced-motion: reduce" in css
     assert ":focus-visible" in css
     assert ".bl-header-links" in css
-    assert "position: absolute" not in css
+    legacy, connectors = css.split("/* M5.6: geometrically centered methodology steps and connectors. */", 1)
+    assert "position: absolute" not in legacy
+    assert connectors.count("position: absolute;") == 1
     assert "margin-left:-" not in css
     assert ".bl-pair-grid" in css
     assert "max-width: 100%" in css

@@ -21,8 +21,11 @@ def test_visual_system_has_motion_and_no_inaccessible_slop():
     assert "@media (max-width: 480px)" in STYLE
     assert "scroll-snap-type: x proximity" in STYLE
     assert "background-image: url(\"data:image/svg+xml" in STYLE
-    for dangerous in ("position: absolute", "backdrop-filter", "margin-left:-", "\u2014"):
+    for dangerous in ("backdrop-filter", "margin-left:-", "\u2014"):
         assert dangerous not in STYLE
+    legacy, connectors = STYLE.split("/* M5.6: geometrically centered methodology steps and connectors. */", 1)
+    assert "position: absolute" not in legacy
+    assert connectors.count("position: absolute;") == 1
 
 
 def test_analytics_and_export_apis_remain_intact():

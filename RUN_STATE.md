@@ -97,3 +97,16 @@ Approved: APPROVE PUSH and APPROVE MERGE on 2026-10-09.
 Scope: credential-free Chromium hosted smoke, deterministic unit tests, runbook, continuity update. No UCI/model/public exhibit changes.
 Production: ACCESS_NOT_VERIFIED because anonymous Streamlit URL redirects to login.
 NEXT_ACTION M5.2: verify real-UCI GitLab CI and GitHub Actions on committed source; merge only on green results; owner to make Streamlit public and rerun hosted smoke before declaring production verified.
+
+
+## M5.3 design refinement checkpoint (2026-10-09)
+Milestone: M5.3 Streamlit fluid surface refinement
+Status: PUSHED_PENDING_CI
+Branch: feat/basketlens-m53-fluid-surface
+GitLab main baseline: 5c7441e91a692aac4959a61758da60825c3254af
+GitHub main baseline: 9d6939a5e3600bd89051417e89631cd03609c709
+User approved APPROVE PUSH and APPROVE MERGE for M5.3 on 2026-10-09.
+Changes: scoped responsive visual system, iconographic overview native metrics, targeted chart containers, UI regression tests, Streamlit min 1.41.
+Data source, validated UCI rules, model results, aggregate public exhibit and checksum unchanged.
+Offline design prototype: desktop/tablet/mobile no horizontal overflow, CSS parser found zero syntax errors. Exact-source GitLab CI and GitHub workflow must pass before merge.
+NEXT_ACTION M5.3: verify MR full UCI audit and both desktop/mobile screenshot tests, check Github mirror, merge only after both CIs green, verify hosted UI under fresh app session.

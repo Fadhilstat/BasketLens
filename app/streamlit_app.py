@@ -35,8 +35,10 @@ MUTED = "#607067"
 
 st.set_page_config(page_title="BasketLens | Retail research", page_icon="🧺",
                    layout="wide", initial_sidebar_state="collapsed")
-st.markdown("<style>" + (ROOT / "app" / "assets" / "basketlens.css").read_text(encoding="utf-8") +
-            "</style>", unsafe_allow_html=True)
+st.markdown("<style>" + "\n".join(
+    (ROOT / "app" / "assets" / name).read_text(encoding="utf-8")
+    for name in ("basketlens.css", "refinement-m53.css")
+) + "</style>", unsafe_allow_html=True)
 
 
 @st.cache_data(show_spinner=False)
@@ -192,15 +194,16 @@ with overview:
         rollup = d["basket_rollup"].loc[
             d["basket_rollup"]["country"].astype(str).eq(selected_country)]
     snapshot = snapshot_from_rollup(rollup)
-    col1, col2, col3, col4 = st.columns(4, gap="small")
-    col1.metric("Eligible sales value", f"\u00a3{snapshot.sales_gbp:,.0f}",
-                help="Positive eligible sale lines only. Returns and profit are not reconciled.")
-    col2.metric("Baskets analysed", f"{snapshot.baskets:,}")
-    col3.metric("Average per basket", f"\u00a3{snapshot.average_gbp:,.2f}"
-                if snapshot.average_gbp is not None else "N/A")
-    col4.metric("Baskets with 2+ products", f"{snapshot.multi_product_share:.1%}"
-                if snapshot.multi_product_share is not None else "N/A",
-                help="Share of eligible invoices with two or more distinct product codes.")
+    with st.container(key="sales_kpis"):
+        col1, col2, col3, col4 = st.columns(4, gap="small")
+        col1.metric("Eligible sales value", f"\u00a3{snapshot.sales_gbp:,.0f}",
+                    help="Positive eligible sale lines only. Returns and profit are not reconciled.")
+        col2.metric("Baskets analysed", f"{snapshot.baskets:,}")
+        col3.metric("Average per basket", f"\u00a3{snapshot.average_gbp:,.2f}"
+                    if snapshot.average_gbp is not None else "N/A")
+        col4.metric("Baskets with 2+ products", f"{snapshot.multi_product_share:.1%}"
+                    if snapshot.multi_product_share is not None else "N/A",
+                    help="Share of eligible invoices with two or more distinct product codes.")
     if show_notes:
         st.markdown(highlight_kpi_text(snapshot.baskets, snapshot.multi_product_share,
                                        country=("the full study" if selected_country == "All countries"
@@ -210,7 +213,7 @@ with overview:
 
     trend_column, mix_column = st.columns([1.62, 1], gap="medium")
     with trend_column:
-        with st.container(border=True):
+        with st.container(border=True, key="sales_trend_panel"):
             st.markdown(panel_title(
                 "Sales over time", "Eligible sales values by recorded invoice month.",
                 overline="Historical trend"), unsafe_allow_html=True)
@@ -231,7 +234,7 @@ with overview:
                 st.plotly_chart(trend, use_container_width=True, config={"displayModeBar": False})
                 st.caption("Recorded activity, not a forecast. Hover over the line to inspect a month.")
     with mix_column:
-        with st.container(border=True):
+        with st.container(border=True, key="basket_mix_panel"):
             st.markdown(panel_title(
                 "Basket composition", "Distinct products on each eligible invoice.",
                 overline="Order makeup"), unsafe_allow_html=True)
@@ -253,7 +256,7 @@ with overview:
                 st.plotly_chart(composition, use_container_width=True, config={"displayModeBar": False})
                 st.caption("10 groups all baskets with ten or more distinct products.")
 
-    with st.container(border=True):
+    with st.container(border=True, key="product_mix_panel"):
         st.markdown(panel_title(
             "Products contributing the most recorded sales",
             "Ranked across the entire historical dataset, even when a country is selected.",

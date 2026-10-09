@@ -293,3 +293,8 @@ on this exact feature commit before merge. Hosted app verification is separate.
 ## M5.2 hosted release verification
 
 Use `python scripts/hosted_smoke.py --url https://basketlens-retail.streamlit.app/` with Playwright and Chromium to run an anonymous desktop/mobile QA. See [M5.2 runbook](docs/hosted-verification-m52.md). M5.1 is merged on both GitLab and GitHub. The hosted site still redirects anonymous access to login, so public production readiness is not verified.
+
+
+## M5.3 visual refinement (2026-10-09)
+
+The Streamlit interface now uses a calmer, more cohesive research-dashboard design: rounded KPI surfaces with data-specific desktop pictograms, refined chart panels, a smooth active-tab track, clearer inputs and notes, and deliberate mobile/reduced-motion rules. These styles are scoped to the existing real UCI-based workflows, not synthetic results. Read [the M5.3 design note](docs/design-m53.md). GitLab's real-UCI and desktop/mobile browser CI remain the deployment readiness gate.

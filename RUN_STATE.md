@@ -136,3 +136,15 @@ Changes: accessible native KPI icons, five-stage evidence flow, right-aligned qu
 Unchanged: official UCI dataset, chronological holdout, cleaning, association mining, public exhibit hash, privacy safeguards.
 Local approved-reference preview: 9 style checks passed and Chromium responsive checks at 1440, 1024, 390 and 320 pixels; real runtime CI remains mandatory.
 NEXT_ACTION: verify GitLab MR unit, public QA, full UCI/browser and public parity; GitHub Actions. Merge only on green, verify main parity and Streamlit Cloud after rollout.
+
+
+## M5.6 flow alignment checkpoint (2026-10-09)
+Milestone: M5.6 Methodology Symmetry Fix
+Status: PUSHED_PENDING_CI
+Branch: feat/basketlens-m56-symmetric-methodology
+Base GitLab main: fa9bda429ce912d67b364de809b5668df5a714bb
+Base GitHub main: 6365e8a7916632ef7b036b7bee0f789fb28572cc
+User granted APPROVE PUSH and APPROVE MERGE for this milestone.
+Scope: equal five card geometry and true arrow gap midpoint alignment, centered 3+2 tablet flow, single-column mobile, browser geometry regression tests. No analytic data or source code changes.
+Local: Chromium mock at 1440/1280/1024/800/390/320 px passed with zero horizontal overflow. CSS parser passed.
+NEXT_ACTION: verify GitLab MR unit, public and UCI real-data/browser CI; GitHub Actions; merge if green and verify main source parity and published deployment.

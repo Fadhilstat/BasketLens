@@ -153,6 +153,50 @@ def main() -> None:
                     flow_steps = page.get_by_role("list", name="Validation sequence").locator("li")
                     if flow_steps.count() != 5:
                         raise AssertionError(f"{label}: five methodological stages are required")
+                    # M5.6: check rendered card geometry, not just CSS declarations.
+                    if label in {"wide", "desktop"}:
+                        symmetry = page.get_by_role(
+                            "list", name="Validation sequence").evaluate("""list => {
+                            return [...list.querySelectorAll(':scope > li')].map(node => {
+                                const box = node.getBoundingClientRect();
+                                const badge = node.querySelector('.bl-flow-index').getBoundingClientRect();
+                                const text = node.querySelector('.bl-flow-copy').getBoundingClientRect();
+                                const arrow = getComputedStyle(node, '::after');
+                                return {
+                                    x: box.x, y: box.y, width: box.width,
+                                    height: box.height, center: box.x + box.width / 2,
+                                    badgeCenter: badge.x + badge.width / 2,
+                                    labelCenter: text.x + text.width / 2,
+                                    connectorRight: Number.parseFloat(arrow.right),
+                                    connectorWidth: Number.parseFloat(arrow.width),
+                                    connectorPosition: arrow.position
+                                };
+                            });
+                        }""")
+                        if len(symmetry) != 5:
+                            raise AssertionError(f"{label}: five symmetrical stages required")
+                        if max(x["y"] for x in symmetry) - min(x["y"] for x in symmetry) > 2:
+                            raise AssertionError(f"{label}: flow cards are not level")
+                        if max(x["height"] for x in symmetry) - min(x["height"] for x in symmetry) > 2:
+                            raise AssertionError(f"{label}: flow cards have uneven heights")
+                        if max(x["width"] for x in symmetry) - min(x["width"] for x in symmetry) > 2:
+                            raise AssertionError(f"{label}: flow cards have uneven widths")
+                        for i, stage in enumerate(symmetry):
+                            if abs(stage["center"] - stage["labelCenter"]) > 2:
+                                raise AssertionError(f"{label}: stage {i+1} label off-center")
+                            if abs(stage["badgeCenter"] + 24 - stage["center"]) > 2:
+                                raise AssertionError(f"{label}: stage {i+1} index/icon off-center")
+                            if i < 4:
+                                if stage["connectorPosition"] != "absolute":
+                                    raise AssertionError(f"{label}: connector positioning missing")
+                                arrow_center = (stage["x"] + stage["width"]
+                                                - stage["connectorRight"]
+                                                - stage["connectorWidth"] / 2)
+                                gap_center = ((stage["x"] + stage["width"]
+                                               + symmetry[i+1]["x"]) / 2)
+                                if abs(arrow_center - gap_center) > 3:
+                                    raise AssertionError(f"{label}: connector {i+1} off-center")
+
                     if label != "mobile":
                         quality_icon = quality_cards.first.evaluate(
                             "el => getComputedStyle(el, '::before').backgroundImage"
@@ -204,7 +248,7 @@ def main() -> None:
                     page.close()
             finally:
                 browser.close()
-        print("REAL_DATA_BROWSER_QA_PASS wide desktop mobile M5.5 quality icons flow ledger tabs pairing search basket keyboard viewport")
+        print("REAL_DATA_BROWSER_QA_PASS wide desktop mobile M5.6 symmetrical methodology flow and M5.5 UI")
     finally:
         server.terminate()
         try:

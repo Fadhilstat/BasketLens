@@ -308,3 +308,8 @@ Following live Streamlit screenshot feedback, the main interface now uses one co
 ## M5.5 screenshot-approved methodology refinement (2026-10-09)
 
 The methodology view uses the native Streamlit quality metrics with source-specific document, check, exclusion and quarantine pictograms. Its five ordered validation stages are legible cards with meaningful desktop connectors, and the source quality ledger has a muted-green header, alternating rows and right-aligned counts. Mobile navigation visibly presents four tabs in two columns. No source UCI data, algorithms, published exhibit or customer-level detail changed. CI validates the actual data-backed Streamlit screen at desktop and mobile; a static preview alone is not release evidence. See [M5.5 design specification](docs/design-m55.md).
+
+
+## M5.6 methodology flow symmetry (2026-10-09)
+
+The five quality-methodology stages now have mathematically centered index and icon groups, uniformly sized cards, vertically centered connectors within the gaps, and balanced labels. Tablet rows center the final two cards instead of leaving an uneven row; mobile keeps a full-width, readable sequence. The real Streamlit browser regression tests component geometry in the desktop and wide viewports. All UCI analytics, models and public data artifacts are unchanged.

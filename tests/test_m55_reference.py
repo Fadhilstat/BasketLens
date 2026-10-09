@@ -44,7 +44,7 @@ def test_mobile_tabs_and_motion_accessibility():
 
 
 def test_no_nonfunctional_decorative_navigation_or_unsafe_copy():
-    for banned in ("position: absolute", "backdrop-filter", "—", "#8b5cf6"):
+    for banned in ("backdrop-filter", "—", "#8b5cf6"):
         assert banned not in CSS
     assert 'aria-selected="true"' in CSS
     assert 'st.plotly_chart(' in APP

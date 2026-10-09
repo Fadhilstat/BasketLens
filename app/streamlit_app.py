@@ -12,7 +12,7 @@ from basketlens.insights import annotate_evidence, recommend_with_holdout
 from basketlens.network import affinity_edges, network_figure
 
 st.set_page_config(page_title="BasketLens | Retail intelligence", page_icon="🧺",
-                   layout="wide", initial_sidebar_state="expanded")
+                   layout="wide", initial_sidebar_state="collapsed")
 
 st.markdown("""
 <style>

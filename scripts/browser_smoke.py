@@ -146,6 +146,30 @@ def main() -> None:
                         page.get_by_text("related product candidates").wait_for(timeout=60000)
                     page.get_by_role("tab", name="Data quality & methodology").click(timeout=30000)
                     page.get_by_text("What can we trust in this analysis?").wait_for(timeout=60000)
+                    # M5.5 approves real Streamlit presentation, not a mock screenshot.
+                    quality_cards = page.locator(".st-key-quality_kpis [data-testid='stMetric']")
+                    if quality_cards.count() != 4:
+                        raise AssertionError(f"{label}: four quality cards are required")
+                    flow_steps = page.get_by_role("list", name="Validation sequence").locator("li")
+                    if flow_steps.count() != 5:
+                        raise AssertionError(f"{label}: five methodological stages are required")
+                    if label != "mobile":
+                        quality_icon = quality_cards.first.evaluate(
+                            "el => getComputedStyle(el, '::before').backgroundImage"
+                        )
+                        if "data:image/svg+xml" not in quality_icon:
+                            raise AssertionError(f"{label}: quality card pictogram missing")
+                    if label == "mobile":
+                        tablist = page.get_by_role("tablist").first
+                        layout = tablist.evaluate("el => getComputedStyle(el).gridTemplateColumns")
+                        if len(layout.split()) != 2:
+                            raise AssertionError(f"{label}: all tabs need visible two-column layout")
+                    if page.locator('[data-testid="stTable"] table').count():
+                        align = page.locator('[data-testid="stTable"] tbody td:last-child').first.evaluate(
+                            "el => getComputedStyle(el).textAlign")
+                        if align != "right":
+                            raise AssertionError(f"{label}: evidence counts must align right")
+
                     quality_kpis = page.locator(".st-key-quality_kpis [data-testid='stMetric']")
                     try:
                         page.wait_for_function(
@@ -180,7 +204,7 @@ def main() -> None:
                     page.close()
             finally:
                 browser.close()
-        print("REAL_DATA_BROWSER_QA_PASS wide desktop mobile M5.4 typography tabs quality stepper pairing search basket keyboard viewport")
+        print("REAL_DATA_BROWSER_QA_PASS wide desktop mobile M5.5 quality icons flow ledger tabs pairing search basket keyboard viewport")
     finally:
         server.terminate()
         try:

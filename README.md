@@ -254,3 +254,22 @@ A new `docs/experience.md` explains layout decisions, accessibility, empty state
 non-causal boundaries. Source data, the 1,500-rule public exhibit, checksum, and computation
 methods are unchanged. The current release has been tested with synthetic fixtures locally;
 a real-data GitLab/browser CI rerun is required before merging.
+
+
+## M5 reference-inspired dashboard
+
+The M5 frontend makes BasketLens easier to scan with a soft-gray workspace,
+white rounded panels, deep green accents, responsive navigation, a clear product
+ranking, and visually grouped sales/basket charts. It is based on the user's
+green/white dashboard references but uses only real historical UCI aggregate
+metrics and preserves existing analytic methods and downloads.
+
+Four functional research tabs remain: Sales overview, Association explorer,
+Build a basket, and Data quality & methodology. Resource shortcuts link to
+official UCI documentation, project methodology and the GitHub source.
+The curated public exhibit is unchanged and contains no raw invoices or customer IDs.
+See [M5 design rationale](docs/design-m5.md).
+
+The M5 reference mockups use illustrative chart shapes. The shipped Streamlit
+app renders source-backed charts and real measurements. A live Streamlit
+Community Cloud URL has not been verified here; do not claim it is deployed.

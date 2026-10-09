@@ -63,8 +63,20 @@ def main() -> None:
                     if is_public:
                         search = page.get_by_role("textbox", name="Search by product or SKU")
                         search.fill("___NOT_AN_ACTUAL_STOCK_CODE___")
-                        page.get_by_text("No rules match your search and thresholds").wait_for(timeout=60000)
+                        search.press("Enter")  # Streamlit commits st.text_input on Enter or blur.
+                        page.get_by_role("tab", name="Association explorer").click(timeout=30000)
+                        try:
+                            page.get_by_text("No rules match your search and thresholds").wait_for(timeout=30000)
+                        except Exception:
+                            page.screenshot(path=str(args.report / f"{label}-search-diagnostic.png"),
+                                            full_page=True, animations="disabled")
+                            print(f"PUBLIC_SEARCH_DIAGNOSTIC {label}: " +
+                                  page.locator("body").inner_text(timeout=5000)[-3200:], flush=True)
+                            raise
+                        search = page.get_by_role("textbox", name="Search by product or SKU")
                         search.fill("")
+                        search.press("Enter")
+                        page.get_by_role("tab", name="Association explorer").click(timeout=30000)
                         page.get_by_text("A pairing worth examining").wait_for(timeout=60000)
                     page.screenshot(path=str(args.report / f"{label}.png"),
                                     full_page=True, animations="disabled")

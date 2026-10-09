@@ -297,6 +297,7 @@ with explorer:
             min_joint = st.number_input("At least this many baskets together", min_value=1,
                                         max_value=max_joint, value=min(20, max_joint),
                                         help="Larger counts generally offer more descriptive context.")
+        st.caption("To apply a typed search, press Enter or click outside the search field.")
         filtered = filter_rule_view(rules, names, minimum_lift=min_lift,
                                     minimum_joint=int(min_joint), search=search)
         st.caption(f"{len(filtered):,} of {len(rules):,} available rules match your filters. "

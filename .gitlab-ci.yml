@@ -1,0 +1,45 @@
+image: python:3.11-slim
+
+stages:
+  - test
+  - verify
+
+unit_tests:
+  stage: test
+  before_script:
+    - python -m pip install --upgrade pip
+    - python -m pip install -e ".[dev]"
+  script:
+    - python -m compileall -q src app scripts
+    - python -m pytest -q
+    - python -m pip check
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+
+real_dataset_audit:
+  stage: verify
+  needs: [unit_tests]
+  before_script:
+    - python -m pip install --upgrade pip
+    - python -m pip install -e ".[dev]"
+    - python -m pip install 'playwright>=1.50,<2'
+    - python -m playwright install chromium --with-deps
+  script:
+    - python -m basketlens.cli download
+    - python scripts/source_conflict_audit.py --max-loss-fraction 0.01 --report reports
+    - python -m basketlens.cli build --algorithm pairwise --inconsistent-policy quarantine --output .audit/pairwise
+    - python -m basketlens.cli verify --output .audit/pairwise
+    - python -m basketlens.cli build --algorithm fpgrowth --inconsistent-policy quarantine --output .audit/fpgrowth
+    - python -m basketlens.cli verify --output .audit/fpgrowth
+    - python scripts/verify_real_dataset.py --pairwise .audit/pairwise --fpgrowth .audit/fpgrowth --report reports
+    - python scripts/browser_smoke.py --data .audit/fpgrowth --report reports/screenshots
+  artifacts:
+    when: always
+    expire_in: 7 days
+    paths:
+      - reports/source_conflict_audit.json
+      - reports/real_dataset_audit.json
+      - reports/screenshots/
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'

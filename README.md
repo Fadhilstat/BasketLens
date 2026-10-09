@@ -215,3 +215,29 @@ BasketLens application code: [MIT](LICENSE). Dataset: Chen, D. (2019). *Online R
 ## Author
 
 Data analytics portfolio project. Author's GitHub and LinkedIn links can be added after the project is published and verified.
+
+
+## Public Streamlit deployment (planned, not yet live)
+
+The production entrypoint is \`app/streamlit_app.py\`, on branch \`main\` of
+https://github.com/Fadhilstat/BasketLens. The root \`requirements.txt\` installs
+the project package and its dependencies. Use Python 3.11 or 3.12 on
+Streamlit Community Cloud.
+
+The public app loads \`data/public_demo/basketlens_public_v1.b64\` and verifies
+its companion SHA-256 checksum. This aggregate-only exhibit is built from
+official UCI Online Retail II in CI and contains a limited subset of rules
+selected using training-period measures, with matched chronological holdout
+evidence. It contains no customer IDs, invoice IDs or raw invoice rows.
+
+For deployment, visit https://share.streamlit.io and select repository
+\`Fadhilstat/BasketLens\`, branch \`main\`, and main file
+\`app/streamlit_app.py\`. Wait until the exhibit has been committed and its
+GitHub CI passed. No API keys are required. Do not present a Streamlit URL
+as live until the hosted app has been opened and smoke-tested.
+
+Local full-data analysts can still point \`BASKETLENS_DATA_DIR\` at a complete
+verified analytics build. The public display is curated; full-data counts
+in its manifest and quality report refer to the offline historical analysis,
+not to the number of display rules. UCI credit: Daqing Chen (2019),
+DOI 10.24432/C5CG6D, CC BY 4.0.

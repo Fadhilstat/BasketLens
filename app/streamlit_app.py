@@ -17,6 +17,7 @@ import streamlit as st
 from basketlens.dashboard_ui import (dashboard_header, dashboard_intro, highlight_kpi_text,
                                     pairing_cards, panel_title, quality_pipeline, study_status)
 from basketlens.insights import annotate_evidence, recommend_with_holdout
+from basketlens.portfolio_case import select_portfolio_case, portfolio_case_html
 from basketlens.network import affinity_edges, network_figure
 from basketlens.presentation import (
     compact_rule_table, example_basket_seed, filter_rule_view, lift_meaning, product_name,
@@ -272,6 +273,10 @@ with overview:
             top_chart.update_yaxes(showgrid=False, automargin=True)
             top_chart.update_xaxes(title=None, tickprefix="\u00a3", tickformat="~s")
             st.plotly_chart(top_chart, width="stretch", config={"displayModeBar": False})
+    business_case = select_portfolio_case(d["rules"], d["evaluation"], names)
+    if business_case is not None:
+        st.markdown(portfolio_case_html(business_case), unsafe_allow_html=True)
+        st.caption("The example is selected using earlier-basket evidence only; later outcomes are a descriptive check.")
     st.caption("Next, open Association explorer to find historical product pairings and inspect their evidence.")
 
 with explorer:

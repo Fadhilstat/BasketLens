@@ -58,6 +58,16 @@ def main() -> None:
                     page.get_by_text("Start with what the baskets tell us").wait_for(timeout=60000)
                     page.get_by_role("combobox", name="Show sales for").wait_for(timeout=30000)
                     page.get_by_text("Sales over time", exact=True).wait_for(timeout=60000)
+                    # M6 editorial case is genuinely derived from public and full UCI rules.
+                    portfolio_brief = page.locator(".bl-decision-brief")
+                    portfolio_brief.wait_for(timeout=30000)
+                    if portfolio_brief.count() != 1:
+                        raise AssertionError(f"{label}: decision brief missing")
+                    if portfolio_brief.locator(".bl-case-results > div").count() != 4:
+                        raise AssertionError(f"{label}: decision evidence incomplete")
+                    if "does not demonstrate incremental conversion" not in portfolio_brief.inner_text():
+                        raise AssertionError(f"{label}: causal limitation missing")
+
                     # Streamlit batches widget messages; one visible metric does
                     # not establish that the entire four-column layout has rendered.
                     try:
@@ -146,11 +156,17 @@ def main() -> None:
                         page.get_by_text("related product candidates").wait_for(timeout=60000)
                     page.get_by_role("tab", name="Data quality & methodology").click(timeout=30000)
                     page.get_by_text("What can we trust in this analysis?").wait_for(timeout=60000)
-                    # M5.5 approves real Streamlit presentation, not a mock screenshot.
+                    # Streamlit renders tab content asynchronously, especially in full-data
+                    # mobile mode. Wait for all four cards, then verify their count.
+                    page.wait_for_function(
+                        "() => document.querySelectorAll('.st-key-quality_kpis [data-testid=stMetric]').length === 4",
+                        timeout=60000,
+                    )
                     quality_cards = page.locator(".st-key-quality_kpis [data-testid='stMetric']")
                     if quality_cards.count() != 4:
                         raise AssertionError(f"{label}: four quality cards are required")
                     flow_steps = page.get_by_role("list", name="Validation sequence").locator("li")
+                    flow_steps.first.wait_for(timeout=30000)
                     if flow_steps.count() != 5:
                         raise AssertionError(f"{label}: five methodological stages are required")
                     # M5.6: check rendered card geometry, not just CSS declarations.
@@ -254,7 +270,7 @@ def main() -> None:
                     page.close()
             finally:
                 browser.close()
-        print("REAL_DATA_BROWSER_QA_PASS wide desktop mobile M5.6 symmetrical methodology flow and M5.5 UI")
+        print("REAL_DATA_BROWSER_QA_PASS wide desktop mobile M6 dynamic decision case plus M5.6 symmetrical methodology")
     finally:
         server.terminate()
         try:

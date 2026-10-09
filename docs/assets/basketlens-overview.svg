@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="520" viewBox="0 0 1280 520" role="img" aria-label="BasketLens retail research: 1.07 million historical lines, 40,280 baskets and one verified pairing for an experiment hypothesis">
+<rect width="1280" height="520" fill="#0e513b"/>
+<circle cx="1034" cy="230" r="205" fill="#1a6d50"/><circle cx="1034" cy="230" r="149" fill="#287e5d"/>
+<g stroke="#c4e1cf" stroke-width="3" fill="none" opacity=".72"><path d="M902 230 976 136 1108 182 1157 292 1049 365 933 338 Z"/><path d="M976 136 1049 365M902 230 1108 182"/></g>
+<g fill="#ddf2df"><circle cx="902" cy="230" r="9"/><circle cx="976" cy="136" r="9"/><circle cx="1108" cy="182" r="9"/><circle cx="1157" cy="292" r="9"/><circle cx="1049" cy="365" r="9"/><circle cx="933" cy="338" r="9"/></g>
+<g font-family="Arial,Helvetica,sans-serif" fill="#fff"><text x="57" y="76" font-size="25" font-weight="700" letter-spacing="5">BASKETLENS</text><rect x="57" y="106" width="133" height="5" fill="#b1dcae"/><text x="57" y="186" font-size="50" font-weight="700">From retail receipts</text><text x="57" y="246" font-size="50" font-weight="700">to testable decisions</text><text x="58" y="302" font-size="21" fill="#d8e9dc">Real UCI transactions, chronological validation,</text><text x="58" y="333" font-size="21" fill="#d8e9dc">and a transparent case for controlled experiments.</text></g>
+<rect x="57" y="387" width="715" height="73" rx="14" fill="#1a674c"/>
+<g font-family="Arial,Helvetica,sans-serif" fill="#fff" font-size="20" font-weight="700"><text x="80" y="432">1,067,371 source lines</text><text x="354" y="432">40,280 baskets</text><text x="575" y="432">1,500 public rules</text></g>
+</svg>

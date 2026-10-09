@@ -14,6 +14,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 
+from basketlens.dashboard_ui import dashboard_header, dashboard_intro, highlight_kpi_text, panel_title, study_status
 from basketlens.insights import annotate_evidence, recommend_with_holdout
 from basketlens.network import affinity_edges, network_figure
 from basketlens.presentation import (
@@ -25,10 +26,10 @@ from basketlens.public_demo import PUBLIC_FILENAME, load_public_demo
 ROOT = Path(__file__).resolve().parents[1]
 BASE_DIR = Path(os.environ.get("BASKETLENS_DATA_DIR", "data/processed"))
 PUBLIC_PATH = ROOT / "data" / "public_demo" / PUBLIC_FILENAME
-FOREST = "#426a57"
-CLAY = "#ad714d"
-PAPER = "#f7f6f2"
-MUTED = "#56685c"
+FOREST = "#117d58"
+CLAY = "#a5c4af"
+PAPER = "#f3f4f1"
+MUTED = "#607067"
 
 st.set_page_config(page_title="BasketLens | Retail research", page_icon="🧺",
                    layout="wide", initial_sidebar_state="collapsed")
@@ -71,14 +72,14 @@ def reading_note(title: str, explanation: str, *, clay: bool = False) -> None:
 
 def chart_layout(fig: go.Figure, *, height: int = 340) -> go.Figure:
     fig.update_layout(
-        height=height, margin=dict(l=4, r=8, t=12, b=14),
+        height=height, margin=dict(l=8, r=9, t=8, b=10),
         paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
-        font=dict(family="Arial, sans-serif", size=12, color="#34483d"),
+        font=dict(family="Inter, Segoe UI, sans-serif", size=11, color="#405348"),
         showlegend=False, hoverlabel=dict(bgcolor="#20372f", font_color="#ffffff"),
     )
     fig.update_xaxes(showgrid=False, zeroline=False, showline=False,
                      tickfont=dict(color=MUTED))
-    fig.update_yaxes(showgrid=True, gridcolor="#e7e9e2", zeroline=False,
+    fig.update_yaxes(showgrid=True, gridcolor="#edf0eb", zeroline=False,
                      tickfont=dict(color=MUTED))
     return fig
 
@@ -153,29 +154,15 @@ with st.sidebar:
 public_line = (f"Curated view: {int(published['visible_rule_count']):,} of "
                f"{int(published['full_rule_count']):,} rule candidates" if published else
                "Full local research workspace")
-st.markdown(
-    '<section class="bl-hero"><div class="bl-hero-grid"><div>'
-    '<div class="bl-eyebrow">Retail research / Historical transactions</div>'
-    '<h1>BasketLens</h1>'
-    '<p class="bl-hero-lede">What do people tend to buy together?</p>'
-    '<p class="bl-hero-note">Start with the shopping picture, examine product pairings, '
-    'then test a sample basket. Every insight is based on recorded purchases, '
-    'not a sales experiment.</p></div>'
-    '<div class="bl-hero-side">'
-    '<span>DATA COVERAGE</span>'
-    f'<strong>{escape(period_start)} to {escape(period_end)}</strong>'
-    f'<span>{escape(public_line)}</span>'
-    '<span style="margin-top:.7rem">Daqing Chen / UCI Online Retail II</span>'
-    '</div></div></section>', unsafe_allow_html=True,
-)
-st.markdown(
-    '<div class="bl-flow">'
-    '<span>01 &nbsp; Understand sales</span>'
-    '<span>02 &nbsp; Find pairings</span>'
-    '<span>03 &nbsp; Try a basket</span>'
-    '<span>04 &nbsp; Review the evidence</span>'
-    '</div>', unsafe_allow_html=True,
-)
+st.markdown(dashboard_header(period_start, period_end, bool(published)), unsafe_allow_html=True)
+st.markdown(dashboard_intro(
+    period_start, period_end,
+    int(published["visible_rule_count"]) if published else None,
+), unsafe_allow_html=True)
+st.markdown(study_status(
+    int(manifest["basket_count_all"]),
+    int(published["visible_rule_count"]) if published else None,
+), unsafe_allow_html=True)
 
 # Preserve the explicit tab labels used by automated desktop/mobile smoke tests.
 overview, explorer, builder, quality_tab = st.tabs([
@@ -183,12 +170,17 @@ overview, explorer, builder, quality_tab = st.tabs([
 ])
 
 with overview:
-    st.markdown('<p class="bl-section-kicker">01 / The business picture</p>', unsafe_allow_html=True)
-    st.subheader("Start with what the baskets tell us")
-    st.caption("All figures below are based on positive, eligible historical sales. They are not net revenue or profit.")
-    options = ["All countries"] + d["countries"]["country"].dropna().astype(str).tolist()
-    selected_country = st.selectbox("Show sales for", options, key="country_scope",
-                                    help="This changes sales summaries only. Association rules are global.")
+    st.markdown('<p class="bl-section-kicker">01 / Sales overview</p>', unsafe_allow_html=True)
+    headline, picker = st.columns([1.8, 1], gap="large", vertical_alignment="bottom")
+    with headline:
+        st.subheader("Start with what the baskets tell us")
+        st.caption("Historical, eligible sales only. Values are not net revenue or profit.")
+    with picker:
+        options = ["All countries"] + d["countries"]["country"].dropna().astype(str).tolist()
+        selected_country = st.selectbox(
+            "Show sales for", options, key="country_scope",
+            help="This affects country sales summaries, not globally trained association rules.",
+        )
     if selected_country == "All countries":
         monthly = d["monthly"]
         rollup = d["basket_rollup"]
@@ -198,71 +190,86 @@ with overview:
         rollup = d["basket_rollup"].loc[
             d["basket_rollup"]["country"].astype(str).eq(selected_country)]
     snapshot = snapshot_from_rollup(rollup)
-    col1, col2, col3, col4 = st.columns(4)
-    col1.metric("Eligible sales value", f"£{snapshot.sales_gbp:,.0f}",
-                help="Positive eligible sale-line value, not adjusted for returned goods or profit.")
+    col1, col2, col3, col4 = st.columns(4, gap="small")
+    col1.metric("Eligible sales value", f"\u00a3{snapshot.sales_gbp:,.0f}",
+                help="Positive eligible sale lines only. Returns and profit are not reconciled.")
     col2.metric("Baskets analysed", f"{snapshot.baskets:,}")
-    col3.metric("Average per basket", f"£{snapshot.average_gbp:,.2f}"
+    col3.metric("Average per basket", f"\u00a3{snapshot.average_gbp:,.2f}"
                 if snapshot.average_gbp is not None else "N/A")
     col4.metric("Baskets with 2+ products", f"{snapshot.multi_product_share:.1%}"
                 if snapshot.multi_product_share is not None else "N/A",
-                help="Share of eligible invoices with at least two distinct product codes.")
+                help="Share of eligible invoices with two or more distinct product codes.")
     if show_notes:
-        scope = "this historical dataset" if selected_country == "All countries" else selected_country
-        if snapshot.baskets:
-            reading_note("What this means.",
-                         f"In {scope}, a recorded basket was worth £{snapshot.average_gbp:,.2f} "
-                         f"on average. {snapshot.multi_product_share:.1%} of baskets contained at least two "
-                         "different products. This describes historical buying, not sales generated by recommendations.")
-        else:
-            reading_note("No eligible baskets.", "Select another country to inspect recorded activity.")
-    st.markdown("#### How did eligible sales change over time?")
-    if monthly.empty:
-        st.info("No monthly sales were recorded for this selection.")
+        st.markdown(highlight_kpi_text(snapshot.baskets, snapshot.multi_product_share,
+                                       country=("the full study" if selected_country == "All countries"
+                                                else selected_country)), unsafe_allow_html=True)
     else:
-        plot = monthly.sort_values("month").copy()
-        trend = px.line(plot, x="month", y="sales_gbp", markers=True,
-                        labels={"month": "Invoice month", "sales_gbp": "Eligible sales (£)"})
-        trend.update_traces(line=dict(color=FOREST, width=3), marker=dict(size=7, color=CLAY),
-                            hovertemplate="%{x}<br>£%{y:,.0f}<extra></extra>")
-        chart_layout(trend, height=330)
-        trend.update_xaxes(title=None, type="category", showgrid=False)
-        trend.update_yaxes(title="Sales value (£)", tickprefix="£", tickformat=",.0f")
-        st.plotly_chart(trend, use_container_width=True, config={"displayModeBar": False})
-    left, right = st.columns([1.3, 1], gap="large")
-    with left:
-        st.markdown("#### Which products had the highest sales value?")
-        st.caption("This product ranking always covers the entire dataset, even when a country is selected.")
+        st.write("")
+
+    trend_column, mix_column = st.columns([1.62, 1], gap="medium")
+    with trend_column:
+        with st.container(border=True):
+            st.markdown(panel_title(
+                "Sales over time", "Eligible sales values by recorded invoice month.",
+                overline="Historical trend"), unsafe_allow_html=True)
+            if monthly.empty:
+                st.info("No monthly sales records exist for this selection.")
+            else:
+                plot = monthly.sort_values("month").copy()
+                trend = px.line(plot, x="month", y="sales_gbp",
+                                labels={"month": "Invoice month", "sales_gbp": "Sales (GBP)"})
+                trend.update_traces(
+                    line=dict(color=FOREST, width=3, shape="spline", smoothing=0.55),
+                    fill="tozeroy", fillcolor="rgba(17,125,88,0.11)",
+                    hovertemplate="%{x}<br>GBP %{y:,.0f}<extra></extra>",
+                )
+                chart_layout(trend, height=332)
+                trend.update_xaxes(title=None, type="category", showgrid=False)
+                trend.update_yaxes(title=None, tickprefix="\u00a3", tickformat="~s")
+                st.plotly_chart(trend, use_container_width=True, config={"displayModeBar": False})
+                st.caption("Recorded activity, not a forecast. Hover over the line to inspect a month.")
+    with mix_column:
+        with st.container(border=True):
+            st.markdown(panel_title(
+                "Basket composition", "Distinct products on each eligible invoice.",
+                overline="Order makeup"), unsafe_allow_html=True)
+            counts = (rollup.assign(size=rollup["item_count"].clip(upper=10))
+                      .groupby("size", as_index=False)["basket_count"].sum())
+            if counts.empty:
+                st.info("No basket composition is available for this selection.")
+            else:
+                composition = px.bar(counts, x="size", y="basket_count",
+                                     labels={"size": "Distinct products (10 includes 10+)",
+                                             "basket_count": "Baskets"})
+                composition.update_traces(
+                    marker=dict(color="#87b99a", line=dict(color="#87b99a", width=0)),
+                    hovertemplate="%{x} different products<br>%{y:,} baskets<extra></extra>",
+                )
+                chart_layout(composition, height=332)
+                composition.update_xaxes(dtick=1, title=None)
+                composition.update_yaxes(title=None, tickformat="~s")
+                st.plotly_chart(composition, use_container_width=True, config={"displayModeBar": False})
+                st.caption("10 groups all baskets with ten or more distinct products.")
+
+    with st.container(border=True):
+        st.markdown(panel_title(
+            "Products contributing the most recorded sales",
+            "Ranked across the entire historical dataset, even when a country is selected.",
+            overline="Product mix"), unsafe_allow_html=True)
         best = products.nlargest(10, "sales_gbp").copy()
-        best["product"] = best["description"].astype(str).str.slice(0, 30)
+        best["product"] = best["description"].astype(str).str.slice(0, 38)
         if best.empty:
-            st.info("No product aggregates available for ranking.")
+            st.info("No aggregate product ranking is available for this research build.")
         else:
             top_chart = px.bar(best.sort_values("sales_gbp"), x="sales_gbp", y="product",
-                               orientation="h", labels={"sales_gbp": "Sales value (£)", "product": ""})
-            top_chart.update_traces(marker_color=FOREST,
-                                    hovertemplate="%{y}<br>£%{x:,.0f}<extra></extra>")
-            chart_layout(top_chart, height=375)
-            top_chart.update_yaxes(showgrid=False)
-            top_chart.update_xaxes(tickprefix="£", tickformat=",.0f")
+                               orientation="h", labels={"sales_gbp": "Sales (GBP)", "product": ""})
+            top_chart.update_traces(marker=dict(color="#147f59", line=dict(width=0)),
+                                    hovertemplate="%{y}<br>GBP %{x:,.0f}<extra></extra>")
+            chart_layout(top_chart, height=355)
+            top_chart.update_yaxes(showgrid=False, automargin=True)
+            top_chart.update_xaxes(title=None, tickprefix="\u00a3", tickformat="~s")
             st.plotly_chart(top_chart, use_container_width=True, config={"displayModeBar": False})
-    with right:
-        st.markdown("#### How many products are in each basket?")
-        st.caption("Each basket counts distinct stock codes. The last group includes 10 or more.")
-        counts = (rollup.assign(size=rollup["item_count"].clip(upper=10))
-                  .groupby("size", as_index=False)["basket_count"].sum())
-        if counts.empty:
-            st.info("No basket composition is available for this selection.")
-        else:
-            composition = px.bar(counts, x="size", y="basket_count",
-                                 labels={"size": "Distinct products (10 includes 10+)",
-                                         "basket_count": "Baskets"})
-            composition.update_traces(marker_color=CLAY,
-                                      hovertemplate="%{x} different products<br>%{y:,} baskets<extra></extra>")
-            chart_layout(composition, height=375)
-            composition.update_xaxes(dtick=1)
-            st.plotly_chart(composition, use_container_width=True, config={"displayModeBar": False})
-    st.caption("Next: open Association explorer to see which products repeatedly appeared together.")
+    st.caption("Next, open Association explorer to find historical product pairings and inspect their evidence.")
 
 with explorer:
     st.markdown('<p class="bl-section-kicker">02 / Product relationships</p>', unsafe_allow_html=True)
@@ -297,7 +304,7 @@ with explorer:
             min_joint = st.number_input("At least this many baskets together", min_value=1,
                                         max_value=max_joint, value=min(20, max_joint),
                                         help="Larger counts generally offer more descriptive context.")
-        st.caption("To apply a typed search, press Enter or click outside the search field.")
+        st.caption("Apply the search with Enter or by leaving the input field. ")
         filtered = filter_rule_view(rules, names, minimum_lift=min_lift,
                                     minimum_joint=int(min_joint), search=search)
         st.caption(f"{len(filtered):,} of {len(rules):,} available rules match your filters. "
@@ -397,7 +404,7 @@ with builder:
         st.session_state["basket_products"] = []
     # The example uses a frequently observed training antecedent, never future outcomes.
     example_sku = example_basket_seed(d["rules"], all_skus)
-    if example_sku and st.button("Fill an example basket", type="secondary",
+    if example_sku and st.button("Fill an example basket", type="primary",
                                  help="Picks a commonly observed starting product from the training period."):
         st.session_state["basket_products"] = [example_sku]
     selected = st.multiselect("Products currently in the basket", options=all_skus,

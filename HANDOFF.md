@@ -44,3 +44,20 @@ scripts/browser_smoke.py checks reading order, search, builder interaction, tabs
 focus and viewport overflow on desktop/mobile in both full-data and public mode.
 The headless runner must confirm all new flows before the M4 branch is merged.
 Streamlit Cloud URL is not yet verified in this conversation.
+
+
+## M5 reference-inspired UX release
+
+User approved APPROVE PUSH and APPROVE MERGE on 2026-10-09.
+Base GitLab main SHA: 0c697cb558f0b87b41daa87e128a8613695f6022.
+Base GitHub main SHA: 7a890234b50a029fefb56f9218451f8965ab2137.
+Source changes: app/streamlit_app.py, app/assets/basketlens.css,
+src/basketlens/dashboard_ui.py, .streamlit/config.toml,
+scripts/browser_smoke.py, tests/test_dashboard_ui.py, docs/design-m5.md.
+The official public data exhibit, historical business rules, matching algorithms,
+chronological split, data quality and privacy exclusions remain unchanged.
+Local QA: 35 passed, 2 optional skipped, Python compile passes and verified
+M5 patch ZIP source manifest/CRC. Static HTML desktop/mobile concept is
+illustrative only. Native Streamlit real-data and public-mode browser QA
+remains a required CI gate before merging.
+No public Streamlit Cloud URL has been confirmed.

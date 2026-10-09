@@ -48,3 +48,21 @@ Browser/mobile tests: pending GitLab real-data CI. No new hosted deployment clai
 The UCI public data bundle remains unchanged.
 NEXT_ACTION M4: GitLab MR CI including real/public desktop+mobile UX checks.
 Only after green QA, sync GitHub and promote main, then verify hosted Streamlit URL.
+
+
+## M5 release checkpoint (2026-10-09)
+
+Milestone: M5 reference-led responsive dashboard
+Status: PUSHED_PENDING_CI
+GitLab branch: feat/basketlens-m5-reference-dashboard
+GitLab base SHA: 0c697cb558f0b87b41daa87e128a8613695f6022
+GitHub base SHA: 7a890234b50a029fefb56f9218451f8965ab2137
+User gate: APPROVE PUSH and APPROVE MERGE provided 2026-10-09.
+Local tests: 35 passed, 2 optional skipped; compile and ZIP CRC pass.
+M5 source: source-backed soft-green UI, compact header, accessible research links,
+rounded analytic cards, existing 4 research workflows and exports, unit/browser tests.
+Public UCI exhibit and checksum: preserve unchanged.
+NEXT_ACTION M5: Check GitLab CI on exact M5 HEAD, browser smoke for both full-data
+and public exhibit on desktop/mobile, scan secrets/diffs, then reconcile GitHub
+and merge both platforms only on green verification. Verify postmerge CI.
+Hosted Streamlit Community Cloud status unknown pending actual authenticated URL.

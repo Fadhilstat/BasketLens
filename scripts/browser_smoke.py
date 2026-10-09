@@ -52,9 +52,18 @@ def main() -> None:
                                             device_scale_factor=1)
                     page.goto("http://127.0.0.1:8501", wait_until="domcontentloaded", timeout=60000)
                     page.get_by_role("heading", name="BasketLens").wait_for(timeout=90000)
+                    page.locator(".bl-topbar").wait_for(timeout=90000)
+                    page.get_by_role("heading", name="Find the story in every basket.").wait_for(timeout=90000)
                     page.get_by_role("tab", name="Sales overview").wait_for(timeout=90000)
                     page.get_by_text("Start with what the baskets tell us").wait_for(timeout=60000)
                     page.get_by_role("combobox", name="Show sales for").wait_for(timeout=30000)
+                    page.locator('[data-testid="stMetric"]').first.wait_for(timeout=30000)
+                    page.get_by_text("Sales over time", exact=True).wait_for(timeout=60000)
+                    rail = page.get_by_role("navigation", name="Research resources")
+                    if label == "desktop" and not rail.is_visible():
+                        raise AssertionError("Desktop shortcut rail is missing")
+                    if label == "mobile" and rail.is_visible():
+                        raise AssertionError("Shortcut rail overlaps mobile content")
                     if page.get_by_text("This app has encountered an error").count():
                         raise AssertionError(f"{label}: Streamlit runtime error")
                     page.get_by_role("tab", name="Association explorer").click(timeout=30000)
@@ -63,16 +72,9 @@ def main() -> None:
                     if is_public:
                         search = page.get_by_role("textbox", name="Search by product or SKU")
                         search.fill("___NOT_AN_ACTUAL_STOCK_CODE___")
-                        search.press("Enter")  # Streamlit commits st.text_input on Enter or blur.
+                        search.press("Enter")
                         page.get_by_role("tab", name="Association explorer").click(timeout=30000)
-                        try:
-                            page.get_by_text("No rules match your search and thresholds").wait_for(timeout=30000)
-                        except Exception:
-                            page.screenshot(path=str(args.report / f"{label}-search-diagnostic.png"),
-                                            full_page=True, animations="disabled")
-                            print(f"PUBLIC_SEARCH_DIAGNOSTIC {label}: " +
-                                  page.locator("body").inner_text(timeout=5000)[-3200:], flush=True)
-                            raise
+                        page.get_by_text("No rules match your search and thresholds").wait_for(timeout=60000)
                         search = page.get_by_role("textbox", name="Search by product or SKU")
                         search.fill("")
                         search.press("Enter")
@@ -98,7 +100,7 @@ def main() -> None:
                     page.close()
             finally:
                 browser.close()
-        print("REAL_DATA_BROWSER_QA_PASS desktop mobile narrative search basket tabs keyboard viewport")
+        print("REAL_DATA_BROWSER_QA_PASS desktop mobile M5 chrome search basket tabs keyboard viewport")
     finally:
         server.terminate()
         try:

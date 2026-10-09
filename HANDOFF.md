@@ -100,3 +100,10 @@ The user approved the refined Data quality & methodology reference and explicitl
 
 ## M5.6 methodology symmetry fix
 The user showed non-centered number/icon groups and connectors in the M5.5 five-step method sequence and authorized push/merge. CSS now uses 5-column index/icon layout within each card so their combined group is centered. Equal-sized desktop cards have a centered label spanning the whole inner card, and absolute-positioned decorative arrows sit at the exact midpoint of each 32px gap. No other application element is absolutely positioned. Tablet rows become balanced 3+2 with the last two cards centered. Mobile is a full-width ordered list. Browser smoke explicitly compares real Streamlit card dimensions, captions, icon badges and connector positions in the desktop and wide viewports. Original UI semantics, UCI pipeline, model output and public exhibit remain untouched.
+
+
+## M6 portfolio launch and consultant decision brief
+On 9 Oct 2026, user requested a consulting-style PNG deck inspired by uploaded navy/green corporate references and approved project code push/merge. The deck uses audited public UCI and verified real selected rule 22386 (Jumbo Bag Pink Polkadot) -> 85099B (Jumbo Bag Red Retrospot). It does not invent sales impact.
+New src/basketlens/portfolio_case.py selects a 1:1 pair using only training joint frequency, confidence and lift, then joins later evidence after selection; all shown names are HTML escaped. Four deterministic unit tests protect no-peeking, missing-data, zero-firings and escaping.
+Appends a compact business decision brief to Sales overview after product charts. All existing four tabs, models, data, and exports remain unchanged. Existing Streamlit real-data and public browser smoke now checks the brief's presence, four evidence cells and explicit non-causal caveat.
+The README is rewritten to remove stale claims that CI/deployment did not exist, and docs/portfolio-case-study.md with an SVG visual summary makes the project understandable to recruiters. Deck PNGs are user-delivered separate artifacts. Public Cloud access must be checked from a fresh anonymous browser before social promotion.

@@ -148,3 +148,17 @@ User granted APPROVE PUSH and APPROVE MERGE for this milestone.
 Scope: equal five card geometry and true arrow gap midpoint alignment, centered 3+2 tablet flow, single-column mobile, browser geometry regression tests. No analytic data or source code changes.
 Local: Chromium mock at 1440/1280/1024/800/390/320 px passed with zero horizontal overflow. CSS parser passed.
 NEXT_ACTION: verify GitLab MR unit, public and UCI real-data/browser CI; GitHub Actions; merge if green and verify main source parity and published deployment.
+
+
+## M6 portfolio launch checkpoint (2026-10-09)
+Milestone: M6 Portfolio Launch and Evidence Brief
+Status: PUSHED_PENDING_CI
+Branch: feat/basketlens-m6-portfolio-launch
+GitLab main baseline: 69d95f811577b8704169eec3ac420d027994b883
+GitHub main baseline: c9225270962900f7f8390b8de4c9162e015c1ca5
+User approved APPROVE PUSH and APPROVE MERGE for consulting-deck and suitable code upgrades.
+Change: dynamic training-selected decision brief in Sales overview, four non-leaky unit tests, real full-data/public browser check, rewritten recruiter-focused README, new case study and SVG repository banner.
+Verified portfolio case from aggregate public exhibit: 22386 -> 85099B; 1,166 train joint baskets; train confidence .63129399; train lift 6.240128; 416 later fires, 279 hits; later confidence .670673; later lift 6.770604.
+No change to official UCI data, cleaning, rule mining, chronological holdout, public exhibit hash, privacy protections, or hosting.
+A separate nine-slide 1920x1080 PNG consulting deck was generated locally and verified for slide overflow; it is delivered in this conversation, not checked in to the code repository.
+NEXT_ACTION: verify M6 MR GitLab unit/full source/public browser CI, GitHub Actions, then merge both under user's explicit approvals if green. Confirm exact main parity and public hosted status separately.

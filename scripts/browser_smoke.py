@@ -58,6 +58,16 @@ def main() -> None:
                     page.get_by_text("Start with what the baskets tell us").wait_for(timeout=60000)
                     page.get_by_role("combobox", name="Show sales for").wait_for(timeout=30000)
                     page.get_by_text("Sales over time", exact=True).wait_for(timeout=60000)
+                    # M6 editorial case is genuinely derived from public and full UCI rules.
+                    portfolio_brief = page.locator(".bl-decision-brief")
+                    portfolio_brief.wait_for(timeout=30000)
+                    if portfolio_brief.count() != 1:
+                        raise AssertionError(f"{label}: decision brief missing")
+                    if portfolio_brief.locator(".bl-case-results > div").count() != 4:
+                        raise AssertionError(f"{label}: decision evidence incomplete")
+                    if "does not demonstrate incremental conversion" not in portfolio_brief.inner_text():
+                        raise AssertionError(f"{label}: causal limitation missing")
+
                     # Streamlit batches widget messages; one visible metric does
                     # not establish that the entire four-column layout has rendered.
                     try:
@@ -254,7 +264,7 @@ def main() -> None:
                     page.close()
             finally:
                 browser.close()
-        print("REAL_DATA_BROWSER_QA_PASS wide desktop mobile M5.6 symmetrical methodology flow and M5.5 UI")
+        print("REAL_DATA_BROWSER_QA_PASS wide desktop mobile M6 dynamic decision case plus M5.6 symmetrical methodology")
     finally:
         server.terminate()
         try:

@@ -284,3 +284,24 @@
   *, *::before, *::after { animation-duration: .01ms !important;
     transition-duration: .01ms !important; scroll-behavior: auto !important; }
 }
+
+
+/* Streamlit 1.65 gives the keyboard tab its role on an inner control.
+   Style that actual interactive element as well as the BaseWeb wrapper. */
+.stTabs [role="tablist"] { border-radius: 17px; }
+.stTabs [role="tab"] {
+  border-radius: 12px !important;
+  transition: background-color .2s var(--bl-ease), color .2s var(--bl-ease),
+              box-shadow .2s var(--bl-ease);
+}
+.stTabs [role="tab"]:hover { background: #e4efe7; color: #0f6548; }
+.stTabs [role="tab"][aria-selected="true"] {
+  border-radius: 12px !important;
+  color: #fff !important;
+  background: linear-gradient(115deg, #137756 0%, #258c67 100%) !important;
+  box-shadow: 0 3px 9px rgba(11, 99, 62, .13);
+}
+@media (max-width: 480px) {
+  .stTabs [role="tablist"] { border-radius: 15px; }
+  .stTabs [role="tab"] { border-radius: 11px !important; }
+}

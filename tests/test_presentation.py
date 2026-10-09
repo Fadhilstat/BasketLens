@@ -85,3 +85,27 @@ def test_example_basket_uses_training_counts_with_literal_multisku_split():
     assert example_basket_seed(rules, ["SKU3"]) == "SKU3"
     assert example_basket_seed(rules, []) is None
     assert example_basket_seed(pd.DataFrame(columns=rules.columns), ["SKU1"]) is None
+
+
+def test_pair_highlights_deduplicate_symmetry_and_keep_direction():
+    from basketlens.presentation import top_unique_pairs
+    import pandas as pd
+    rules = pd.DataFrame([
+        {"antecedent": "A", "consequent": "B", "antecedent_size": 1,
+         "consequent_size": 1, "joint_count": 13, "confidence": .6, "lift": 2.5},
+        {"antecedent": "B", "consequent": "A", "antecedent_size": 1,
+         "consequent_size": 1, "joint_count": 13, "confidence": .2, "lift": 2.5},
+        {"antecedent": "A", "consequent": "C", "antecedent_size": 1,
+         "consequent_size": 1, "joint_count": 9, "confidence": .4, "lift": 1.8},
+        {"antecedent": "A||B", "consequent": "C", "antecedent_size": 2,
+         "consequent_size": 1, "joint_count": 90, "confidence": .8, "lift": 7.8},
+    ])
+    found = top_unique_pairs(rules, {"A": "RED BAG", "B": "BLUE BAG", "C": "HEART"}, limit=4)
+    assert len(found) == 2
+    assert found[0]["antecedent"] == "Red Bag"
+    assert found[0]["consequent"] == "Blue Bag"
+    assert found[0]["baskets"] == 13
+    assert found[0]["confidence_pct"] == 60.0
+    assert found[0]["lift"] == 2.5
+    assert found[1]["antecedent_sku"] == "A"
+    assert top_unique_pairs(rules.iloc[:0], {}, limit=3) == []

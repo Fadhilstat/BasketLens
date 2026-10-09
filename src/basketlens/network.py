@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import math
+from html import escape
 
 import networkx as nx
 import pandas as pd
@@ -52,8 +53,9 @@ def network_figure(edges: pd.DataFrame, name_map: dict[str, str]) -> go.Figure:
         return fig
     graph = nx.Graph()
     for row in edges.itertuples(index=False):
-        graph.add_edge(row.product_a, row.product_b, weight=row.joint_count)
-    positions = nx.spring_layout(graph, seed=42, weight="weight", iterations=80)
+        graph.add_edge(row.product_a, row.product_b, weight=math.log1p(row.joint_count))
+    positions = nx.spring_layout(graph, seed=42, weight="weight", iterations=160,
+                                 k=1.4 / math.sqrt(max(1, graph.number_of_nodes())))
     max_count = max(edges["joint_count"])
     for row in edges.itertuples(index=False):
         start, end = positions[row.product_a], positions[row.product_b]
@@ -65,20 +67,18 @@ def network_figure(edges: pd.DataFrame, name_map: dict[str, str]) -> go.Figure:
                                  text=[label, label], hovertemplate="%{text}<extra></extra>",
                                  showlegend=False))
     nodes = sorted(graph.nodes())
-    node_text = [f"{name_map.get(node, 'Unknown product')}<br>SKU: {node}<br>"
-                 f"Links shown: {graph.degree(node)}" for node in nodes]
-    node_labels = []
-    for node in nodes:
-        label = str(name_map.get(node, "Unknown product")).strip().title()
-        node_labels.append(label if len(label) <= 19 else label[:18].rstrip() + "…")
+    node_text = [f"{escape(str(name_map.get(node, 'Unknown product')).strip().title())}"
+                 f"<br>SKU: {escape(str(node))}<br>Visible links: {graph.degree(node)}" for node in nodes]
+    # The old text labels collided. Keep details in accessible table and in
+    # per-node hover/touch descriptions, not on top of each other in the graph.
     fig.add_trace(go.Scatter(x=[positions[node][0] for node in nodes],
-                             y=[positions[node][1] for node in nodes], mode="markers+text",
-                             text=node_labels, textposition="top center", hovertext=node_text,
-                             hovertemplate="%{hovertext}<extra></extra>",
-                             marker={"color": "#426a57", "size": [13 + graph.degree(node) * 2 for node in nodes],
-                                     "line": {"color": "#fffefa", "width": 1.5}},
-                             textfont={"size": 10, "color": "#27362e"}, showlegend=False))
-    fig.update_layout(height=490, margin={"l": 10, "r": 10, "t": 10, "b": 10},
+                             y=[positions[node][1] for node in nodes], mode="markers",
+                             hovertext=node_text, hovertemplate="%{hovertext}<extra></extra>",
+                             marker={"color": "#147a58",
+                                     "size": [min(25, 12 + graph.degree(node) * 2) for node in nodes],
+                                     "line": {"color": "#ffffff", "width": 1.7}},
+                             showlegend=False))
+    fig.update_layout(height=410, margin={"l": 12, "r": 12, "t": 12, "b": 12},
                       paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
                       xaxis={"visible": False}, yaxis={"visible": False},
                       hovermode="closest", dragmode="pan")

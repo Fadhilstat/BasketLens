@@ -6,6 +6,7 @@ snapshot. There are no synthetic KPI claims or decorative fake controls.
 from __future__ import annotations
 
 from html import escape
+from math import isfinite
 from typing import Any
 
 SOURCE_URL = "https://archive.ics.uci.edu/dataset/502/online+retail+ii"
@@ -41,8 +42,7 @@ def _symbol(which: str, size: int = 20) -> str:
 
 
 def dashboard_header(start: str, end: str, public: bool) -> str:
-    """A useful brand header and genuine links, not dummy finance UI controls."""
-    period = _safe(f"{start} to {end}")
+    """A single, flowing header with real accessible links, without overlay rails."""
     mode = "Curated public research" if public else "Local analyst workspace"
     return (
         '<header class="bl-topbar">'
@@ -51,20 +51,16 @@ def dashboard_header(start: str, end: str, public: bool) -> str:
         '<div class="bl-brand-copy"><h1>Basket<span>Lens</span></h1>'
         '<small>Retail intelligence</small></div></div>'
         '<div class="bl-topbar-right">'
-        f'<span class="bl-topbar-period">{period}</span>'
         f'<span class="bl-mode-dot">{_safe(mode)}</span>'
+        '<nav class="bl-header-links" aria-label="Research resources">'
+        f'<a class="bl-text-link" href="{SOURCE_URL}" target="_blank" '
+        'rel="noopener noreferrer" aria-label="Open official UCI dataset">Dataset</a>'
+        f'<a class="bl-text-link" href="{METHOD_URL}" target="_blank" '
+        'rel="noopener noreferrer" aria-label="Open research methodology">Method</a>'
         f'<a class="bl-link-button" href="{CODE_URL}" target="_blank" '
-        'rel="noopener noreferrer">View code ' + _symbol("github", 16) + '</a>'
-        '</div></header>'
-        '<nav class="bl-resource-rail" aria-label="Research resources">'
-        '<span class="bl-rail-top" aria-hidden="true">' + _symbol("layers", 23) + '</span>'
-        f'<a href="{SOURCE_URL}" target="_blank" rel="noopener noreferrer" '
-        'title="Official UCI dataset" aria-label="Open official UCI dataset">' + _symbol("chart", 20) + '</a>'
-        f'<a href="{METHOD_URL}" target="_blank" rel="noopener noreferrer" '
-        'title="Research methodology" aria-label="Open research methodology">' + _symbol("book", 20) + '</a>'
-        f'<a href="{CODE_URL}" target="_blank" rel="noopener noreferrer" '
-        'title="Project source code" aria-label="Open source code">' + _symbol("github", 20) + '</a>'
-        '</nav>'
+        'rel="noopener noreferrer" aria-label="Open project source code">GitHub '
+        + _symbol("github", 16) + '</a>'
+        '</nav></div></header>'
     )
 
 
@@ -112,3 +108,31 @@ def highlight_kpi_text(baskets: int, share: float | None, *, country: str) -> st
     return (f'<aside class="bl-context-note"><span class="bl-context-icon">'
             + _symbol("receipt", 21) + '</span><div><strong>What the numbers say</strong>'
             f'<p>{_safe(message)}</p></div></aside>')
+
+
+def pairing_cards(items: list[dict]) -> str:
+    """Render trustworthy pair highlights using escaped text and recorded metrics."""
+    if not items:
+        return '<div class="bl-pair-grid bl-pair-grid--empty"></div>'
+    cards = []
+    for number, row in enumerate(items, start=1):
+        left, right = _safe(row["antecedent"]), _safe(row["consequent"])
+        left_code, right_code = _safe(row["antecedent_sku"]), _safe(row["consequent_sku"])
+        count = int(row["baskets"])
+        confidence = float(row["confidence_pct"])
+        lift = float(row["lift"])
+        if count < 0 or not (isfinite(confidence) and 0 <= confidence <= 100) or not (isfinite(lift) and lift >= 0):
+            raise ValueError("Invalid rule metrics for the card view")
+        cards.append(
+            '<article class="bl-pair-card" role="listitem">'
+            f'<div class="bl-pair-label">PAIR {number:02d}</div>'
+            '<div class="bl-pair-title">'
+            f'{left} <span class="bl-pair-plus">+</span> {right}</div>'
+            '<div class="bl-pair-metrics">'
+            f'<span><strong>{count:,}</strong> baskets together</span>'
+            f'<span><strong>{lift:.2f}x</strong> lift</span></div>'
+            f'<p class="bl-pair-caption">{confidence:.1f}% of earlier baskets with '
+            f'{left} ({left_code}) also contained {right} ({right_code}).</p>'
+            '</article>'
+        )
+    return '<div class="bl-pair-grid" role="list">' + ''.join(cards) + '</div>'

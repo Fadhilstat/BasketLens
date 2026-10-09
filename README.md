@@ -273,3 +273,18 @@ See [M5 design rationale](docs/design-m5.md).
 The M5 reference mockups use illustrative chart shapes. The shipped Streamlit
 app renders source-backed charts and real measurements. A live Streamlit
 Community Cloud URL has not been verified here; do not claim it is deployed.
+
+
+## M5.1 screenshot-driven layout repair (2026-10-09)
+
+Live app screenshots exposed an icon rail crossing the hero, inconsistent left padding,
+overly dense association tables and overlapped affinity-network labels.
+The fix uses normal document flow rather than absolute-positioned navigation,
+a centered layout grid, labelled research links, higher text legibility,
+four unique product-pair summary cards and an optional full rules table.
+The network is collapsed by default with node hover and a readable link list.
+
+See [layout repair and QA](docs/layout-repair-m51.md). The historic UCI source,
+cleaning and chronology, rule generation, public-exhibit checksum, and business
+interpretations remain unchanged. Real-data desktop/mobile browser CI must pass
+on this exact feature commit before merge. Hosted app verification is separate.

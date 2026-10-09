@@ -59,16 +59,33 @@ def main() -> None:
                     page.get_by_role("combobox", name="Show sales for").wait_for(timeout=30000)
                     page.locator('[data-testid="stMetric"]').first.wait_for(timeout=30000)
                     page.get_by_text("Sales over time", exact=True).wait_for(timeout=60000)
-                    rail = page.get_by_role("navigation", name="Research resources")
-                    if label == "desktop" and not rail.is_visible():
-                        raise AssertionError("Desktop shortcut rail is missing")
-                    if label == "mobile" and rail.is_visible():
-                        raise AssertionError("Shortcut rail overlaps mobile content")
+                    metric_count = page.locator('[data-testid="stMetric"]').count()
+                    if metric_count < 4:
+                        raise AssertionError(f"{label}: expected 4 data-backed KPI cards")
+                    page.screenshot(path=str(args.report / f"{label}-overview.png"),
+                                    full_page=False, animations="disabled")
+                    # Layout regression: the old absolute-positioned icon rail
+                    # crossed the hero heading in the live Streamlit app.
+                    if page.locator(".bl-resource-rail").count():
+                        raise AssertionError("Absolute shortcut rail should not exist")
+                    nav = page.get_by_role("navigation", name="Research resources")
+                    if nav.get_by_role("link").count() != 3:
+                        raise AssertionError("The header must expose three working resource links")
+                    topbar_box = page.locator(".bl-topbar").bounding_box()
+                    hero_box = page.locator(".bl-intro-hero").bounding_box()
+                    if topbar_box is None or hero_box is None:
+                        raise AssertionError("Header or hero layout is not visible")
+                    if topbar_box["y"] + topbar_box["height"] > hero_box["y"] + 3:
+                        raise AssertionError(f"{label}: header overlaps the hero")
+                    if abs(topbar_box["x"] - hero_box["x"]) > 20:
+                        raise AssertionError(f"{label}: header and content do not align")
                     if page.get_by_text("This app has encountered an error").count():
                         raise AssertionError(f"{label}: Streamlit runtime error")
                     page.get_by_role("tab", name="Association explorer").click(timeout=30000)
                     page.get_by_text("Which products appeared together?").wait_for(timeout=60000)
-                    page.get_by_text("Product affinity map").wait_for(timeout=60000)
+                    page.get_by_text("Most frequent product pairings").wait_for(timeout=60000)
+                    page.locator(".bl-pair-card").first.wait_for(timeout=60000)
+                    page.get_by_text("Optional: product connection network").wait_for(timeout=60000)
                     if is_public:
                         search = page.get_by_role("textbox", name="Search by product or SKU")
                         search.fill("___NOT_AN_ACTUAL_STOCK_CODE___")
@@ -80,8 +97,8 @@ def main() -> None:
                         search.press("Enter")
                         page.get_by_role("tab", name="Association explorer").click(timeout=30000)
                         page.get_by_text("A pairing worth examining").wait_for(timeout=60000)
-                    page.screenshot(path=str(args.report / f"{label}.png"),
-                                    full_page=True, animations="disabled")
+                    page.screenshot(path=str(args.report / f"{label}-pairings.png"),
+                                    full_page=False, animations="disabled")
                     page.get_by_role("tab", name="Build a basket").click(timeout=30000)
                     page.get_by_text("Choose one or more products").wait_for(timeout=60000)
                     if is_public:
@@ -89,6 +106,8 @@ def main() -> None:
                         page.get_by_text("related product candidates").wait_for(timeout=60000)
                     page.get_by_role("tab", name="Data quality & methodology").click(timeout=30000)
                     page.get_by_text("What can we trust in this analysis?").wait_for(timeout=60000)
+                    page.get_by_text("Read the methodology, definitions and limitations").wait_for(
+                        timeout=30000)
                     page.keyboard.press("Tab")
                     if not page.evaluate("document.activeElement !== document.body"):
                         raise AssertionError(f"{label}: no keyboard focus detected")
@@ -100,7 +119,7 @@ def main() -> None:
                     page.close()
             finally:
                 browser.close()
-        print("REAL_DATA_BROWSER_QA_PASS desktop mobile M5 chrome search basket tabs keyboard viewport")
+        print("REAL_DATA_BROWSER_QA_PASS desktop mobile M5.1 aligned header pairing cards search basket keyboard viewport")
     finally:
         server.terminate()
         try:

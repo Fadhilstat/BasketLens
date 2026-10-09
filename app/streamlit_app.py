@@ -10,6 +10,7 @@ import streamlit as st
 
 from basketlens.insights import annotate_evidence, recommend_with_holdout
 from basketlens.network import affinity_edges, network_figure
+from basketlens.public_demo import PUBLIC_FILENAME, load_public_demo
 
 st.set_page_config(page_title="BasketLens | Retail intelligence", page_icon="🧺",
                    layout="wide", initial_sidebar_state="collapsed")
@@ -34,6 +35,7 @@ h1 {font-family:Georgia, 'Times New Roman',serif; font-size:clamp(2.2rem,4.4vw,3
 </style>""", unsafe_allow_html=True)
 
 BASE_DIR = Path(os.environ.get("BASKETLENS_DATA_DIR", "data/processed"))
+PUBLIC_PATH = Path(__file__).resolve().parents[1] / "data" / "public_demo" / PUBLIC_FILENAME
 
 @st.cache_data(show_spinner=False)
 def load_data(base: str, manifest_mtime: float) -> dict:
@@ -46,10 +48,21 @@ def load_data(base: str, manifest_mtime: float) -> dict:
         types = ({"stock_code": str} if name == "products" else
                  {"antecedent": str, "consequent": str} if name in {"rules", "evaluation"} else None)
         result[name] = pd.read_csv(path / f"{name}.csv", dtype=types)
-    result["baskets"] = pd.read_csv(path / "basket_summary.csv.gz", parse_dates=["invoice_date"])
+    baskets = pd.read_csv(path / "basket_summary.csv.gz", usecols=[
+        "country", "item_count", "basket_revenue_gbp"
+    ], dtype={"country": str})
+    result["basket_rollup"] = baskets.groupby(["country", "item_count"], as_index=False).agg(
+        basket_count=("basket_revenue_gbp", "size"), sales_gbp=("basket_revenue_gbp", "sum")
+    )
     return result
 
-if not (BASE_DIR / "manifest.json").exists():
+
+@st.cache_data(show_spinner=False)
+def load_published(path: str, asset_mtime: float) -> dict:
+    return load_public_demo(Path(path))
+
+
+if not (BASE_DIR / "manifest.json").exists() and not PUBLIC_PATH.is_file():
     st.markdown('<p class="eyebrow">Research workspace · data not prepared</p>', unsafe_allow_html=True)
     st.title("BasketLens")
     st.write("Analyse real transaction patterns and test cross-selling rules against later orders.")
@@ -60,12 +73,20 @@ if not (BASE_DIR / "manifest.json").exists():
     st.stop()
 
 try:
-    d = load_data(str(BASE_DIR.resolve()), (BASE_DIR / "manifest.json").stat().st_mtime)
+    if (BASE_DIR / "manifest.json").exists():
+        d = load_data(str(BASE_DIR.resolve()), (BASE_DIR / "manifest.json").stat().st_mtime)
+    else:
+        d = load_published(str(PUBLIC_PATH), PUBLIC_PATH.stat().st_mtime)
 except (OSError, ValueError, json.JSONDecodeError, KeyError) as error:
-    st.error(f"Cannot read processed analytics data: {error}")
+    st.error(f"Cannot read analytics data: {error}")
     st.stop()
 
 m, q = d["manifest"], d["quality"]
+if "publication" in d:
+    pub = d["publication"]
+    st.caption(f"Public exhibit | {pub['visible_rule_count']:,} training-selected rules from "
+               f"{pub['full_rule_count']:,} full-data candidates. "
+               "Sales metrics cover all eligible historical baskets. No invoice or customer identifiers published.")
 products = d["products"]
 name_map = dict(zip(products["stock_code"].astype(str), products["description"].fillna("Unknown")))
 
@@ -102,15 +123,18 @@ with overview:
     st.subheader("Historical performance")
     if selected_country == "All countries":
         monthly = d["monthly"]
-        selected_baskets = d["baskets"]
+        selected_rollup = d["basket_rollup"]
     else:
         monthly = d["monthly_country"].loc[
             d["monthly_country"]["country"].astype(str).eq(selected_country)]
-        selected_baskets = d["baskets"].loc[d["baskets"]["country"].astype(str).eq(selected_country)]
+        selected_rollup = d["basket_rollup"].loc[
+            d["basket_rollup"]["country"].astype(str).eq(selected_country)]
+    baskets_count = int(selected_rollup["basket_count"].sum())
+    sales_value = float(selected_rollup["sales_gbp"].sum())
     col1, col2, col3 = st.columns(3)
-    col1.metric("Recorded sales value", f"£{selected_baskets['basket_revenue_gbp'].sum():,.0f}")
-    col2.metric("Valid baskets", f"{len(selected_baskets):,}")
-    col3.metric("Average basket value", f"£{selected_baskets['basket_revenue_gbp'].mean():,.2f}" if len(selected_baskets) else "N/A")
+    col1.metric("Recorded sales value", f"£{sales_value:,.0f}")
+    col2.metric("Valid baskets", f"{baskets_count:,}")
+    col3.metric("Average basket value", f"£{sales_value / baskets_count:,.2f}" if baskets_count else "N/A")
     if not monthly.empty:
         fig = px.line(monthly.sort_values("month"), x="month", y="sales_gbp", markers=True,
                       labels={"month":"Invoice month", "sales_gbp":"Sales value (£)"},
@@ -134,8 +158,11 @@ with overview:
         st.plotly_chart(fig2, use_container_width=True)
     with c2:
         st.markdown("**Basket composition**")
-        dist = selected_baskets["item_count"].clip(upper=20).value_counts().sort_index().reset_index()
-        dist.columns = ["distinct_products", "baskets"]
+        dist = selected_rollup.assign(
+            distinct_products=selected_rollup["item_count"].clip(upper=20)
+        ).groupby("distinct_products", as_index=False)["basket_count"].sum().rename(
+            columns={"basket_count": "baskets"}
+        )
         if not dist.empty:
             fig3 = px.bar(dist, x="distinct_products", y="baskets",
                           labels={"distinct_products":"Distinct SKUs (20 includes 20+)", "baskets":"Baskets"},
@@ -148,6 +175,9 @@ with overview:
 with explorer:
     st.subheader("Association explorer")
     st.caption("Association rules are trained on earlier baskets. Filtering below changes the display, not the trained model.")
+    if "publication" in d:
+        st.info("Public display is a training-selected subset of the full set of association rules. "
+                "Holdout outcomes are shown for assessment, not used to select rules for publication.")
     rules = d["rules"].copy()
     if rules.empty:
         st.warning("No rules passed the configured thresholds. Rebuild with suitable settings.")

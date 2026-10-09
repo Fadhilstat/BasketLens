@@ -57,3 +57,18 @@ GitLab MR CI runs `scripts/source_conflict_audit.py` before full-data builds. On
 ## Browser-level release smoke
 
 The CI full-source job also starts the real-data Streamlit server and runs Chromium Playwright on desktop (1440x900) and mobile (390x844). It checks the main heading, the four primary tabs and product affinity controls, keyboard focus, runtime error visibility, and exports screenshots as short-lived CI artifacts. Browser smoke does not replace a full WCAG audit or user acceptance testing. Do not call the site publicly deployed before a real hosting URL is verified.
+
+
+### Public exhibit release gate
+
+1. Build the full-data FP-Growth analysis from the official UCI workbook.
+2. Validate pairwise and FP-Growth parity, temporal holdout and arithmetic.
+3. Run \`python scripts/build_public_demo.py --input .audit/fpgrowth --output data/public_demo\`.
+4. Load the produced \`basketlens_public_v1.b64\` with
+   \`basketlens.public_demo.load_public_demo\` and verify its checksum.
+5. Check that all public tables exclude invoice numbers, customer identifiers
+   and raw transactions. Product/catalog and country facts are aggregated.
+6. Run Chromium browser smoke tests in public-only mode on desktop and mobile.
+7. Copy only the checked public bundle into the repository. Never commit raw UCI
+   XLSX, invoice-level processed CSV, temporary audit folders or credentials.
+8. Verify GitLab/GitHub parity and Streamlit Community Cloud live URL.

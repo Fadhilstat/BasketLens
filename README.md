@@ -298,3 +298,8 @@ Use `python scripts/hosted_smoke.py --url https://basketlens-retail.streamlit.ap
 ## M5.3 visual refinement (2026-10-09)
 
 The Streamlit interface now uses a calmer, more cohesive research-dashboard design: rounded KPI surfaces with data-specific desktop pictograms, refined chart panels, a smooth active-tab track, clearer inputs and notes, and deliberate mobile/reduced-motion rules. These styles are scoped to the existing real UCI-based workflows, not synthetic results. Read [the M5.3 design note](docs/design-m53.md). GitLab's real-UCI and desktop/mobile browser CI remain the deployment readiness gate.
+
+
+## M5.4 readability and layout release (2026-10-09)
+
+Following live Streamlit screenshot feedback, the main interface now uses one consolidated CSS source, clearer tab navigation, larger labels and actual metric values, more readable tables and a five-step ordered methodology flow. The native filters, interactive charts, basket builder, association evidence and downloads remain functional. See [M5.4 design QA](docs/design-m54.md). The unchanged verified public UCI exhibit remains the only deployed data source.

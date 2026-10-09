@@ -110,3 +110,16 @@ Changes: scoped responsive visual system, iconographic overview native metrics, 
 Data source, validated UCI rules, model results, aggregate public exhibit and checksum unchanged.
 Offline design prototype: desktop/tablet/mobile no horizontal overflow, CSS parser found zero syntax errors. Exact-source GitLab CI and GitHub workflow must pass before merge.
 NEXT_ACTION M5.3: verify MR full UCI audit and both desktop/mobile screenshot tests, check Github mirror, merge only after both CIs green, verify hosted UI under fresh app session.
+
+
+## M5.4 live methodology layout checkpoint (2026-10-09)
+Milestone: M5.4 Readable Streamlit Research Interface
+Status: PUSHED_PENDING_CI
+GitLab branch: feat/basketlens-m54-readable-ui
+GitLab base main: 8369dd5c0342a826ec176b3d4c787c20cb4ffbed
+GitHub base main: 355a5ccfe9bd9f25804a7aeb8fb69fd8f1685b7c
+User granted APPROVE PUSH and APPROVE MERGE for M5.4.
+Scope: consolidate CSS, enlarge data-quality values and captions, improve real tabs, stepper, table, chart tick readability, browser smoke screenshots at wide/desktop/mobile, add fast public UI CI.
+Local layout prototype: 1920/1440/1024/390px tested; no horizontal document overflow. Real Streamlit CI still required.
+The UCI source, algorithms, verified public exhibit and checksum are unchanged.
+NEXT_ACTION M5.4: confirm fast public UI and full UCI GitLab MR CI plus GitHub Actions. Merge only with green QA. After release, check deployed UI and capture actual Streamlit screenshot.

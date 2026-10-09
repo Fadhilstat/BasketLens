@@ -47,7 +47,7 @@ def main() -> None:
         with sync_playwright() as pw:
             browser = pw.chromium.launch(headless=True, args=["--no-sandbox"])
             try:
-                for label, width, height in [("desktop", 1440, 900), ("mobile", 390, 844)]:
+                for label, width, height in [("wide", 1920, 1080), ("desktop", 1440, 900), ("mobile", 390, 844)]:
                     page = browser.new_page(viewport={"width": width, "height": height},
                                             device_scale_factor=1)
                     page.goto("http://127.0.0.1:8501", wait_until="domcontentloaded", timeout=60000)
@@ -57,8 +57,20 @@ def main() -> None:
                     page.get_by_role("tab", name="Sales overview").wait_for(timeout=90000)
                     page.get_by_text("Start with what the baskets tell us").wait_for(timeout=60000)
                     page.get_by_role("combobox", name="Show sales for").wait_for(timeout=30000)
-                    page.locator('[data-testid="stMetric"]').first.wait_for(timeout=30000)
                     page.get_by_text("Sales over time", exact=True).wait_for(timeout=60000)
+                    # Streamlit batches widget messages; one visible metric does
+                    # not establish that the entire four-column layout has rendered.
+                    try:
+                        page.wait_for_function(
+                            "() => document.querySelectorAll('[data-testid=stMetric]').length >= 4",
+                            timeout=90000,
+                        )
+                    except Exception as exc:
+                        page.screenshot(path=str(args.report / f"{label}-missing-metrics.png"),
+                                        full_page=False, animations="disabled")
+                        raise AssertionError(
+                            f"{label}: fewer than 4 overview metrics after render wait"
+                        ) from exc
                     metric_count = page.locator('[data-testid="stMetric"]').count()
                     if metric_count < 4:
                         raise AssertionError(f"{label}: expected 4 data-backed KPI cards")
@@ -76,7 +88,15 @@ def main() -> None:
                         "el => parseFloat(getComputedStyle(el).borderTopLeftRadius)")
                     if tab_radius < 10:
                         raise AssertionError(f"{label}: tab treatment missing")
-                    if label == "desktop":
+                    tab_surface = page.get_by_role("tablist").first.evaluate(
+                        "el => getComputedStyle(el).backgroundColor")
+                    if tab_surface in {"rgba(0, 0, 0, 0)", "transparent"}:
+                        raise AssertionError(f"{label}: navigation track is invisible")
+                    tab_font = page.get_by_role("tab", name="Sales overview").evaluate(
+                        "el => parseFloat(getComputedStyle(el).fontSize)")
+                    if tab_font < 14:
+                        raise AssertionError(f"{label}: tab labels are too small")
+                    if label in {"wide", "desktop"}:
                         first_icon = page.locator(".st-key-sales_kpis [data-testid='stMetric']").first.evaluate(
                             "el => getComputedStyle(el, '::before').backgroundImage")
                         if "data:image/svg+xml" not in first_icon:
@@ -126,6 +146,27 @@ def main() -> None:
                         page.get_by_text("related product candidates").wait_for(timeout=60000)
                     page.get_by_role("tab", name="Data quality & methodology").click(timeout=30000)
                     page.get_by_text("What can we trust in this analysis?").wait_for(timeout=60000)
+                    quality_kpis = page.locator(".st-key-quality_kpis [data-testid='stMetric']")
+                    try:
+                        page.wait_for_function(
+                            "() => document.querySelectorAll('.st-key-quality_kpis [data-testid=stMetric]').length === 4",
+                            timeout=60000,
+                        )
+                    except Exception as exc:
+                        page.screenshot(path=str(args.report / f"{label}-quality-missing.png"),
+                                        full_page=False, animations="disabled")
+                        raise AssertionError(f"{label}: missing quality KPI after render wait") from exc
+                    quality_value = quality_kpis.first.locator(
+                        '[data-testid="stMetricValue"]').evaluate(
+                        "el => parseFloat(getComputedStyle(el).fontSize)")
+                    if quality_value < 24:
+                        raise AssertionError(f"{label}: quality metric value is too small")
+                    flow = page.get_by_role("list", name="Validation sequence")
+                    flow.locator("li").first.wait_for(timeout=30000)
+                    if flow.locator("li").count() != 5:
+                        raise AssertionError(f"{label}: validation steps lost")
+                    page.screenshot(path=str(args.report / f"{label}-quality.png"),
+                                    full_page=False, animations="disabled")
                     page.get_by_text("Read the methodology, definitions and limitations").wait_for(
                         timeout=30000)
                     page.keyboard.press("Tab")
@@ -139,7 +180,7 @@ def main() -> None:
                     page.close()
             finally:
                 browser.close()
-        print("REAL_DATA_BROWSER_QA_PASS desktop mobile M5.3 smooth surfaces KPI icons responsive tabs search basket keyboard viewport")
+        print("REAL_DATA_BROWSER_QA_PASS wide desktop mobile M5.4 typography tabs quality stepper pairing search basket keyboard viewport")
     finally:
         server.terminate()
         try:

@@ -15,7 +15,7 @@ import plotly.graph_objects as go
 import streamlit as st
 
 from basketlens.dashboard_ui import (dashboard_header, dashboard_intro, highlight_kpi_text,
-                                    pairing_cards, panel_title, study_status)
+                                    pairing_cards, panel_title, quality_pipeline, study_status)
 from basketlens.insights import annotate_evidence, recommend_with_holdout
 from basketlens.network import affinity_edges, network_figure
 from basketlens.presentation import (
@@ -35,10 +35,8 @@ MUTED = "#607067"
 
 st.set_page_config(page_title="BasketLens | Retail research", page_icon="🧺",
                    layout="wide", initial_sidebar_state="collapsed")
-st.markdown("<style>" + "\n".join(
-    (ROOT / "app" / "assets" / name).read_text(encoding="utf-8")
-    for name in ("basketlens.css", "refinement-m53.css")
-) + "</style>", unsafe_allow_html=True)
+st.markdown("<style>" + (ROOT / "app" / "assets" / "basketlens.css").read_text(
+    encoding="utf-8") + "</style>", unsafe_allow_html=True)
 
 
 @st.cache_data(show_spinner=False)
@@ -78,13 +76,13 @@ def chart_layout(fig: go.Figure, *, height: int = 340) -> go.Figure:
     fig.update_layout(
         height=height, margin=dict(l=8, r=9, t=8, b=10),
         paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
-        font=dict(family="Inter, Segoe UI, sans-serif", size=11, color="#405348"),
+        font=dict(family="Inter, Segoe UI, sans-serif", size=12, color="#405348"),
         showlegend=False, hoverlabel=dict(bgcolor="#20372f", font_color="#ffffff"),
     )
     fig.update_xaxes(showgrid=False, zeroline=False, showline=False,
-                     tickfont=dict(color=MUTED))
+                     tickfont=dict(color=MUTED, size=12))
     fig.update_yaxes(showgrid=True, gridcolor="#edf0eb", zeroline=False,
-                     tickfont=dict(color=MUTED))
+                     tickfont=dict(color=MUTED, size=12))
     return fig
 
 
@@ -231,7 +229,7 @@ with overview:
                 chart_layout(trend, height=332)
                 trend.update_xaxes(title=None, type="category", showgrid=False)
                 trend.update_yaxes(title=None, tickprefix="\u00a3", tickformat="~s")
-                st.plotly_chart(trend, use_container_width=True, config={"displayModeBar": False})
+                st.plotly_chart(trend, width="stretch", config={"displayModeBar": False})
                 st.caption("Recorded activity, not a forecast. Hover over the line to inspect a month.")
     with mix_column:
         with st.container(border=True, key="basket_mix_panel"):
@@ -253,7 +251,7 @@ with overview:
                 chart_layout(composition, height=332)
                 composition.update_xaxes(dtick=1, title=None)
                 composition.update_yaxes(title=None, tickformat="~s")
-                st.plotly_chart(composition, use_container_width=True, config={"displayModeBar": False})
+                st.plotly_chart(composition, width="stretch", config={"displayModeBar": False})
                 st.caption("10 groups all baskets with ten or more distinct products.")
 
     with st.container(border=True, key="product_mix_panel"):
@@ -273,7 +271,7 @@ with overview:
             chart_layout(top_chart, height=355)
             top_chart.update_yaxes(showgrid=False, automargin=True)
             top_chart.update_xaxes(title=None, tickprefix="\u00a3", tickformat="~s")
-            st.plotly_chart(top_chart, use_container_width=True, config={"displayModeBar": False})
+            st.plotly_chart(top_chart, width="stretch", config={"displayModeBar": False})
     st.caption("Next, open Association explorer to find historical product pairings and inspect their evidence.")
 
 with explorer:
@@ -331,7 +329,7 @@ with explorer:
             with st.expander(f"Browse all matching rules ({len(filtered):,})", expanded=False):
                 st.caption("Full training-period rule details. Many pairs also have a reverse-direction rule.")
                 top = compact_rule_table(filtered.head(80))
-                st.dataframe(top, hide_index=True, use_container_width=True, height=335,
+                st.dataframe(top, hide_index=True, width="stretch", height=335,
                              column_config={
                                  "Purchased together": st.column_config.NumberColumn(format="%d"),
                                  "Confidence (%)": st.column_config.NumberColumn(format="%.1f%%"),
@@ -354,7 +352,7 @@ with explorer:
                 st.info("No two-product connections satisfy the current filters.")
             else:
                 fig = network_figure(edges, names)
-                st.plotly_chart(fig, use_container_width=True,
+                st.plotly_chart(fig, width="stretch",
                                 config={"displayModeBar": False})
                 st.markdown("**Connections as a list**")
                 connection_table = edges.head(10).copy()
@@ -364,7 +362,7 @@ with explorer:
                     lambda code: product_name(str(code), names).title())
                 st.dataframe(connection_table[["First product", "Second product", "joint_count", "lift"]]
                              .rename(columns={"joint_count": "Together in baskets", "lift": "Training lift"}),
-                             hide_index=True, use_container_width=True, height=240)
+                             hide_index=True, width="stretch", height=240)
     st.markdown("#### Did these pairings appear in later orders?")
     st.caption("A later time window checks whether the co-occurrence was repeated. It is not an A/B test.")
     evaluation = d["evaluation"]
@@ -400,7 +398,7 @@ with explorer:
                                  "evidence_label"]].head(80).rename(columns={
                                      "fires": "Starting product seen later", "hits": "Both seen later",
                                      "holdout_lift": "Later lift", "evidence_label": "Descriptive evidence"
-                                 }), hide_index=True, use_container_width=True, height=300,
+                                 }), hide_index=True, width="stretch", height=300,
                          column_config={
                              "Earlier confidence (%)": st.column_config.NumberColumn(format="%.1f%%"),
                              "Later confidence (%)": st.column_config.NumberColumn(format="%.1f%%"),
@@ -462,7 +460,7 @@ with builder:
                                 "Later confidence (%)", "evidence_label"]].rename(columns={
                                     "joint_count": "Earlier co-purchases", "lift": "Earlier lift",
                                     "fires": "Seen later", "evidence_label": "Evidence"
-                                }), hide_index=True, use_container_width=True,
+                                }), hide_index=True, width="stretch",
                          column_config={
                              "Earlier confidence (%)": st.column_config.NumberColumn(format="%.1f%%"),
                              "Later confidence (%)": st.column_config.NumberColumn(format="%.1f%%"),
@@ -482,19 +480,18 @@ with quality_tab:
     st.subheader("What can we trust in this analysis?")
     st.write("A useful pairing begins with a trustworthy basket. The pipeline excludes invalid sales "
              "and records invoices that cannot be interpreted consistently.")
-    q1, q2, q3, q4 = st.columns(4)
-    q1.metric("Source line items", f"{quality['input_rows']:,}")
-    q2.metric("Eligible sale lines analysed",
-              f"{quality.get('analysis_eligible_rows', quality['valid_rows']):,}")
-    q3.metric("Excluded lines", f"{quality['excluded_rows']:,}",
-              help="Invalid, canceled and non-merchandise records. Quarantined lines are separate.")
-    quarantined = quality.get("source_invoice_conflicts", {}).get("quarantined_rows", 0)
-    q4.metric("Additional quarantined lines", f"{quarantined:,}",
-              help="Complete invoices were removed when source dates or countries conflicted.")
+    with st.container(key="quality_kpis"):
+        q1, q2, q3, q4 = st.columns(4)
+        q1.metric("Source line items", f"{quality['input_rows']:,}")
+        q2.metric("Eligible sale lines analysed",
+                  f"{quality.get('analysis_eligible_rows', quality['valid_rows']):,}")
+        q3.metric("Excluded lines", f"{quality['excluded_rows']:,}",
+                  help="Invalid, canceled and non-merchandise records. Quarantined lines are separate.")
+        quarantined = quality.get("source_invoice_conflicts", {}).get("quarantined_rows", 0)
+        q4.metric("Additional quarantined lines", f"{quarantined:,}",
+                  help="Complete invoices were removed when source dates or countries conflicted.")
     st.markdown("#### Where did the data go?")
-    st.markdown('<div class="bl-flow"><span>Invoice records</span><span>Eligibility checks</span>'
-                '<span>One basket per invoice</span><span>Rules from earlier orders</span>'
-                '<span>Check against later orders</span></div>', unsafe_allow_html=True)
+    st.markdown(quality_pipeline(), unsafe_allow_html=True)
     reason_rows = [
         {"Quality outcome": quality_reason_label(reason), "Source lines": int(count)}
         for reason, count in quality["reason_counts"].items()

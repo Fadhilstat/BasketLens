@@ -136,3 +136,17 @@ def pairing_cards(items: list[dict]) -> str:
             '</article>'
         )
     return '<div class="bl-pair-grid" role="list">' + ''.join(cards) + '</div>'
+
+def quality_pipeline() -> str:
+    """An ordered, readable summary of the actual methodological steps."""
+    steps = (
+        "Invoice records",
+        "Eligibility checks",
+        "One basket per invoice",
+        "Rules from earlier orders",
+        "Check against later orders",
+    )
+    return ('<ol class="bl-flow" aria-label="Validation sequence">' +
+            ''.join(f'<li><span class="bl-flow-index" aria-hidden="true">{i:02d}</span>'
+                    f'<span class="bl-flow-copy">{_safe(label)}</span></li>'
+                    for i, label in enumerate(steps, start=1)) + '</ol>')

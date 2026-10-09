@@ -23,6 +23,9 @@ def test_fixed_icon_and_label_grid_prevent_asymmetric_cards():
     assert "grid-column: 4;" in section
     assert "grid-column: 1 / -1;" in section
     assert "min-height: 120px;" in section
+    assert "width: 100%;" in section
+    assert "margin: 0;" in section
+    assert "justify-self: stretch;" in section
     assert "align-content: center;" in section
     assert "align-items: stretch;" in section
     assert "overflow-wrap: anywhere" in CSS

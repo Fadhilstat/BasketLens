@@ -53,7 +53,7 @@ The public Streamlit app uses a **checksum-verified aggregate-only exhibit**. Ra
 
 ## Portfolio frontend for Vercel (M6.3)
 
-The `site/` folder provides a separate, recruiter-first portfolio dossier with responsive editorial design, an accessible train/holdout comparison, and links to the complete Streamlit research workbench. The dossier is a **read-only explanatory companion**. It does not replace Python mining, load raw customer information, or claim conversion or revenue uplift.
+The `site/` folder provides a separate, recruiter-first portfolio dossier with responsive editorial design, an accessible train/holdout comparison, and links to the complete Streamlit research workbench. The frontend is a **read-only analytical companion** with an interactive published Rule Explorer. It does not replace Python mining, load raw customer information, or claim conversion or revenue uplift.
 
 To test it locally: `npm --prefix site test` and `npm --prefix site run build`. The prebuilt `site/dist/` directory can be deployed as a static Vercel project with **Root Directory = site**. Vercel production is deployed from GitLab `main` to [BasketLens portfolio](https://basketlens-fadhil-9768s-projects.vercel.app/) (deployment `dpl_33yyNrDmzfaFU7jJfMg7m91GbbTG`, status READY). Anonymous access PASSED an external Chromium guest check on 2026-10-10 (HTTP 200, desktop 1440 px, mobile 390 px, and narrow mobile 320 px; tabs, keyboard, and overflow). [View verified CI evidence](https://gitlab.com/fadhilrusydih/basketlens/-/jobs/17080255194). The separate Streamlit workbench retains its own access/interaction gate. See [Vercel frontend contract](docs/vercel-frontend.md).
 
@@ -145,3 +145,10 @@ The application has passed source CI and simulated public-data browser QA. **Thi
 ## M6.5 dashboard-style portfolio experience
 
 The public Vercel front door has a dedicated **retail intelligence dashboard** layout rather than a generic case-study page: responsive research navigation, source-verified KPI tiles, training/holdout comparison, product-pair diagram, methods and a controlled-test decision brief. The Python/Streamlit analysis remains the reproducible research engine and is not replaced by a static frontend. The Vercel deployment should be checked again as an anonymous guest after the M6.5 merge before claiming that the redesign is live.
+
+
+## M6.6: Rule Explorer on Vercel
+
+The production-facing dashboard now exposes an interactive explorer for the **1,500 training-selected public rules**. Visitors can search stock codes or product names, filter the earlier-period training lift and co-purchase count, distinguish one- and two-product antecedents, and inspect later-period observational hits/fires. Results never rank or filter based on later-period performance. The interface includes genuine empty/error/retry states and progressive display for mobile readability.
+
+The browser receives only whitelisted aggregate rule fields derived at build time from a SHA256-verified copy of `data/public_demo/basketlens_public_v1.b64`. No raw UCI invoices or personal identifiers are served. The canonical artifact remains under `data/public_demo/`, and site build CI rejects divergent hashes. Commands: `npm --prefix site test`, `npm --prefix site run build`, `python site/tests/explorer_browser_smoke.py`. The live URL should be treated as M6.6 only after post-merge anonymous guest CI passes.

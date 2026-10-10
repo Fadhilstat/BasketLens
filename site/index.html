@@ -249,7 +249,75 @@ button:focus-visible, a:focus-visible, summary:focus-visible, [tabindex]:focus-v
   .product-item strong { font-size: 15px; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation: none !important; transition-duration: 0s !important; } }
-  </style>
+  /* M6.6: The published rule exhibit becomes a usable research instrument. */
+.explorer-section { margin-top: 29px; }
+.explorer-shell { border: 1px solid var(--stroke); background: #fff; border-radius: 9px; overflow: hidden; }
+.explorer-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; padding: 24px 26px; background: #eaf1e9; border-bottom: 1px solid #d0dfd2; }
+.explorer-head h3 { margin: 4px 0 6px; font: 400 27px/1.14 var(--serif); letter-spacing: -.025em; }
+.explorer-head p { margin: 0; font-size: 12px; line-height: 1.6; color: var(--body); max-width: 660px; }
+.explorer-provenance { text-align: right; flex: 0 0 auto; font-size: 11px; color: #355d48; font-weight: 750; line-height: 1.7; padding-top: 7px; }
+.explorer-provenance span { display: block; font-size: 10px; font-weight: 500; color: var(--muted); }
+.explorer-filters { padding: 23px 26px 18px; display: grid; grid-template-columns: minmax(195px, 1.45fr) repeat(3, minmax(130px,1fr)) auto; gap: 12px; align-items: end; border-bottom: 1px solid var(--stroke); }
+.rule-field { display: flex; flex-direction: column; min-width: 0; gap: 7px; }
+.rule-field span { font-weight: 750; font-size: 11px; color: var(--forest); }
+.rule-field input, .rule-field select { display: block; width: 100%; min-width: 0; min-height: 45px; border: 1px solid #c5d5c8; border-radius: 6px; padding: 10px 12px; background: #fff; color: var(--ink); font: 600 12px/1.4 Arial, Helvetica, sans-serif; }
+.rule-field input::placeholder { color: #6d8475; font-weight: 400; }
+.rule-reset, .rule-more, .rule-retry { min-height: 45px; border: 1px solid #b4cdbc; border-radius: 6px; background: #f5faf5; color: var(--pine); padding: 10px 14px; font-weight: 800; font-size: 12px; }
+.rule-reset:hover, .rule-more:hover, .rule-retry:hover { background: #e1eee3; }
+.explorer-summary { display: flex; justify-content: space-between; gap: 18px; flex-wrap: wrap; align-items: center; padding: 13px 26px; color: var(--body); font-size: 11px; border-bottom: 1px solid var(--stroke); }
+.explorer-summary strong { color: var(--pine); font-size: 12px; }
+.rule-list { min-width: 0; }
+.rule-row { padding: 20px 26px; border-bottom: 1px solid var(--stroke); display: grid; grid-template-columns: minmax(0,1.45fr) minmax(0,1.3fr) minmax(0,.85fr); gap: 22px; align-items: start; }
+.rule-row:nth-child(even) { background: #fbfdfb; }
+.rule-relationship { min-width: 0; }
+.rule-description-label { display: block; color: #60836e; font-size: 9px; letter-spacing: .055em; line-height: 1.45; font-weight: 800; }
+.rule-then { margin-top: 11px; }
+.rule-product-name { display: block; color: #163d2b; overflow-wrap: anywhere; font-size: 13px; line-height: 1.38; font-weight: 800; margin-top: 3px; }
+.rule-measures { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; align-self: stretch; }
+.rule-metric { min-width: 0; padding: 9px 10px; background: #f1f6f0; border-radius: 5px; }
+.rule-metric-label { display: block; color: #526c5b; font-size: 9px; line-height: 1.4; min-height: 25px; }
+.rule-metric strong { display: block; font: 400 22px/1.2 var(--serif); color: var(--pine); margin: 3px 0; }
+.rule-metric small { display: block; color: #5f7868; font-size: 9px; line-height: 1.35; }
+.rule-holdout { border-left: 2px solid #b8d7c3; padding-left: 15px; min-width: 0; }
+.rule-holdout-number { display: block; margin: 8px 0 4px; color: var(--pine); font: 400 25px/1.1 var(--serif); white-space: nowrap; }
+.rule-holdout small { display: block; color: var(--body); font-size: 10px; line-height: 1.55; }
+.rule-empty, .rule-error { padding: 33px 25px; text-align: center; border-bottom: 1px solid var(--stroke); }
+.rule-empty strong, .rule-error strong { display: block; margin-bottom: 5px; color: var(--pine); font-size: 15px; }
+.rule-empty p, .rule-error p { margin: 3px 0 14px; font-size: 12px; color: var(--body); }
+.explorer-actions { padding: 16px 26px; display: flex; justify-content: center; }
+.rule-more { min-width: 200px; }
+.explorer-foot { border-top: 1px solid var(--stroke); background: #f9fbf7; padding: 14px 26px; color: #496052; font-size: 11px; line-height: 1.65; }
+.explorer-foot strong { color: var(--pine); }
+.explorer-foot span { display: block; font-size: 10px; color: var(--muted); overflow-wrap: anywhere; margin-top: 5px; }
+@media (max-width: 1280px) {
+  .explorer-filters { grid-template-columns: repeat(4,minmax(0,1fr)); }
+  .rule-search { grid-column: span 2; }
+  .rule-reset { grid-column: span 2; }
+  .rule-row { grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 16px; }
+  .rule-holdout { grid-column: span 2; display: flex; gap: 12px; align-items: baseline; }
+  .rule-holdout .rule-holdout-number { margin: 0; }
+}
+@media (max-width: 780px) {
+  .explorer-head { padding: 22px 18px; }
+  .explorer-filters { padding: 18px; grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .rule-search { grid-column: span 2; }
+  .rule-reset { grid-column: span 2; }
+  .rule-row { padding: 19px 18px; grid-template-columns: 1fr; }
+  .rule-holdout { grid-column: auto; }
+  .explorer-summary, .explorer-actions, .explorer-foot { padding-inline: 18px; }
+}
+@media (max-width: 480px) {
+  .explorer-head { display: block; }
+  .explorer-provenance { text-align: left; margin-top: 13px; }
+  .explorer-provenance span { display: inline; }
+  .explorer-filters { gap: 12px; }
+  .rule-metric strong { font-size: 19px; }
+  .rule-measures { gap: 6px; }
+  .rule-metric { padding: 8px 7px; }
+  .rule-holdout { flex-wrap: wrap; gap: 6px 12px; }
+  .explorer-summary { gap: 6px; }
+}
+</style>
 </head>
 <body>
 <a class="skip-link" href="#main-content">Skip to research content</a>
@@ -263,6 +331,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible, [tabindex]:focus-v
     <nav class="sidebar-nav" aria-label="Research sections">
       <a class="active" href="#top" aria-current="page"><svg class="nav-glyph" viewBox="0 0 20 20" aria-hidden="true"><path d="M2.5 9.3 10 3l7.5 6.3v7.4H12v-5H8v5H2.5z"/></svg>Overview</a>
       <a href="#finding"><svg class="nav-glyph" viewBox="0 0 20 20" aria-hidden="true"><path d="M2 16h16M4 13l4-5 4 3 4-7"/></svg>Association evidence</a>
+      <a href="#explorer"><svg class="nav-glyph" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 4h14v12H3zM6 8h8M6 11h5M6 14h7"/></svg>Rule explorer</a>
       <a href="#method"><svg class="nav-glyph" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 3h12v14H4zM7 7h6M7 10h6M7 13h4"/></svg>Methodology</a>
       <a href="#decision"><svg class="nav-glyph" viewBox="0 0 20 20" aria-hidden="true"><path d="m3 10 4 4L17 4M4 17h12"/></svg>Decision brief</a>
       <a href="https://github.com/Fadhilstat/BasketLens/blob/main/docs/portfolio-case-study.md" target="_blank" rel="noopener noreferrer"><svg class="nav-glyph" viewBox="0 0 20 20" aria-hidden="true"><path d="M6 3h8l3 3v11H3V3zM8 8h5M8 11h5"/></svg>Full case study</a>
@@ -289,7 +358,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible, [tabindex]:focus-v
           <p class="hero-kicker">Featured insight / Rule 22386 to 85099B</p>
           <h2 id="hero-banner-title" class="hero-title">One pairing.<br><em>Two periods of evidence.</em></h2>
           <p class="hero-description">Pink Polkadot and Red Retrospot jumbo bags co-occurred in earlier baskets and were observed again in later invoices. This is a hypothesis worth checking, not a promise of sales uplift.</p>
-          <div class="hero-actions"><a class="primary-link" href="#finding">Inspect association</a><a class="secondary-link" href="https://github.com/Fadhilstat/BasketLens/blob/main/docs/portfolio-case-study.md" target="_blank" rel="noopener noreferrer">Read full case study</a></div>
+          <div class="hero-actions"><a class="primary-link" href="#explorer">Browse 1,500 rules</a><a class="secondary-link" href="https://github.com/Fadhilstat/BasketLens/blob/main/docs/portfolio-case-study.md" target="_blank" rel="noopener noreferrer">Read full case study</a></div>
           <p class="availability-note">Interactive analysis and reproducible methods are documented in the source repository.</p>
         </div>
         <div class="hero-visual" aria-label="Training and holdout association confidence snapshot">
@@ -344,8 +413,30 @@ button:focus-visible, a:focus-visible, summary:focus-visible, [tabindex]:focus-v
         </div>
         <p class="finding-caption">Interpretation: the pairing survived a later-period observational check. There is no causal, profitability or present-day demand conclusion from these numbers.</p>
       </section>
+      <section id="explorer" class="explorer-section" aria-labelledby="explorer-title">
+        <div class="section-bar"><div><p class="section-number">02 / Published rule explorer</p><h2 id="explorer-title">Inspect the wider shortlist</h2></div><p>Verified, historical, read-only evidence</p></div>
+        <div class="explorer-shell">
+          <header class="explorer-head">
+            <div><p class="card-kicker">Interactive research / UCI Online Retail II</p><h3>What else appears together?</h3><p>Search a product name or stock code, then narrow the 1,500 training-selected associations. Each row keeps its later-period observation separate from the training evidence.</p></div>
+            <div class="explorer-provenance">1,200 single + 300 multi-item rules<span> Selected using earlier orders only</span></div>
+          </header>
+          <form id="explorer-filters" class="explorer-filters" role="search" aria-label="Filter published association rules">
+            <label class="rule-field rule-search" for="rule-query"><span>Product name or SKU</span><input id="rule-query" type="search" placeholder="e.g. polkadot or 22386" autocomplete="off"></label>
+            <label class="rule-field" for="rule-lift"><span>Minimum training lift</span><select id="rule-lift"><option value="0">All lifts</option><option value="2">2x or higher</option><option value="5">5x or higher</option><option value="10">10x or higher</option></select></label>
+            <label class="rule-field" for="rule-joint"><span>Earlier co-purchases</span><select id="rule-joint"><option value="1">All published</option><option value="20">20 or more</option><option value="50">50 or more</option><option value="100">100 or more</option></select></label>
+            <label class="rule-field" for="rule-type"><span>Antecedent type</span><select id="rule-type"><option value="all">All rules</option><option value="single">1 product</option><option value="multi">2 products</option></select></label>
+            <button class="rule-reset" type="reset">Reset filters</button>
+          </form>
+          <div class="explorer-summary"><strong id="rule-summary" role="status" aria-live="polite">Loading 1,500 audited rules...</strong><span>Ranked by earlier-period co-purchases, not later outcomes</span></div>
+          <div id="rule-results" class="rule-list" role="list" aria-label="Training-selected association rules"></div>
+          <div id="rule-empty" class="rule-empty" hidden><strong>No rules match these filters.</strong><p>Try a different SKU or relax the training thresholds. This does not mean the product was never sold.</p></div>
+          <div id="rule-error" class="rule-error" role="alert" hidden><strong>Published evidence is temporarily unavailable.</strong><p>The static research table could not be loaded. The verified featured example above and full methodology remain accessible.</p><button id="rule-retry" class="rule-retry" type="button" hidden>Retry loading</button></div>
+          <div class="explorer-actions"><button id="rule-more" class="rule-more" type="button" hidden>Show more rules</button></div>
+          <div class="explorer-foot"><strong>How to read:</strong> Training confidence and lift describe earlier co-occurrence. Later hits / fires describe a separate observational check. Neither is a measured response to a recommendation, a commercial uplift or a demand forecast.<span id="rule-fingerprint">Source: checksum-verified aggregate-only publication. No invoices or customer identifiers.</span></div>
+        </div>
+      </section>
       <section id="method" class="method-section" aria-labelledby="method-title">
-        <div class="section-bar"><div><p class="section-number">02 / Research protocol</p><h2 id="method-title">How we made the evidence auditable</h2></div><p>Four documented controls</p></div>
+        <div class="section-bar"><div><p class="section-number">03 / Research protocol</p><h2 id="method-title">How we made the evidence auditable</h2></div><p>Four documented controls</p></div>
         <div class="method-panel">
           <div class="method-intro"><p class="card-kicker">Validation before interpretation</p><h2>From transactions<br>to a testable shortlist.</h2><p>Review exclusions, preserve invoice integrity and keep model selection separate from later evaluation.</p><a class="text-link" href="https://github.com/Fadhilstat/BasketLens/blob/main/docs/methodology.md" target="_blank" rel="noopener noreferrer">Read the methodology</a></div>
           <div>
@@ -360,7 +451,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible, [tabindex]:focus-v
         </div>
       </section>
       <section id="decision" class="decision-section" aria-labelledby="decision-title">
-        <div class="section-bar"><div><p class="section-number">03 / Commercial interpretation</p><h2 id="decision-title">Turn evidence into a responsible test</h2></div><p>Recommendation, not forecast</p></div>
+        <div class="section-bar"><div><p class="section-number">04 / Commercial interpretation</p><h2 id="decision-title">Turn evidence into a responsible test</h2></div><p>Recommendation, not forecast</p></div>
         <div class="decision-panel">
           <div class="decision-intro"><p class="card-kicker">Analyst recommendation</p><h2>Test the pairing.<br><em>Do not assume return.</em></h2><p>Co-purchase recurrence is a reason to assess a candidate pairing under controlled conditions, not to change placement immediately.</p></div>
           <div class="decision-grid">
@@ -450,5 +541,6 @@ button:focus-visible, a:focus-visible, summary:focus-visible, [tabindex]:focus-v
   }));
 })();
 </script>
+<script src="./explorer.js" defer></script>
 </body>
 </html>

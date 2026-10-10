@@ -29,6 +29,7 @@ public_ui_smoke:
     - python scripts/check_public_demo.py
     - python scripts/browser_smoke.py --data data/processed --report reports/quick-public
     - python site/tests/browser_smoke.py
+    - python site/tests/explorer_browser_smoke.py
   artifacts:
     when: always
     expire_in: 7 days

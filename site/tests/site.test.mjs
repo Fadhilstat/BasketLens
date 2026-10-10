@@ -47,3 +47,14 @@ test('build exposes exactly one self-contained HTML entrypoint', () => {
   assert.doesNotMatch(html, /src="\.\/app\.js"|href="\.\/styles\.css"/);
   assert.match(html, /target="_blank" rel="noopener noreferrer"/);
 });
+
+test('visitor can reach the new source-backed explorer without empty navigation', () => {
+  for (const marker of ['id="explorer"', 'id="rule-query"', 'id="rule-lift"', 'id="rule-joint"',
+    'id="rule-type"', 'id="rule-results"', 'id="rule-more"', 'id="rule-error"',
+    'href="#explorer"', 'src="./explorer.js" defer']) {
+    assert.ok(html.includes(marker), `Missing working explorer structure: ${marker}`);
+  }
+  assert.match(html, /Training-selected|Selected using earlier orders only/i);
+  assert.match(html, /neither is a measured response to a recommendation/i);
+  assert.doesNotMatch(html, /src="https?:\/\/|data:\s*text\/html/i);
+});

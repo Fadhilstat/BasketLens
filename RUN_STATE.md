@@ -225,3 +225,11 @@ The first published Vercel dossier was too article-like for the approved profess
 Local QA: `node --test site/tests/site.test.mjs` 5/5 PASS; `python site/tests/browser_smoke.py` PASS on 1440, 1024, 768, 390, and 320 px with keyboard and tab switching, verified figures, no JS errors and no horizontal overflow.
 REMOTE STATUS: PENDING exact-head CI and Vercel preview/public production verification. Do not announce the M6.5 website as live until after verified merge, READY production redeploy and anonymous post-merge QA.
 NEXT_ACTION: inspect GitLab MR full UCI, UI and site test gates, sync matching GitHub PR, merge with approved gates once green, inspect production preview and no-login hosted QA, then visually compare to approved retail dashboard direction.
+
+
+## M6.6 published Rule Explorer continuation (2026-10-10)
+Approval: user granted APPROVE PUSH & APPROVE MERGE for further BasketLens portfolio readiness in this turn.
+Verified baseline: GitLab main `73e66248d180ef7f4c1b80bf18e06eb15eae8c65`; GitHub main `3d8d50a4a8694bde1628b4e57046a3c4b9496712`. Vercel project `prj_BiqgK3ZnFN9vKURIftb5m1dxB8wF` is GitLab-main production with successful M6.5 guest QA.
+Scope M6.6: static Rule Explorer on the verified Vercel UI, searchable by SKU/name, min earlier lift/co-purchases and antecedent size, later observation labelled separately. No changes to UCI ETL, FP-Growth, holdout methodology or Python app. Build mirrors canonical `data/public_demo/basketlens_public_v1.b64` as a hash-checked site asset, exports a safe JSON subset from exactly 1,500 curated rules. No customer IDs, invoice IDs, or new success claims.
+Local QA before push: Node markup tests 6/6 PASS; existing Chromium dashboard smoke PASS on 1440/1024/768/390/320; offline synthetic Rule Explorer browser fixture PASS at the same widths (search, filters, empty, reset, progressive display, no overflow). Genuine real-exhibit build and hosted guest tests are PENDING CI at creation of this checkpoint; distinguish the fixture checks from real provenance validation.
+NEXT_ACTION: Review exact-source M6.6 GitLab and GitHub CI, fix build/schema regression if any, merge only on green, verify Vercel production READY at the approved SHA and anonymous guest explorer interactions, then evaluate whether an additional basket builder provides portfolio value.

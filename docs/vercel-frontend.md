@@ -82,3 +82,7 @@ Runtime remains static Vercel (Root Directory `site`, Node 22). Build copies two
 ## M6.8 typography and Vercel as sole public frontend
 
 The pine-green and warm-paper retail dashboard keeps its existing structure. Manrope handles functional content, labels and numerical dashboard data; Instrument Serif handles editorial headings, with system fallbacks. Google Fonts is an optional external styling dependency, not an application runtime. Site remains Vercel Root Directory `site`, no API/backend/VPS. The failed optional Streamlit Cloud hosted guest CI job was retired while source and mandatory UCI parity and Vercel guest tests were preserved. Revert this commit and redeploy the preceding Vercel release to roll back without data migration.
+
+## M6.9 motion design decision
+
+Microinteractions are intentionally tied to real user actions rather than decorative loops. Hover is enabled only for devices with true hover/fine pointers, selected tabs respond with a 160ms background transition, and the verified evidence bar uses 360ms width interpolation. Only five meaningful analysis containers have a one-time 320ms entrance cue triggered with IntersectionObserver. This is progressive enhancement: their default appearance is fully visible, even if JS fails. Motion uses compositor-friendly opacity and translate rather than animating layout height or dimensions. On `prefers-reduced-motion: reduce`, CSS transitions are disabled and JS effects are skipped or cancelled. The static Vercel deployment, verified data, publication URLs and research limits are unchanged.

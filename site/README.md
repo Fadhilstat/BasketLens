@@ -57,3 +57,9 @@ The example cart reuses the one verified `explorer.v1.json` fetch through the ex
 ## M6.8 typography and hosting policy
 
 Manrope is the main typeface for the dashboard and figures, Instrument Serif the editorial display face. Google Fonts uses `display=swap` with local system fallbacks. BasketLens has one supported public deployment, Vercel; its earlier Streamlit source is retained as archival analysis, not a second maintained public app.
+
+## M6.9 purposeful motion
+
+The public Vercel site now uses approximately 160ms interaction transitions on the existing sidebar, filter controls, evidence tabs, call-to-action links and Basket Builder. The verified confidence bar updates over 360ms on tab selection; the numerical text and accessibility labels update immediately. Five research containers receive a one-time subtle IntersectionObserver + Web Animations API entrance cue (10px travel, 320ms) only when entering view. Those panels are never hidden while waiting for JavaScript, and the original page renders normally without IntersectionObserver.
+
+CSS and JS both respect `prefers-reduced-motion: reduce`. The JS cancels an in-flight reveal if the user enables that setting while the page is open. No animation framework, new API, storage, serverless functions, image payloads or secrets were added. Regression checks include five viewport widths, focus/keyboard behavior, Rule Explorer, Basket Builder, reduced-motion rendering and anonymous Vercel smoke after deployment.

@@ -65,3 +65,15 @@ test('M6.8 retail typography and Vercel-only publication', () => {
   assert.ok(!html.includes('font: 14px/1.5 Arial, Helvetica, sans-serif'));
   assert.ok(!html.includes('basketlens-retail.streamlit.app'));
 });
+
+test('M6.9 transitions and scroll cues are bounded and accessible', () => {
+  for (const token of ['--motion-fast:', '--motion-data:', '--motion-ease:',
+    'transition: width var(--motion-data)', 'IntersectionObserver',
+    'motionPreference.matches', 'motionPreference.addEventListener',
+    'observer.unobserve(entry.target)', 'animation.cancel()',
+    'duration: 320', 'prefers-reduced-motion: reduce']) {
+    assert.ok(html.includes(token), 'Missing intentional motion behavior: ' + token);
+  }
+  assert.doesNotMatch(html, /animation:\s*infinite/);
+  assert.match(html, /if \(changed && !motionPreference\.matches/);
+});

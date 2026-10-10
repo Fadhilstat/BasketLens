@@ -398,6 +398,41 @@ body { text-rendering: optimizeLegibility; }
   .page-intro h1 { letter-spacing: -.012em; }
   .kpi-value, .confidence-value { letter-spacing: -.035em; }
 }
+
+/* M6.9: purposeful microinteractions, never required to read the results. */
+:root {
+  --motion-fast: 160ms;
+  --motion-data: 360ms;
+  --motion-ease: cubic-bezier(.22, 1, .36, 1);
+}
+.sidebar-nav a, .source-link, .primary-link, .secondary-link,
+.rule-reset, .rule-more, .rule-retry, .basket-actions button,
+.basket-choice-button, .basket-remove {
+  transition: background-color var(--motion-fast) var(--motion-ease),
+              border-color var(--motion-fast) var(--motion-ease),
+              color var(--motion-fast) var(--motion-ease),
+              transform var(--motion-fast) var(--motion-ease);
+}
+.evidence-tabs button {
+  transition: background-color var(--motion-fast) var(--motion-ease),
+              color var(--motion-fast) var(--motion-ease),
+              box-shadow var(--motion-fast) var(--motion-ease);
+}
+.confidence-fill { transition: width var(--motion-data) var(--motion-ease); }
+.rule-field input, .rule-field select, .basket-search {
+  transition: border-color var(--motion-fast) var(--motion-ease),
+              background-color var(--motion-fast) var(--motion-ease);
+}
+.rule-row { transition: background-color var(--motion-fast) var(--motion-ease); }
+.rule-row:hover { background-color: #f0f6ef; }
+@media (hover: hover) and (pointer: fine) {
+  .primary-link:hover, .secondary-link:hover, .source-link:hover,
+  .rule-reset:hover, .rule-more:hover, .rule-retry:hover,
+  .basket-actions button:hover:not(:disabled),
+  .basket-choice-button:hover, .basket-remove:hover {
+    transform: translateY(-1px);
+  }
+}
 </style>
 </head>
 <body>
@@ -595,9 +630,11 @@ body { text-rendering: optimizeLegibility; }
   const tabs = Array.from(document.querySelectorAll('[data-period][role="tab"]'));
   const panel = document.getElementById('period-panel');
   const status = document.getElementById('copy-status');
+  const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
   let active = 'earlier';
   function selectPeriod(period, moveFocus = false) {
     if (!Object.prototype.hasOwnProperty.call(periods, period)) return;
+    const changed = active !== period;
     active = period;
     const data = periods[period];
     const value = data.confidence.toFixed(1);
@@ -619,6 +656,13 @@ body { text-rendering: optimizeLegibility; }
     document.getElementById('count-value').textContent = data.count;
     document.getElementById('evidence-explain').textContent = data.explanation;
     status.textContent = '';
+    // Evidence and ARIA update immediately. This short visual cue never interpolates the value.
+    if (changed && !motionPreference.matches && typeof Element.prototype.animate === 'function') {
+      document.getElementById('confidence-value').animate(
+        [{ opacity: .78, transform: 'translateY(3px)' }, { opacity: 1, transform: 'translateY(0)' }],
+        { duration: 180, easing: 'cubic-bezier(.22,1,.36,1)' }
+      );
+    }
   }
   tabs.forEach((tab, index) => {
     tab.addEventListener('click', () => selectPeriod(tab.dataset.period));
@@ -643,6 +687,32 @@ body { text-rendering: optimizeLegibility; }
       status.textContent = 'Clipboard unavailable. Select and copy the figures shown above.';
     }
   });
+  // Progressive enhancement: research content is never hidden while waiting for JS.
+  if (!motionPreference.matches && 'IntersectionObserver' in window &&
+      typeof Element.prototype.animate === 'function') {
+    const running = new Set();
+    const observer = new IntersectionObserver(entries => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        observer.unobserve(entry.target);
+        if (motionPreference.matches) continue;
+        const animation = entry.target.animate(
+          [{ opacity: .9, transform: 'translateY(10px)' }, { opacity: 1, transform: 'translateY(0)' }],
+          { duration: 320, easing: 'cubic-bezier(.22,1,.36,1)' }
+        );
+        running.add(animation);
+        animation.addEventListener('finish', () => running.delete(animation), { once: true });
+        animation.addEventListener('cancel', () => running.delete(animation), { once: true });
+      }
+    }, { rootMargin: '0px 0px -32px 0px', threshold: .08 });
+    document.querySelectorAll('.finding-grid, .explorer-head, .basket-shell, .method-panel, .decision-panel')
+      .forEach(target => observer.observe(target));
+    motionPreference.addEventListener('change', event => {
+      if (!event.matches) return;
+      for (const animation of running) animation.cancel();
+      observer.disconnect();
+    });
+  }
   const navLinks = Array.from(document.querySelectorAll('.sidebar-nav a[href^="#"]'));
   navLinks.forEach(link => link.addEventListener('click', () => {
     navLinks.forEach(a => { a.classList.remove('active'); a.removeAttribute('aria-current'); });

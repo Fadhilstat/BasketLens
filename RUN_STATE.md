@@ -247,3 +247,10 @@ Recovered base: GitLab main `3d5454a0d5d36390b04ea39970776b51adb3e0b9`, GitHub m
 Scope: Manrope functional UI and tabular numeric styles, Instrument Serif editorial headings, CSS/system fallbacks, source/browser/hosted typography tests, retire optional failing Streamlit Cloud guest CI probe and update public hosting documentation. No changes to UCI data, FP-Growth, Rule Explorer/Basket Builder calculations, Python source, privacy, backend or VPS.
 Status when written: PENDING exact-head GitLab and GitHub CI, merge and Vercel public QA. The font pair follows the approved visual direction, not a claimed exact proprietary typeface.
 NEXT_ACTION: verify scoped MR/PR CI and diff, merge only if green using owner approval, validate anonymous Vercel production typefaces and responsive research interactions.
+
+## M6.9 interaction-motion polish (2026-10-10)
+
+User granted explicit APPROVE PUSH & MERGE for motion polish. Verified baseline before edits: GitLab main `88ddc2f99b3e24be113b33be8ec46b669dae6e8e`, GitHub main `f4020a3cd016a3e968f90e3abe3df0b5a348faff`, Vercel production READY. No GitLab MR open during recovery. Work is isolated to `feat/basketlens-m69-motion-craft`; no local checkout was changed.
+Changes: 160ms hover/selection feedback for existing controls; 360ms confidence-bar width interpolation that never delays evidence text or ARIA; one-time 320ms/10px IO/WAAPI section appearances for five analysis panels; reduced-motion guard/cancellation and regression tests. Content is never hidden pending JS or scroll. No backend, dependency, new data, model, customer/invoice fields, secrets, Streamlit hosting, or VPS workload change.
+At document authoring, branch exact-head GitLab/GitHub CI, merge and deployed guest QA are PENDING. Confirm actual evidence using live connectors before marking release completed.
+NEXT_ACTION: check M6.9 MR full UCI and frontend/browser tests, verify synced GitHub PR, merge with exact approvals only on green checks; confirm Vercel production READY and anonymous desktop/mobile reduced-motion smoke. After release, visually inspect motion on physical mobile to rule out distraction.

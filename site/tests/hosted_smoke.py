@@ -148,6 +148,28 @@ def check_page(page, url: str) -> dict:
         if "Instrument Serif" not in page.locator("#hero-title").evaluate("(el) => getComputedStyle(el).fontFamily"):
             raise AssertionError("Editorial heading does not use Instrument Serif")
 
+
+    # M6.9 motion contract applies after main deploy; MR checks previous production.
+    has_motion = page.evaluate(
+        "getComputedStyle(document.documentElement).getPropertyValue('--motion-data').trim() !== ''"
+    )
+    if os.getenv("CI_PIPELINE_SOURCE") != "merge_request_event" and not has_motion:
+        raise AssertionError("Published motion system not present")
+    if has_motion:
+        if not page.locator('#confidence-fill').evaluate(
+            "(el) => parseFloat(getComputedStyle(el).transitionDuration) >= 0.3"
+        ):
+            raise AssertionError("Confidence bar transition missing")
+        page.emulate_media(reduced_motion="reduce")
+        if not page.locator('#confidence-fill').evaluate(
+            "(el) => parseFloat(getComputedStyle(el).transitionDuration) === 0"
+        ):
+            raise AssertionError("Reduce Motion preference was not respected")
+        page.get_by_role("tab", name="Later holdout").click()
+        if page.locator("#chart-value").inner_text() != "67.1%":
+            raise AssertionError("Evidence tab failed with reduced motion")
+        page.emulate_media(reduced_motion="no-preference")
+
     if page.evaluate("document.documentElement.scrollWidth > document.documentElement.clientWidth + 1"):
         raise AssertionError("Page overflows horizontally")
     if errors:

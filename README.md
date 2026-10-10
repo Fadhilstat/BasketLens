@@ -51,6 +51,12 @@ The application also generates this decision brief dynamically from validated ru
 
 The public Streamlit app uses a **checksum-verified aggregate-only exhibit**. Raw source workbooks, customer IDs, invoice IDs and transaction-level records are not published. Public hosted access should be checked from an anonymous browser before social promotion.
 
+## Portfolio frontend for Vercel (M6.3)
+
+The `site/` folder provides a separate, recruiter-first portfolio dossier with responsive editorial design, an accessible train/holdout comparison, and links to the complete Streamlit research workbench. The dossier is a **read-only explanatory companion**. It does not replace Python mining, load raw customer information, or claim conversion or revenue uplift.
+
+To test it locally: `npm --prefix site test` and `npm --prefix site run build`. The prebuilt `site/dist/` directory can be deployed as a static Vercel project with **Root Directory = site**. No Vercel deployment or public URL is claimed until the connected project is created and checked in a signed-out browser. See [Vercel frontend contract](docs/vercel-frontend.md).
+
 ## Reproducible architecture
 
 ~~~text

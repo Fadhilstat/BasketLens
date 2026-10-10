@@ -53,6 +53,26 @@ def main() -> None:
                     page.goto("http://127.0.0.1:8501", wait_until="domcontentloaded", timeout=60000)
                     page.get_by_role("heading", name="BasketLens").wait_for(timeout=90000)
                     page.locator(".bl-topbar").wait_for(timeout=90000)
+                    # M6.1: verify actual brand/link alignment on the rendered app.
+                    header = page.locator(".bl-topbar")
+                    brand = header.locator(".bl-brand")
+                    links = header.locator(".bl-header-links")
+                    info = header.locator(".bl-mode-dot")
+                    if links.get_by_role("link").count() != 3:
+                        raise AssertionError(f"{label}: resource navigation is incomplete")
+                    if info.locator("a").count():
+                        raise AssertionError(f"{label}: public-mode label became a fake link")
+                    if width > 760:
+                        b = brand.bounding_box()
+                        l = links.bounding_box()
+                        if not b or not l or abs((b["y"] + b["height"]/2) - (l["y"] + l["height"]/2)) > 5:
+                            raise AssertionError(f"{label}: brand and links are vertically misaligned")
+                    else:
+                        b = brand.bounding_box()
+                        l = links.bounding_box()
+                        if not b or not l or l["y"] <= b["y"] + b["height"] - 2:
+                            raise AssertionError(f"{label}: mobile navigation overlaps brand")
+
                     page.get_by_role("heading", name="Find the story in every basket.").wait_for(timeout=90000)
                     page.get_by_role("tab", name="Sales overview").wait_for(timeout=90000)
                     page.get_by_text("Start with what the baskets tell us").wait_for(timeout=60000)

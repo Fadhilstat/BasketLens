@@ -162,3 +162,14 @@ Verified portfolio case from aggregate public exhibit: 22386 -> 85099B; 1,166 tr
 No change to official UCI data, cleaning, rule mining, chronological holdout, public exhibit hash, privacy protections, or hosting.
 A separate nine-slide 1920x1080 PNG consulting deck was generated locally and verified for slide overflow; it is delivered in this conversation, not checked in to the code repository.
 NEXT_ACTION: verify M6 MR GitLab unit/full source/public browser CI, GitHub Actions, then merge both under user's explicit approvals if green. Confirm exact main parity and public hosted status separately.
+
+
+## M6.1 publish-ready header checkpoint (2026-10-10)
+Milestone: M6.1 Header Alignment and Publication Readiness
+Status: PUSHED_PENDING_CI
+Branch: feat/basketlens-m61-header-polish
+Base GitLab SHA: ad6d7c19e625c78ec7e211035d7d575cc060613b
+Approved: APPROVE PUSH and APPROVE MERGE (2026-10-10).
+Change: improve brand group/link vertical alignment, remove fake-button mode status, mobile two-row navigation; add semantic and actual Streamlit browser tests.
+No changes to validated UCI source, models, aggregate public exhibit, privacy or numerical outcomes.
+NEXT_ACTION: verify GitLab full UCI, public browser, GitHub CI, then merge, check source parity and public hosting.

@@ -71,7 +71,21 @@ real_dataset_audit:
       - data/public_demo/basketlens_public_v1.b64
       - data/public_demo/basketlens_public_v1.b64.sha256
   rules:
+    # Rebuild 1M+ source rows when the analytics contract or CI audit changes.
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - .gitlab-ci.yml
+        - pyproject.toml
+        - requirements.txt
+        - src/**/*
+        - tests/**/*
+        - scripts/**/*
+        - app/**/*
+        - data/**/*
+    # Presentation-only MRs retain manual full-data verification on demand.
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: manual
+      allow_failure: true
 
 
 portfolio_site_tests:

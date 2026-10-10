@@ -15,7 +15,12 @@ def run() -> None:
                 page = browser.new_page(viewport={'width': width, 'height': height}, device_scale_factor=1)
                 errors = []
                 page.on('pageerror', lambda err: errors.append(str(err)))
-                page.set_content(html, wait_until='load')
+                # Check fallback typography even when external font CDNs are unavailable.
+                page.route('https://fonts.googleapis.com/**', lambda route: route.abort())
+                page.route('https://fonts.gstatic.com/**', lambda route: route.abort())
+                page.set_content(html, wait_until='domcontentloaded')
+                assert 'Manrope' in page.evaluate('getComputedStyle(document.body).fontFamily')
+                assert 'Instrument Serif' in page.locator('#hero-title').evaluate('(el) => getComputedStyle(el).fontFamily')
                 assert page.get_by_role('heading', name='A pattern in the basket. Not a sales forecast.').is_visible()
                 assert page.get_by_role('heading', name='Confidence by period').is_visible()
                 assert page.get_by_role('navigation', name='Research sections').get_by_role('link', name='Association evidence').count() == 1

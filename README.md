@@ -4,7 +4,7 @@
 
 ![BasketLens evidence-led research](docs/assets/basketlens-overview.svg)
 
-[**Explore the Streamlit dashboard**](https://basketlens-retail.streamlit.app/) · [**Read the consulting case study**](docs/portfolio-case-study.md) · [**Review the methodology**](docs/methodology.md) · [**Inspect CI**](https://gitlab.com/fadhilrusydih/basketlens/-/pipelines)
+[**Explore the Streamlit dashboard**](https://basketlens-retail.streamlit.app/) · [**Read the consulting case study**](docs/portfolio-case-study.md) · [**Review the methodology**](docs/methodology.md) · [**Publication kit**](docs/publication-readiness.md) · [**Inspect CI**](https://gitlab.com/fadhilrusydih/basketlens/-/pipelines)
 
 BasketLens turns UCI Online Retail II receipts into auditable product-pair associations and tests whether those patterns appear again in later invoices. Its most important output is a **shortlist of testable retail hypotheses**, not a prediction of incremental revenue.
 
@@ -124,3 +124,10 @@ Dataset: Chen, D. (2019), **Online Retail II**, UCI Machine Learning Repository,
 Application code: [MIT](LICENSE).
 
 **Fadhil Rusydi Hafizh** · [GitHub](https://github.com/Fadhilstat) · [LinkedIn](https://www.linkedin.com/in/fadhilrusydi31/)
+
+
+## Sharing this portfolio
+
+The M6.2 release package contains exactly three consulting slides as 1920 x 1080 PNG files, an editable PowerPoint and a caption ready for review. These binary publication assets are delivered separately rather than checked into the source repo. See the [three-slide narrative](docs/social/three-slide-story.md), [LinkedIn post](docs/social/linkedin-post.md) and [publication readiness checklist](docs/publication-readiness.md).
+
+The application has passed source CI and simulated public-data browser QA. **This is not proof of anonymous Streamlit Community Cloud access.** Verify the hosted app in a logged-out incognito window before sharing it.

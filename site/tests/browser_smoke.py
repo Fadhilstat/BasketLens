@@ -21,6 +21,9 @@ def run() -> None:
                 page.set_content(html, wait_until='domcontentloaded')
                 assert 'Manrope' in page.evaluate('getComputedStyle(document.body).fontFamily')
                 assert 'Instrument Serif' in page.locator('#hero-title').evaluate('(el) => getComputedStyle(el).fontFamily')
+                assert page.locator('#confidence-fill').evaluate(
+                    '(el) => parseFloat(getComputedStyle(el).transitionDuration) >= 0.3'
+                )
                 assert page.get_by_role('heading', name='A pattern in the basket. Not a sales forecast.').is_visible()
                 assert page.get_by_role('heading', name='Confidence by period').is_visible()
                 assert page.get_by_role('navigation', name='Research sections').get_by_role('link', name='Association evidence').count() == 1
@@ -58,6 +61,25 @@ def run() -> None:
                     assert page.locator('.hero-banner').evaluate('(el)=>getComputedStyle(el).gridTemplateColumns.split(" ").length') == 1
                 print(f'PASS {width}x{height}: dashboard, responsive layout, tabs, keyboard, audit, JS')
                 page.close()
+            quiet = browser.new_page(viewport={'width': 390, 'height': 844},
+                                     reduced_motion='reduce')
+            quiet.route('https://fonts.googleapis.com/**', lambda route: route.abort())
+            quiet.route('https://fonts.gstatic.com/**', lambda route: route.abort())
+            quiet.set_content(html, wait_until='domcontentloaded')
+            assert quiet.locator('#confidence-fill').evaluate(
+                '(el) => parseFloat(getComputedStyle(el).transitionDuration) == 0'
+            )
+            quiet.get_by_role('tab', name='Later holdout').click()
+            assert quiet.locator('#chart-value').inner_text() == '67.1%'
+            assert quiet.locator('#confidence-fill').evaluate(
+                '(el) => el.getAnimations().length == 0'
+            )
+            assert quiet.locator('#basket').is_visible()
+            assert not quiet.evaluate(
+                'document.documentElement.scrollWidth > document.documentElement.clientWidth + 1'
+            )
+            print('PASS reduced motion: zero transitions, tab works, basket readable')
+            quiet.close()
         finally:
             browser.close()
 

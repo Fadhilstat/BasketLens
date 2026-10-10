@@ -29,3 +29,10 @@ Vercel is a hosting/deployment platform, not a design framework. This dependency
 
 
 The separate Streamlit hosted workbench failed anonymous guest QA on 2026-10-10. Until access is independently restored, the Vercel site links to the reproducible GitHub case study rather than an unreliable hosted dashboard. Reverify this link after each production deployment. The original Streamlit program and local analyst mode remain unchanged.
+
+
+## M6.5 retail intelligence dashboard
+
+This source remains a self-contained static site, but the visitor experience is an actual portfolio dashboard rather than a long editorial page. Desktop: forest-green workspace navigation, audit-period banner, verified cohort KPI tiles, interactive training/holdout evidence, diagram of the selected two-product association, inline QA protocol and decision brief. On mobile/tablet the sidebar becomes touch-scrollable horizontal navigation and two-column analysis panels stack vertically. Everything is non-sensitive aggregated history, not a live feed.
+
+Validation before publication: `npm --prefix site test`, `npm --prefix site run build`, `python site/tests/browser_smoke.py`. The browser smoke inspects five widths, keyboard tab interaction, data and method details, alignment and overflow. Guest-verified Vercel deployment is a separate gate after merge to `main`.

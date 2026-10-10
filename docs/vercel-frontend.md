@@ -55,3 +55,10 @@ GitLab CI job https://gitlab.com/fadhilrusydih/basketlens/-/jobs/17080255194 use
 ## Public CTA correction
 
 The separate Streamlit hosted guest test failed to load its dashboard on desktop/mobile in GitLab job 17080255195. The Vercel dossier therefore replaces its secondary hero CTA with the accessible GitHub consulting case study. Publication remains evidence-first: the Vercel case study is independently accessible, while deeper hosted Streamlit exploration is an open operational issue.
+
+
+## M6.5 design decision: retail intelligence dashboard
+
+Owner feedback (2026-10-10): the M6.4 portfolio was visually distant from the approved green-and-cream retail analytics reference, because its large reading sections looked like a research article. The approved redesign changes only `site/index.html` presentation, research navigation and associated UI tests. Desktop introduces a restrained pine left rail, case-report heading, comparative association hero, four audited cohort metrics, true training/holdout bars, a selected pair panel, a data-quality audit strip and commercial test brief. Tablet and phone use a compact navigable header and stacked panels. Neither Vercel hosting nor generic templates independently create good UX. No dependency, server data fetch, private record, sign-in or new quantitative estimate was added.
+
+UX acceptance criteria: 1440/1024/768/390/320 px without horizontal overflow; live tab switch and keyboard ArrowLeft/ArrowRight; visible navigation destinations and accessible focus; reduced-motion preference; complete source-backed figures; primary CTA to the on-page finding and secondary to the real GitHub case study. Results are historical co-occurrence, not an A/B test. This milestone keeps `app/streamlit_app.py` and all checksum-verified aggregate datasets unchanged.

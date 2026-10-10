@@ -187,3 +187,14 @@ Data, models, source UCI files, Streamlit application and published aggregate ex
 Deck PptxGenJS slides_test: PASS, no overflow. Source CI and real browser QA are required.
 BLOCKERS: hosted anonymous access has not been verified; GitHub About metadata empty; GitHub release not yet published. Owner action needed for About/release because connected GitHub mutation actions are unavailable.
 NEXT_ACTION: green MR CI, merge GitLab/GitHub, verify parity/post-merge CI; owner incognito smoke and metadata/release publication.
+
+
+## M6.3 Vercel-ready editorial dossier (2026-10-10)
+Milestone: M6.3 Evidence-led portfolio frontend
+State before remote verification: LOCAL_QA_PASS_REMOTE_PENDING
+Approval: user explicitly provided APPROVE PUSH and APPROVE MERGE for this milestone.
+Source: site/ static read-only dossier, semantic editorial presentation, interactive training/holdout comparison, evidence and limitations, accessible navigation, error-safe link actions, mobile-first layout.
+No changes to validated Python analytics, Streamlit workflows, raw UCI data, or checksum-verified aggregate public bundle.
+Local tests: 4/4 Node standard tests; static build; Chromium interactions across desktop/tablet/mobile including keyboard focus and no horizontal overflow. These local results do not prove the Vercel-hosted URL.
+Release gates: GitLab MR unit/public UI/full UCI and bundle parity, GitHub PR checks, diff and privacy review, then verified merge and mirrors. Vercel project import and signed-out smoke check remain separate.
+NEXT_ACTION: Verify M6.3 exact-head MR and PR CI, merge only on green, then connect `site/` to Vercel and verify anonymous production site before publishing the link.

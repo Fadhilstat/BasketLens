@@ -1,0 +1,11 @@
+{
+  "name": "basketlens-portfolio-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Dependency-free, Vercel-ready companion to the audited BasketLens Python application",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test tests/site.test.mjs"
+  },
+  "engines": { "node": ">=20" }
+}

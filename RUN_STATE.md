@@ -173,3 +173,17 @@ Approved: APPROVE PUSH and APPROVE MERGE (2026-10-10).
 Change: improve brand group/link vertical alignment, remove fake-button mode status, mobile two-row navigation; add semantic and actual Streamlit browser tests.
 No changes to validated UCI source, models, aggregate public exhibit, privacy or numerical outcomes.
 NEXT_ACTION: verify GitLab full UCI, public browser, GitHub CI, then merge, check source parity and public hosting.
+
+
+## M6.2 final publication kit (2026-10-10)
+Milestone: M6.2 portfolio promotion and release readiness
+Status: PUSHED_PENDING_CI
+Branch: feat/basketlens-m62-publication-kit
+GitLab base main: 6b2913061412423690d0d7cf73740284c750d6fa
+GitHub base main: 1d7230a5faf64bd0533f09346084f5fe6184744d
+User approved APPROVE PUSH and APPROVE MERGE for the milestone.
+Changes: exactly three 1920x1080 PNG consulting slides plus editable PPTX delivered separately, documented slide facts, launch caption, guest smoke checklist, GitHub About values, draft v1.0.0 release notes and documentation tests.
+Data, models, source UCI files, Streamlit application and published aggregate exhibit unchanged.
+Deck PptxGenJS slides_test: PASS, no overflow. Source CI and real browser QA are required.
+BLOCKERS: hosted anonymous access has not been verified; GitHub About metadata empty; GitHub release not yet published. Owner action needed for About/release because connected GitHub mutation actions are unavailable.
+NEXT_ACTION: green MR CI, merge GitLab/GitHub, verify parity/post-merge CI; owner incognito smoke and metadata/release publication.

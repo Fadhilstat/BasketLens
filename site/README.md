@@ -46,3 +46,10 @@ Validation before publication: `npm --prefix site test`, `npm --prefix site run 
 - `tests/explorer-data.test.mjs` validates the resulting real artifact, its canonical portfolio pair, and train-only ordering. `tests/explorer_browser_smoke.py` uses clearly synthetic fixture data for **interaction testing only** across five viewports. GitLab hosted smoke is a distinct guest check of the actual live artifact.
 
 Commands: `npm test --prefix site` (build and test); `python site/tests/explorer_browser_smoke.py` (UI fixture); `python site/tests/browser_smoke.py` (existing dashboard regression). After every data refresh: regenerate and review the canonical exhibit first, mirror its bytes and SHA256 into `site/data/`, run full UCI parity checks, then publish. Do not copy raw workbook or customer identifiers into `site`.
+
+
+## M6.7 Basket Builder
+
+The example cart reuses the one verified `explorer.v1.json` fetch through the existing Rule Explorer event. `basket-matcher.mjs` is a pure, unit-tested deterministic training-only matching layer; `basket-builder.mjs` renders selected SKU chips, accessible search options, an exact antecedent-subset match and descriptive holdout context. It is a **hypothetical basket**, not a retail checkout or a causal recommendation engine. A documented sample loads SKU 22386. The product list is built from published antecedents, not from live inventory. Candidates remain limited to the selected 1,500 curated rules, and no user activity is saved.
+
+`tests/basket-matcher.test.mjs` uses real published rule data plus adversarial synthetic edge cases. `tests/basket_browser_smoke.py` uses a separately-labelled synthetic fixture to test keyboard/touch and errors at 1440, 1024, 768, 390 and 320 pixels. Hosted smoke against the actual live Vercel alias is required after merge. No independent network request, Python runtime, new package or VPS work is introduced.

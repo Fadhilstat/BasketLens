@@ -109,6 +109,8 @@ const output = explorePayload(pack, actualHash);
 await Promise.all([
   copyFile(resolve(root, 'index.html'), resolve(target, 'index.html')),
   copyFile(resolve(root, 'explorer.js'), resolve(target, 'explorer.js')),
+  copyFile(resolve(root, 'basket-matcher.mjs'), resolve(target, 'basket-matcher.mjs')),
+  copyFile(resolve(root, 'basket-builder.mjs'), resolve(target, 'basket-builder.mjs')),
   writeFile(resolve(target, 'explorer.v1.json'), JSON.stringify(output) + '\n', 'utf8'),
 ]);
 console.log(`Built verified BasketLens explorer: ${output.ruleCount} rules, source SHA256 ${actualHash}`);

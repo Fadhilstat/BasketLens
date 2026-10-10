@@ -4,7 +4,7 @@
 
 ![BasketLens evidence-led research](docs/assets/basketlens-overview.svg)
 
-[**View the Vercel portfolio site**](https://basketlens-fadhil-9768s-projects.vercel.app/) · [**Inspect the Streamlit implementation**](https://github.com/Fadhilstat/BasketLens/blob/main/app/streamlit_app.py) · [**Read the consulting case study**](docs/portfolio-case-study.md) · [**Review the methodology**](docs/methodology.md) · [**Publication kit**](docs/publication-readiness.md) · [**Inspect CI**](https://gitlab.com/fadhilrusydih/basketlens/-/pipelines)
+[**View the Vercel portfolio site**](https://basketlens-fadhil-9768s-projects.vercel.app/) · [**Read the consulting case study**](docs/portfolio-case-study.md) · [**Review the methodology**](docs/methodology.md) · [**Publication kit**](docs/publication-readiness.md) · [**Inspect CI**](https://gitlab.com/fadhilrusydih/basketlens/-/pipelines)
 
 BasketLens turns UCI Online Retail II receipts into auditable product-pair associations and tests whether those patterns appear again in later invoices. Its most important output is a **shortlist of testable retail hypotheses**, not a prediction of incremental revenue.
 
@@ -159,3 +159,9 @@ The browser receives only whitelisted aggregate rule fields derived at build tim
 The Vercel portfolio now lets a reviewer select up to three published antecedent products, load the verified Pink Polkadot example, inspect matching association rules, and clear individual products. Rules match only when all antecedent SKUs are present and the consequent is not already selected. Distinct candidate products are ordered by antecedent specificity and **earlier-training co-purchases, confidence and lift only**. Later hits/fires are clearly labelled as descriptive validation, not causal uplift, purchase probability, or actual customer recommendations. This deliberately works on the existing audited 1,500-rule static exhibit.
 
 No new backend, database, client personal data, API token, analytics tracker, or VPS process was added. The Rule Explorer and Basket Builder share one browser-side data load. Acceptance: `npm --prefix site test`, `python site/tests/basket_browser_smoke.py`, existing frontend/real-UCI parity gates and signed-out Vercel production smoke after merge.
+
+## M6.8 Vercel-only public release policy
+
+BasketLens is published **only on Vercel**, with Rule Explorer and example Basket Builder. The historical Streamlit implementation is retained for research reproducibility but is no longer an active public deployment target. The optional external Streamlit Cloud guest CI job has been retired; mandatory Vercel guest, source parity, Python unit and browser regression checks remain. No analytical source, models or historical evidence were deleted.
+
+Typography uses Manrope for controls, navigation, data and dense text, and Instrument Serif for editorial headings. Fonts load through a Google Fonts stylesheet with `display=swap`; system fallbacks preserve readability if it is blocked. The external font service is not a runtime backend.

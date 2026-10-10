@@ -8,6 +8,10 @@
   <meta property="og:title" content="BasketLens | Retail Intelligence Dossier">
   <meta property="og:description" content="40,280 audited baskets. One training-selected product relationship checked in later orders. No invented sales uplift.">
   <title>BasketLens | Retail Intelligence Dossier</title>
+  <!-- M6.8: deliberate editorial retail typography with system fallbacks. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Manrope:wght@400..800&amp;display=swap" rel="stylesheet">
   <style>
 :root {
   color-scheme: light;
@@ -24,11 +28,12 @@
   --muted: #6d8276;
   --stroke: #dee6dc;
   --amber: #ad7035;
-  --serif: Georgia, 'Times New Roman', serif;
+  --serif: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+  --sans: 'Manrope', 'Segoe UI', Arial, sans-serif;
 }
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 26px; }
-body { margin: 0; min-width: 280px; background: var(--paper); color: var(--ink); font: 14px/1.5 Arial, Helvetica, sans-serif; -webkit-font-smoothing: antialiased; }
+body { margin: 0; min-width: 280px; background: var(--paper); color: var(--ink); font: 400 14px/1.55 var(--sans); -webkit-font-smoothing: antialiased; }
 button, a { -webkit-tap-highlight-color: transparent; }
 button { font: inherit; cursor: pointer; }
 a { color: inherit; }
@@ -260,7 +265,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible, [tabindex]:focus-v
 .explorer-filters { padding: 23px 26px 18px; display: grid; grid-template-columns: minmax(195px, 1.45fr) repeat(3, minmax(130px,1fr)) auto; gap: 12px; align-items: end; border-bottom: 1px solid var(--stroke); }
 .rule-field { display: flex; flex-direction: column; min-width: 0; gap: 7px; }
 .rule-field span { font-weight: 750; font-size: 11px; color: var(--forest); }
-.rule-field input, .rule-field select { display: block; width: 100%; min-width: 0; min-height: 45px; border: 1px solid #c5d5c8; border-radius: 6px; padding: 10px 12px; background: #fff; color: var(--ink); font: 600 12px/1.4 Arial, Helvetica, sans-serif; }
+.rule-field input, .rule-field select { display: block; width: 100%; min-width: 0; min-height: 45px; border: 1px solid #c5d5c8; border-radius: 6px; padding: 10px 12px; background: #fff; color: var(--ink); font: 600 12px/1.4 var(--sans); }
 .rule-field input::placeholder { color: #6d8475; font-weight: 400; }
 .rule-reset, .rule-more, .rule-retry { min-height: 45px; border: 1px solid #b4cdbc; border-radius: 6px; background: #f5faf5; color: var(--pine); padding: 10px 14px; font-weight: 800; font-size: 12px; }
 .rule-reset:hover, .rule-more:hover, .rule-retry:hover { background: #e1eee3; }
@@ -331,7 +336,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible, [tabindex]:focus-v
 .basket-actions button:hover:not(:disabled), .basket-choice-button:hover, .basket-remove:hover { background: #e2eee4; color: var(--pine); }
 .basket-actions button:disabled { opacity: .55; cursor: not-allowed; }
 .basket-field { display: block; color: var(--forest); font-size: 11px; font-weight: 750; margin-bottom: 7px; }
-.basket-search { width: 100%; min-width: 0; min-height: 45px; border: 1px solid #bdcfc2; background: #fff; color: var(--ink); border-radius: 6px; padding: 10px 12px; font: 600 12px/1.4 Arial,Helvetica,sans-serif; }
+.basket-search { width: 100%; min-width: 0; min-height: 45px; border: 1px solid #bdcfc2; background: #fff; color: var(--ink); border-radius: 6px; padding: 10px 12px; font: 600 12px/1.4 var(--sans); }
 .basket-search:disabled { background: #eef2ee; }
 .basket-search:focus-visible { outline: 3px solid #b97e3a; outline-offset: 2px; }
 .basket-hint { font-size: 11px; color: var(--muted); margin: 9px 0 13px; line-height: 1.5; }
@@ -365,6 +370,33 @@ button:focus-visible, a:focus-visible, summary:focus-visible, [tabindex]:focus-v
   .basket-actions button { flex: 1 1 auto; }
   .basket-candidate-head { display: block; }
   .basket-candidate-index { display: block; margin-bottom: 5px; }
+}
+
+/* M6.8: editorial heading accents and readable numeric dashboard data. */
+:root { font-synthesis: none; }
+body { text-rendering: optimizeLegibility; }
+.page-intro h1, .hero-title, .method-intro h2, .decision-intro h2 {
+  font-family: var(--serif);
+  font-weight: 400;
+  letter-spacing: -.018em;
+}
+.kpi-value, .confidence-value, .signal-stat strong,
+.rule-metric strong, .rule-holdout-number, .metric-bottom strong {
+  font-family: var(--sans);
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.055em;
+}
+.wordmark { font-family: var(--sans); font-weight: 800; letter-spacing: -.045em; }
+.sidebar-nav a, .breadcrumb, .rule-field, .basket-field, button, input, select {
+  font-family: var(--sans);
+}
+.rule-product-name, .basket-candidate-name { letter-spacing: -.012em; }
+.rule-description-label, .rule-metric-label, .rule-metric small { font-size: 10px; }
+.basket-candidate-index { font-size: 11px; }
+@media (max-width: 480px) {
+  .page-intro h1 { letter-spacing: -.012em; }
+  .kpi-value, .confidence-value { letter-spacing: -.035em; }
 }
 </style>
 </head>

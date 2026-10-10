@@ -63,3 +63,7 @@ The Vercel portfolio front door is guest-verified independently of the Streamlit
 ## Known hosted workbench issue
 
 On 2026-10-10, the separate Streamlit dashboard failed its anonymous desktop/mobile browser check (the required content did not load): https://gitlab.com/fadhilrusydih/basketlens/-/jobs/17080255195 . This does not invalidate the guest-tested Vercel case study, but the Streamlit app must not be promoted as a working public demo until a new smoke test passes. The Vercel front door now directs readers to the available GitHub consulting case study instead.
+
+## M6.8 publication policy supersedes Streamlit deployment plans
+
+The only actively published BasketLens user-facing application is the Vercel retail intelligence dashboard, including Rule Explorer and Basket Builder. References to possible future Streamlit Cloud deployment are historical and not active project requirements. Source Python analytics are kept for reproducibility, but the failed optional hosted Streamlit CI job is removed. Approval was given for scoped M6.8 changes; the final release still requires passing GitLab/GitHub tests and signed-out Vercel production guest QA.

@@ -58,3 +58,10 @@ test('visitor can reach the new source-backed explorer without empty navigation'
   assert.match(html, /neither is a measured response to a recommendation/i);
   assert.doesNotMatch(html, /src="https?:\/\/|data:\s*text\/html/i);
 });
+test('M6.8 retail typography and Vercel-only publication', () => {
+  for (const token of ['Manrope','Instrument Serif','fonts.googleapis.com/css2?',
+    'font-synthesis: none','font-variant-numeric: tabular-nums','id="basket"','id="explorer"'])
+    assert.ok(html.includes(token), `Missing M6.8 contract: ${token}`);
+  assert.ok(!html.includes('font: 14px/1.5 Arial, Helvetica, sans-serif'));
+  assert.ok(!html.includes('basketlens-retail.streamlit.app'));
+});

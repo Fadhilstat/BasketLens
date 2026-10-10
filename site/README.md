@@ -1,6 +1,6 @@
 # BasketLens Vercel companion
 
-This is a public, dependency-free research dossier for BasketLens, not a replacement for the interactive Streamlit research dashboard. All numbers are taken from the verified case study. There is no backend, dataset processing or user tracking in this site.
+This is the canonical public BasketLens research dashboard on Vercel, including Rule Explorer and example Basket Builder. All numbers are taken from the verified case study. There is no backend, dataset processing or user tracking in this site.
 
 ## Local checks
 
@@ -53,3 +53,7 @@ Commands: `npm test --prefix site` (build and test); `python site/tests/explorer
 The example cart reuses the one verified `explorer.v1.json` fetch through the existing Rule Explorer event. `basket-matcher.mjs` is a pure, unit-tested deterministic training-only matching layer; `basket-builder.mjs` renders selected SKU chips, accessible search options, an exact antecedent-subset match and descriptive holdout context. It is a **hypothetical basket**, not a retail checkout or a causal recommendation engine. A documented sample loads SKU 22386. The product list is built from published antecedents, not from live inventory. Candidates remain limited to the selected 1,500 curated rules, and no user activity is saved.
 
 `tests/basket-matcher.test.mjs` uses real published rule data plus adversarial synthetic edge cases. `tests/basket_browser_smoke.py` uses a separately-labelled synthetic fixture to test keyboard/touch and errors at 1440, 1024, 768, 390 and 320 pixels. Hosted smoke against the actual live Vercel alias is required after merge. No independent network request, Python runtime, new package or VPS work is introduced.
+
+## M6.8 typography and hosting policy
+
+Manrope is the main typeface for the dashboard and figures, Instrument Serif the editorial display face. Google Fonts uses `display=swap` with local system fallbacks. BasketLens has one supported public deployment, Vercel; its earlier Streamlit source is retained as archival analysis, not a second maintained public app.

@@ -317,6 +317,55 @@ button:focus-visible, a:focus-visible, summary:focus-visible, [tabindex]:focus-v
   .rule-holdout { flex-wrap: wrap; gap: 6px 12px; }
   .explorer-summary { gap: 6px; }
 }
+
+/* M6.7: A small, source-backed example basket workflow, not a checkout. */
+.basket-section { margin-top: 29px; }
+.basket-shell { display: grid; grid-template-columns: minmax(0,.92fr) minmax(0,1.08fr); background: #fff; border: 1px solid var(--stroke); border-radius: 9px; overflow: hidden; }
+.basket-input { min-width: 0; background: #f8fbf7; padding: 25px 27px; border-right: 1px solid var(--stroke); }
+.basket-output { min-width: 0; padding: 25px 27px; }
+.basket-input h3, .basket-output h3 { font: 400 27px/1.15 var(--serif); letter-spacing: -.02em; margin: 6px 0 10px; }
+.basket-intro p, .basket-output > p { color: var(--body); font-size: 12px; line-height: 1.65; margin: 0 0 16px; }
+.basket-actions { display: flex; flex-wrap: wrap; gap: 9px; margin: 17px 0 19px; }
+.basket-actions button, .basket-choice-button, .basket-remove { min-height: 44px; border: 1px solid #bbd2c0; border-radius: 6px; color: var(--pine); font-size: 12px; font-weight: 750; background: #fff; padding: 9px 14px; }
+.basket-actions button:first-child { background: var(--pine); color: #fff; border-color: var(--pine); }
+.basket-actions button:hover:not(:disabled), .basket-choice-button:hover, .basket-remove:hover { background: #e2eee4; color: var(--pine); }
+.basket-actions button:disabled { opacity: .55; cursor: not-allowed; }
+.basket-field { display: block; color: var(--forest); font-size: 11px; font-weight: 750; margin-bottom: 7px; }
+.basket-search { width: 100%; min-width: 0; min-height: 45px; border: 1px solid #bdcfc2; background: #fff; color: var(--ink); border-radius: 6px; padding: 10px 12px; font: 600 12px/1.4 Arial,Helvetica,sans-serif; }
+.basket-search:disabled { background: #eef2ee; }
+.basket-search:focus-visible { outline: 3px solid #b97e3a; outline-offset: 2px; }
+.basket-hint { font-size: 11px; color: var(--muted); margin: 9px 0 13px; line-height: 1.5; }
+.basket-options, .basket-chosen, .basket-candidates { list-style: none; margin: 0; padding: 0; }
+.basket-options { display: grid; gap: 5px; max-height: 230px; overflow-y: auto; }
+.basket-choice-button { width: 100%; text-align: left; height: auto; overflow-wrap: anywhere; }
+.basket-minihead { font-size: 11px; color: var(--pine); font-weight: 800; margin: 21px 0 9px; }
+.basket-chosen { display: grid; gap: 6px; }
+.basket-selected { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 7px 7px 7px 11px; background: #edf3ec; border: 1px solid #d5e1d6; border-radius: 6px; font-size: 12px; font-weight: 650; overflow-wrap: anywhere; }
+.basket-selected span { min-width: 0; }
+.basket-remove { min-width: 75px; flex: none; background: #fff; padding: 9px; }
+.basket-status { padding: 11px 13px; background: #eef4ed; border-left: 3px solid #2d8964; color: var(--pine) !important; font-size: 12px !important; font-weight: 700; }
+.basket-candidate { border-bottom: 1px solid var(--stroke); padding: 16px 0 17px; }
+.basket-candidate:last-child { border-bottom: 0; }
+.basket-candidate-head { display: flex; flex-wrap: wrap; gap: 8px 14px; justify-content: space-between; align-items: baseline; }
+.basket-candidate-index { font-size: 10px; color: #5e7a66; font-weight: 750; }
+.basket-candidate-name { color: var(--pine); font-size: 14px; line-height: 1.4; overflow-wrap: anywhere; }
+.basket-candidate-context { margin: 8px 0 10px; color: var(--body); font-size: 11px; line-height: 1.55; overflow-wrap: anywhere; }
+.basket-candidate-evidence { display: flex; flex-wrap: wrap; gap: 6px; }
+.basket-candidate-evidence span { background: #edf3ec; color: #20573e; font-size: 10px; line-height: 1.4; border-radius: 4px; padding: 5px 8px; }
+.basket-candidate-later { color: var(--body); font-size: 11px; margin: 10px 0 0; }
+.basket-empty { color: #566e5c; background: #f7faf5; border: 1px dashed #bbcfbb; border-radius: 6px; padding: 16px; font-size: 12px; line-height: 1.6; }
+.basket-error { color: #8d3d30; font-weight: 650; background: #fff4ef; border: 1px solid #e9d0c4; padding: 12px; border-radius: 6px; font-size: 12px; }
+.basket-foot { font-size: 11px !important; border-top: 1px solid var(--stroke); margin: 20px 0 0 !important; padding-top: 14px; }
+@media (max-width: 970px) {
+  .basket-shell { grid-template-columns: minmax(0,1fr); }
+  .basket-input { border-right: 0; border-bottom: 1px solid var(--stroke); }
+}
+@media (max-width: 480px) {
+  .basket-input, .basket-output { padding: 20px 17px; }
+  .basket-actions button { flex: 1 1 auto; }
+  .basket-candidate-head { display: block; }
+  .basket-candidate-index { display: block; margin-bottom: 5px; }
+}
 </style>
 </head>
 <body>
@@ -332,7 +381,8 @@ button:focus-visible, a:focus-visible, summary:focus-visible, [tabindex]:focus-v
       <a class="active" href="#top" aria-current="page"><svg class="nav-glyph" viewBox="0 0 20 20" aria-hidden="true"><path d="M2.5 9.3 10 3l7.5 6.3v7.4H12v-5H8v5H2.5z"/></svg>Overview</a>
       <a href="#finding"><svg class="nav-glyph" viewBox="0 0 20 20" aria-hidden="true"><path d="M2 16h16M4 13l4-5 4 3 4-7"/></svg>Association evidence</a>
       <a href="#explorer"><svg class="nav-glyph" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 4h14v12H3zM6 8h8M6 11h5M6 14h7"/></svg>Rule explorer</a>
-      <a href="#method"><svg class="nav-glyph" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 3h12v14H4zM7 7h6M7 10h6M7 13h4"/></svg>Methodology</a>
+      <a href="#basket"><svg class="nav-glyph" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 6h14l-2 10H5L3 6zM7 6V4m6 2V4M6 10h8"/></svg>Example basket</a>
+       <a href="#method"><svg class="nav-glyph" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 3h12v14H4zM7 7h6M7 10h6M7 13h4"/></svg>Methodology</a>
       <a href="#decision"><svg class="nav-glyph" viewBox="0 0 20 20" aria-hidden="true"><path d="m3 10 4 4L17 4M4 17h12"/></svg>Decision brief</a>
       <a href="https://github.com/Fadhilstat/BasketLens/blob/main/docs/portfolio-case-study.md" target="_blank" rel="noopener noreferrer"><svg class="nav-glyph" viewBox="0 0 20 20" aria-hidden="true"><path d="M6 3h8l3 3v11H3V3zM8 8h5M8 11h5"/></svg>Full case study</a>
     </nav>
@@ -435,8 +485,35 @@ button:focus-visible, a:focus-visible, summary:focus-visible, [tabindex]:focus-v
           <div class="explorer-foot"><strong>How to read:</strong> Training confidence and lift describe earlier co-occurrence. Later hits / fires describe a separate observational check. Neither is a measured response to a recommendation, a commercial uplift or a demand forecast.<span id="rule-fingerprint">Source: checksum-verified aggregate-only publication. No invoices or customer identifiers.</span></div>
         </div>
       </section>
+      <section id="basket" class="basket-section" aria-labelledby="basket-title">
+        <div class="section-bar"><div><p class="section-number">03 / Example basket</p><h2 id="basket-title">From selected items to a testable candidate</h2></div><p>Curated rules, not a checkout simulation</p></div>
+        <div class="basket-shell">
+          <div class="basket-input">
+            <div class="basket-intro"><p class="card-kicker">Construct a hypothetical cart</p><h3>Choose up to three products</h3><p>Start with the audited example or search by product name or SKU. A rule only matches when every antecedent product is already in your example basket.</p></div>
+            <div class="basket-actions">
+              <button id="basket-example" type="button" disabled>Load published example</button>
+              <button id="basket-clear" type="button" disabled>Clear basket</button>
+            </div>
+            <label class="basket-field" for="basket-search">Search catalogued product</label>
+            <input id="basket-search" class="basket-search" type="search" placeholder="Type a name or SKU" autocomplete="off" disabled>
+            <p class="basket-hint" id="basket-search-hint">Waiting for audited product names.</p>
+            <ul id="basket-options" class="basket-options" aria-label="Products matching search"></ul>
+            <h4 class="basket-minihead">Products in your example basket</h4>
+            <ul id="basket-chosen" class="basket-chosen" aria-label="Selected example basket products"></ul>
+            <p id="basket-error" class="basket-error" role="alert" hidden>Cannot load this example builder until the published rules are available. Use Retry loading in the <a href="#explorer">Rule Explorer</a>.</p>
+          </div>
+          <div class="basket-output">
+            <p class="card-kicker">Training-selected candidates</p>
+            <h3>What rules match this basket?</h3>
+            <p id="basket-status" class="basket-status" role="status" aria-live="polite">Waiting for verified published rules.</p>
+            <ol id="basket-candidates" class="basket-candidates" aria-label="Matching training association rules"></ol>
+            <p id="basket-empty" class="basket-empty" hidden>Choose a published product to begin.</p>
+            <p class="basket-foot">More-specific matching antecedents are shown first, followed by earlier-period joint count, confidence and lift. Later co-purchases are descriptive context only. No sales uplift or purchase probability is measured.</p>
+          </div>
+        </div>
+      </section>
       <section id="method" class="method-section" aria-labelledby="method-title">
-        <div class="section-bar"><div><p class="section-number">03 / Research protocol</p><h2 id="method-title">How we made the evidence auditable</h2></div><p>Four documented controls</p></div>
+        <div class="section-bar"><div><p class="section-number">04 / Research protocol</p><h2 id="method-title">How we made the evidence auditable</h2></div><p>Four documented controls</p></div>
         <div class="method-panel">
           <div class="method-intro"><p class="card-kicker">Validation before interpretation</p><h2>From transactions<br>to a testable shortlist.</h2><p>Review exclusions, preserve invoice integrity and keep model selection separate from later evaluation.</p><a class="text-link" href="https://github.com/Fadhilstat/BasketLens/blob/main/docs/methodology.md" target="_blank" rel="noopener noreferrer">Read the methodology</a></div>
           <div>
@@ -451,7 +528,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible, [tabindex]:focus-v
         </div>
       </section>
       <section id="decision" class="decision-section" aria-labelledby="decision-title">
-        <div class="section-bar"><div><p class="section-number">04 / Commercial interpretation</p><h2 id="decision-title">Turn evidence into a responsible test</h2></div><p>Recommendation, not forecast</p></div>
+        <div class="section-bar"><div><p class="section-number">05 / Commercial interpretation</p><h2 id="decision-title">Turn evidence into a responsible test</h2></div><p>Recommendation, not forecast</p></div>
         <div class="decision-panel">
           <div class="decision-intro"><p class="card-kicker">Analyst recommendation</p><h2>Test the pairing.<br><em>Do not assume return.</em></h2><p>Co-purchase recurrence is a reason to assess a candidate pairing under controlled conditions, not to change placement immediately.</p></div>
           <div class="decision-grid">
@@ -542,5 +619,6 @@ button:focus-visible, a:focus-visible, summary:focus-visible, [tabindex]:focus-v
 })();
 </script>
 <script src="./explorer.js" defer></script>
+<script type="module" src="./basket-builder.mjs"></script>
 </body>
 </html>

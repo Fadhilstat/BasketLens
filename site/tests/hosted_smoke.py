@@ -117,6 +117,26 @@ def check_page(page, url: str) -> dict:
         if page.locator(".rule-row").count() != 16:
             raise AssertionError("Explorer pagination failed")
 
+
+    # The M6.7 Basket Builder must exist after production deploy.
+    basket_present = page.locator("#basket").count() == 1
+    if not basket_present and os.getenv("CI_PIPELINE_SOURCE") != "merge_request_event":
+        raise AssertionError("Production is missing the example Basket Builder")
+    if basket_present:
+        page.get_by_role("button", name="Load published example").click()
+        page.locator("#basket-candidates li").first.wait_for(timeout=12000)
+        if page.locator("#basket-chosen li").count() != 1:
+            raise AssertionError("Verified example basket did not select exactly one product")
+        if not page.locator("#basket-candidates").inner_text():
+            raise AssertionError("Basket did not render published matching rules")
+        page.get_by_role("button", name="Clear basket").click()
+        if "No products selected" not in page.locator("#basket-status").inner_text():
+            raise AssertionError("Basket clear action did not update state")
+        page.get_by_label("Search catalogued product").fill("22386")
+        page.locator("#basket-options button").first.click()
+        if page.locator("#basket-chosen li").count() != 1 or not page.locator("#basket-error").is_hidden():
+            raise AssertionError("Live basket SKU selection failed")
+
     if page.evaluate("document.documentElement.scrollWidth > document.documentElement.clientWidth + 1"):
         raise AssertionError("Page overflows horizontally")
     if errors:

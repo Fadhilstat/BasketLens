@@ -152,3 +152,10 @@ The public Vercel front door has a dedicated **retail intelligence dashboard** l
 The production-facing dashboard now exposes an interactive explorer for the **1,500 training-selected public rules**. Visitors can search stock codes or product names, filter the earlier-period training lift and co-purchase count, distinguish one- and two-product antecedents, and inspect later-period observational hits/fires. Results never rank or filter based on later-period performance. The interface includes genuine empty/error/retry states and progressive display for mobile readability.
 
 The browser receives only whitelisted aggregate rule fields derived at build time from a SHA256-verified copy of `data/public_demo/basketlens_public_v1.b64`. No raw UCI invoices or personal identifiers are served. The canonical artifact remains under `data/public_demo/`, and site build CI rejects divergent hashes. Commands: `npm --prefix site test`, `npm --prefix site run build`, `python site/tests/explorer_browser_smoke.py`. The live URL should be treated as M6.6 only after post-merge anonymous guest CI passes.
+
+
+## M6.7: Basket Builder (example, not checkout)
+
+The Vercel portfolio now lets a reviewer select up to three published antecedent products, load the verified Pink Polkadot example, inspect matching association rules, and clear individual products. Rules match only when all antecedent SKUs are present and the consequent is not already selected. Distinct candidate products are ordered by antecedent specificity and **earlier-training co-purchases, confidence and lift only**. Later hits/fires are clearly labelled as descriptive validation, not causal uplift, purchase probability, or actual customer recommendations. This deliberately works on the existing audited 1,500-rule static exhibit.
+
+No new backend, database, client personal data, API token, analytics tracker, or VPS process was added. The Rule Explorer and Basket Builder share one browser-side data load. Acceptance: `npm --prefix site test`, `python site/tests/basket_browser_smoke.py`, existing frontend/real-UCI parity gates and signed-out Vercel production smoke after merge.

@@ -137,6 +137,17 @@ def check_page(page, url: str) -> dict:
         if page.locator("#basket-chosen li").count() != 1 or not page.locator("#basket-error").is_hidden():
             raise AssertionError("Live basket SKU selection failed")
 
+
+    # Typography is required only after merge; an MR tests the prior published release.
+    has_m68_type = page.locator('link[href^="https://fonts.googleapis.com/css2"]').count() == 1
+    if os.getenv("CI_PIPELINE_SOURCE") != "merge_request_event" and not has_m68_type:
+        raise AssertionError("Published M6.8 font stylesheet is missing")
+    if has_m68_type:
+        if "Manrope" not in page.evaluate("getComputedStyle(document.body).fontFamily"):
+            raise AssertionError("Functional UI does not use Manrope")
+        if "Instrument Serif" not in page.locator("#hero-title").evaluate("(el) => getComputedStyle(el).fontFamily"):
+            raise AssertionError("Editorial heading does not use Instrument Serif")
+
     if page.evaluate("document.documentElement.scrollWidth > document.documentElement.clientWidth + 1"):
         raise AssertionError("Page overflows horizontally")
     if errors:

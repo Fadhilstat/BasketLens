@@ -4,7 +4,7 @@
 
 ![BasketLens evidence-led research](docs/assets/basketlens-overview.svg)
 
-[**Explore the Streamlit dashboard**](https://basketlens-retail.streamlit.app/) · [**Read the consulting case study**](docs/portfolio-case-study.md) · [**Review the methodology**](docs/methodology.md) · [**Publication kit**](docs/publication-readiness.md) · [**Inspect CI**](https://gitlab.com/fadhilrusydih/basketlens/-/pipelines)
+[**View the Vercel portfolio site**](https://basketlens-fadhil-9768s-projects.vercel.app/) · [**Inspect the Streamlit implementation**](https://github.com/Fadhilstat/BasketLens/blob/main/app/streamlit_app.py) · [**Read the consulting case study**](docs/portfolio-case-study.md) · [**Review the methodology**](docs/methodology.md) · [**Publication kit**](docs/publication-readiness.md) · [**Inspect CI**](https://gitlab.com/fadhilrusydih/basketlens/-/pipelines)
 
 BasketLens turns UCI Online Retail II receipts into auditable product-pair associations and tests whether those patterns appear again in later invoices. Its most important output is a **shortlist of testable retail hypotheses**, not a prediction of incremental revenue.
 
@@ -55,7 +55,7 @@ The public Streamlit app uses a **checksum-verified aggregate-only exhibit**. Ra
 
 The `site/` folder provides a separate, recruiter-first portfolio dossier with responsive editorial design, an accessible train/holdout comparison, and links to the complete Streamlit research workbench. The dossier is a **read-only explanatory companion**. It does not replace Python mining, load raw customer information, or claim conversion or revenue uplift.
 
-To test it locally: `npm --prefix site test` and `npm --prefix site run build`. The prebuilt `site/dist/` directory can be deployed as a static Vercel project with **Root Directory = site**. No Vercel deployment or public URL is claimed until the connected project is created and checked in a signed-out browser. See [Vercel frontend contract](docs/vercel-frontend.md).
+To test it locally: `npm --prefix site test` and `npm --prefix site run build`. The prebuilt `site/dist/` directory can be deployed as a static Vercel project with **Root Directory = site**. Vercel production is deployed from GitLab `main` to [BasketLens portfolio](https://basketlens-fadhil-9768s-projects.vercel.app/) (deployment `dpl_33yyNrDmzfaFU7jJfMg7m91GbbTG`, status READY). Anonymous access PASSED an external Chromium guest check on 2026-10-10 (HTTP 200, desktop 1440 px, mobile 390 px, and narrow mobile 320 px; tabs, keyboard, and overflow). [View verified CI evidence](https://gitlab.com/fadhilrusydih/basketlens/-/jobs/17080255194). The separate Streamlit workbench retains its own access/interaction gate. See [Vercel frontend contract](docs/vercel-frontend.md).
 
 ## Reproducible architecture
 
@@ -137,3 +137,6 @@ Application code: [MIT](LICENSE).
 The M6.2 release package contains exactly three consulting slides as 1920 x 1080 PNG files, an editable PowerPoint and a caption ready for review. These binary publication assets are delivered separately rather than checked into the source repo. See the [three-slide narrative](docs/social/three-slide-story.md), [LinkedIn post](docs/social/linkedin-post.md) and [publication readiness checklist](docs/publication-readiness.md).
 
 The application has passed source CI and simulated public-data browser QA. **This is not proof of anonymous Streamlit Community Cloud access.** Verify the hosted app in a logged-out incognito window before sharing it.
+
+
+**Hosted workbench limitation (2026-10-10):** the separate Streamlit URL did not load the required dashboard content for a fresh anonymous visitor on desktop or mobile (GitLab probe [17080255195](https://gitlab.com/fadhilrusydih/basketlens/-/jobs/17080255195)). The cause is not yet established; do not promise this hosted deep dive to public viewers. The audited Python source, data contracts and methodology remain reproducible from the repository. The public Vercel dossier passed independent guest QA.

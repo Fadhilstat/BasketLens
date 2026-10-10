@@ -56,7 +56,8 @@ The pair was selected on **training co-occurrence and confidence**, not on its l
 
 ## Links
 
-- [Live Streamlit application](https://basketlens-retail.streamlit.app/) (check anonymous access before promotion)
+- [Guest-verified Vercel portfolio](https://basketlens-fadhil-9768s-projects.vercel.app/)
+- [Streamlit analytical application source](https://github.com/Fadhilstat/BasketLens/blob/main/app/streamlit_app.py) (hosted guest access did not pass on 2026-10-10)
 - [Source repository](https://github.com/Fadhilstat/BasketLens)
 - [UCI official dataset](https://archive.ics.uci.edu/dataset/502/online+retail+ii)
 - [Full method and limitations](methodology.md)

@@ -86,6 +86,37 @@ def check_page(page, url: str) -> dict:
         cta = "previous_production_release"
     else:
         raise AssertionError("Production still exposes an unverified Streamlit CTA")
+    # Rule Explorer is tested after it has deployed to production.
+    # An MR runs against the preceding guest-facing production release.
+    explorer_present = page.locator("#explorer").count() == 1
+    if not explorer_present and os.getenv("CI_PIPELINE_SOURCE") != "merge_request_event":
+        raise AssertionError("Production is missing the Rule Explorer release")
+    if explorer_present:
+        page.wait_for_function(
+            "document.querySelector('#rule-summary')?.textContent?.includes('1,500 of 1,500')",
+            timeout=30000)
+        if page.locator(".rule-row").count() != 8 or not page.locator("#rule-error").is_hidden():
+            raise AssertionError("Published rule data did not load correctly")
+        if not page.locator("#rule-fingerprint").inner_text().startswith("Exhibit SHA256 5303df81bb5d"):
+            raise AssertionError("Unexpected public exhibit fingerprint")
+        page.locator("#rule-query").fill("22386")
+        if page.locator(".rule-row").count() < 1:
+            raise AssertionError("Published product code search yielded no result")
+        if not page.locator(".rule-row").first.inner_text().find("22386") >= 0:
+            raise AssertionError("SKU search returned unrelated rules")
+        page.locator("#rule-query").fill("NOT_A_REAL_SKU_TEST_2026")
+        if not page.get_by_text("No rules match these filters.").is_visible():
+            raise AssertionError("Empty rule search state failed")
+        page.get_by_role("button", name="Reset filters").click()
+        page.wait_for_function(
+            "document.querySelector('#rule-summary')?.textContent?.includes('1,500 of 1,500')",
+            timeout=10000)
+        if page.locator(".rule-row").count() != 8:
+            raise AssertionError("Explorer filter reset failed")
+        page.get_by_role("button", name="Show 8 more rules").click()
+        if page.locator(".rule-row").count() != 16:
+            raise AssertionError("Explorer pagination failed")
+
     if page.evaluate("document.documentElement.scrollWidth > document.documentElement.clientWidth + 1"):
         raise AssertionError("Page overflows horizontally")
     if errors:

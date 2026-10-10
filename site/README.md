@@ -36,3 +36,13 @@ The separate Streamlit hosted workbench failed anonymous guest QA on 2026-10-10.
 This source remains a self-contained static site, but the visitor experience is an actual portfolio dashboard rather than a long editorial page. Desktop: forest-green workspace navigation, audit-period banner, verified cohort KPI tiles, interactive training/holdout evidence, diagram of the selected two-product association, inline QA protocol and decision brief. On mobile/tablet the sidebar becomes touch-scrollable horizontal navigation and two-column analysis panels stack vertically. Everything is non-sensitive aggregated history, not a live feed.
 
 Validation before publication: `npm --prefix site test`, `npm --prefix site run build`, `python site/tests/browser_smoke.py`. The browser smoke inspects five widths, keyboard tab interaction, data and method details, alignment and overflow. Guest-verified Vercel deployment is a separate gate after merge to `main`.
+
+
+## M6.6 real published Rule Explorer
+
+- `index.html` retains the desktop/mobile retail research shell and fixed featured evidence. `explorer.js` renders actual additional rules and search/filter/load-more states using only DOM text nodes, with no server backend or external dependencies.
+- `data/basketlens_public_v1.b64` and its SHA256 companion are exact copies of the existing canonical **aggregate-only** publication in `../data/public_demo/`. The site copy is necessary for Vercel Root Directory=`site` build isolation, not a new source of truth.
+- `scripts/build.mjs` verifies SHA256, dataset structure, cohort totals, 1,500 rule/evaluation keys, and safe public fields. When the root canonical bundle is available in CI, bytes must match. It emits a compact `dist/explorer.v1.json` with a 2MB maximum test budget and no invoice/customer fields.
+- `tests/explorer-data.test.mjs` validates the resulting real artifact, its canonical portfolio pair, and train-only ordering. `tests/explorer_browser_smoke.py` uses clearly synthetic fixture data for **interaction testing only** across five viewports. GitLab hosted smoke is a distinct guest check of the actual live artifact.
+
+Commands: `npm test --prefix site` (build and test); `python site/tests/explorer_browser_smoke.py` (UI fixture); `python site/tests/browser_smoke.py` (existing dashboard regression). After every data refresh: regenerate and review the canonical exhibit first, mirror its bytes and SHA256 into `site/data/`, run full UCI parity checks, then publish. Do not copy raw workbook or customer identifiers into `site`.

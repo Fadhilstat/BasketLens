@@ -215,3 +215,13 @@ M6.4 verified hosted evidence (2026-10-10): GitLab guest Chromium job 1708025519
 
 
 M6.4 risk correction: Streamlit guest probe 17080255195 FAILED on desktop and mobile because required dashboard content did not load. Cause unknown, do not assert a login redirect. To prevent a dead public CTA, the Vercel dossier now links to the available GitHub consulting case study. The Python Streamlit source remains unchanged. Hosted guest QA permits the prior published CTA on merge-request pipelines, while post-merge main CI must require the corrected CTA. NEXT_ACTION: verify updated source and real-UCI CI, sync GitHub, merge under approvals, then verify the corrected Vercel production CTA.
+
+
+## M6.5 frontend match to approved reference (2026-10-10)
+Milestone: M6.5 dashboard-first visual revision; scope: site UI and tests only
+Owner approvals: APPROVE PUSH and APPROVE MERGE granted explicitly on 2026-10-10 in this request.
+GitLab baseline: 55793c8c73c4d82ec22bfa895367f3a08a4dd554; GitHub baseline: e41a443a0e98f4eae486141c09d57fe970620812.
+The first published Vercel dossier was too article-like for the approved professional retail analytics dashboard reference. The replacement includes meaningful dashboard hierarchy (left workspace rail, 4 metric tiles, source-backed comparative evidence, product-pair graphic, original methodology and decision process). Hero and chart labels show only verified UCI Online Retail II measures. No new claims, chart feeds, ML models, raw source, PII or backend services.
+Local QA: `node --test site/tests/site.test.mjs` 5/5 PASS; `python site/tests/browser_smoke.py` PASS on 1440, 1024, 768, 390, and 320 px with keyboard and tab switching, verified figures, no JS errors and no horizontal overflow.
+REMOTE STATUS: PENDING exact-head CI and Vercel preview/public production verification. Do not announce the M6.5 website as live until after verified merge, READY production redeploy and anonymous post-merge QA.
+NEXT_ACTION: inspect GitLab MR full UCI, UI and site test gates, sync matching GitHub PR, merge with approved gates once green, inspect production preview and no-login hosted QA, then visually compare to approved retail dashboard direction.

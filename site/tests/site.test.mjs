@@ -11,8 +11,8 @@ test('source-backed research figures and honest evidence boundary', () => {
     assert.ok(html.includes(fact), `Expected documented fact: ${fact}`);
   }
   assert.match(html, /not incremental revenue|not an experiment/i);
-  assert.ok(html.includes('Interactive analysis and reproducible methods are documented in the source repository.'));
   assert.ok(html.includes('Read full case study'));
+  assert.ok(html.includes('Interactive analysis and reproducible methods are documented in the source repository.'));
   assert.doesNotMatch(html, /basketlens-retail\.streamlit\.app/);
 });
 
@@ -29,6 +29,16 @@ test('functional accessible controls and reduced motion', () => {
   }
   assert.doesNotMatch(html, /href="#"|javascript:|Lorem ipsum|99\.9% uptime|AI powered|trusted by/i);
   assert.ok(!html.includes('\u2014'));
+});
+
+test('retail intelligence dashboard has true visual structure, real numbers and responsive navigation', () => {
+  for (const token of ['class="app-shell"', 'class="sidebar"', 'class="kpi-row"', 'class="hero-banner"', 'class="finding-grid"', 'class="evidence-card"', 'class="compare-row"', 'class="method-steps"', 'class="decision-panel"', 'class="bag-outline"']) {
+    assert.ok(html.includes(token), `Dashboard structure missing: ${token}`);
+  }
+  assert.ok(html.includes('Confidence by period'));
+  assert.ok(html.includes('2009 - 2011'));
+  assert.ok(html.includes('40,280'));
+  assert.ok(html.includes('67.1%'));
 });
 
 test('build exposes exactly one self-contained HTML entrypoint', () => {

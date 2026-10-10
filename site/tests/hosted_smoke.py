@@ -42,8 +42,20 @@ def check_page(page, url: str) -> dict:
     for anchor in ("finding", "method", "decision"):
         if page.locator(f"#{anchor}").count() != 1:
             raise AssertionError(f"Missing published {anchor} section")
-    if "40,280" not in page.locator(".hero-ledger").inner_text():
-        raise AssertionError("Source-backed cohort count missing")
+    dashboard = page.locator(".kpi-row").count() == 1
+    if dashboard:
+        if page.locator(".kpi-row .kpi").count() != 4 or "40,280" not in page.locator(".kpi-row").inner_text():
+            raise AssertionError("Source-backed dashboard KPIs missing")
+        if page.get_by_role("navigation", name="Research sections").count() != 1:
+            raise AssertionError("Research sidebar is missing")
+        if page.locator(".hero-banner").count() != 1 or page.locator(".finding-grid").count() != 1:
+            raise AssertionError("Retail intelligence dashboard layout is missing")
+    elif os.getenv("CI_PIPELINE_SOURCE") == "merge_request_event":
+        # Source MR is tested while the previous production site is still live.
+        if "40,280" not in page.locator(".hero-ledger").inner_text():
+            raise AssertionError("Neither existing nor redesigned public cohort is available")
+    else:
+        raise AssertionError("Production has not deployed the approved dashboard redesign")
 
     earlier = page.get_by_role("tab", name="Earlier training")
     later = page.get_by_role("tab", name="Later holdout")
@@ -79,7 +91,8 @@ def check_page(page, url: str) -> dict:
     if errors:
         raise AssertionError("Uncaught JavaScript error: " + errors[0][:150])
     return {"status": "PASS", "http_status": response.status,
-            "final_host": urlsplit(page.url).hostname, "cta": cta}
+            "final_host": urlsplit(page.url).hostname, "cta": cta,
+            "dashboard": "redesigned" if dashboard else "previous_production"}
 
 
 def main() -> int:

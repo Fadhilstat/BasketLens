@@ -140,3 +140,8 @@ The application has passed source CI and simulated public-data browser QA. **Thi
 
 
 **Hosted workbench limitation (2026-10-10):** the separate Streamlit URL did not load the required dashboard content for a fresh anonymous visitor on desktop or mobile (GitLab probe [17080255195](https://gitlab.com/fadhilrusydih/basketlens/-/jobs/17080255195)). The cause is not yet established; do not promise this hosted deep dive to public viewers. The audited Python source, data contracts and methodology remain reproducible from the repository. The public Vercel dossier passed independent guest QA.
+
+
+## M6.5 dashboard-style portfolio experience
+
+The public Vercel front door has a dedicated **retail intelligence dashboard** layout rather than a generic case-study page: responsive research navigation, source-verified KPI tiles, training/holdout comparison, product-pair diagram, methods and a controlled-test decision brief. The Python/Streamlit analysis remains the reproducible research engine and is not replaced by a static frontend. The Vercel deployment should be checked again as an anonymous guest after the M6.5 merge before claiming that the redesign is live.

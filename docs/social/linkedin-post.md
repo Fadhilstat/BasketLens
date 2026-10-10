@@ -1,6 +1,6 @@
 # BasketLens | LinkedIn post
 
-Publish with the three numbered M6.2 PNG slides once the hosted demo works in a logged-out incognito browser.
+Publish with the three numbered M6.2 PNG slides. The Vercel case-study front door passed independent anonymous desktop/mobile CI on 2026-10-10. The separate Streamlit dashboard has its own guest-access check.
 
 A product pairing is interesting. But is it consistent enough to deserve a business experiment?
 
@@ -12,9 +12,9 @@ One example: Jumbo Bag Pink Polkadot and Jumbo Bag Red Retrospot had 63.1% train
 
 That does not prove a bundle or adjacent display would increase sales. It suggests a hypothesis worth testing, after checking inventory and contribution margins.
 
-I built a reproducible Python analysis pipeline, FP-Growth association research with chronological holdout, an interactive Streamlit dashboard, privacy-safe public aggregates, unit tests and browser QA.
+I built a reproducible Python analysis pipeline, FP-Growth association research with chronological holdout, an interactive Streamlit research application, privacy-safe public aggregates, and a Vercel portfolio front door backed by unit and browser QA.
 
-Explore: https://basketlens-retail.streamlit.app/
+Read the publicly verified case study: https://basketlens-fadhil-9768s-projects.vercel.app/
 Source and method: https://github.com/Fadhilstat/BasketLens
 
 I would be interested to hear how other analysts evaluate associations before turning them into retail recommendations.
@@ -23,4 +23,4 @@ I would be interested to hear how other analysts evaluate associations before tu
 
 ## Short CV bullet
 
-Built BasketLens, a Streamlit market basket research application using UCI Online Retail II. Audited over 1M source lines, analysed 40,280 baskets, mined FP-Growth product associations and checked the results using a chronological holdout. Shipped privacy-safe public aggregates, unit tests, responsive UI and an evidence-based retail case study.
+Built BasketLens, a market basket analytics and retail case-study portfolio using UCI Online Retail II. Audited over 1M source lines, analysed 40,280 baskets, mined FP-Growth product associations and checked the results using a chronological holdout. Shipped privacy-safe public aggregates, unit tests, responsive UI and an evidence-based retail case study.

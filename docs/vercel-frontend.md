@@ -26,7 +26,7 @@ No actual experiment was conducted. Association confidence is not causal convers
 - Source: `site/index.html` (self-contained HTML, CSS and JS for predictable static delivery)
 - Build: `node site/scripts/build.mjs` copies the audited entrypoint to `site/dist/`
 - Tests: Node built-in test runner and Playwright Chromium smoke
-- Vercel: Personal account, import GitHub repository, root directory `site`, framework `Other`, output `dist`, committed `vercel.json`
+- Vercel: Hobby project linked to GitLab source `fadhilrusydih/basketlens`, root directory `site`, framework Other, Node 22, output `dist`, committed `vercel.json`; GitHub remains the public mirror
 - No environment variables, user login, server functions, database or external trackers
 - No new ML inference, data upload or on-request Python mining
 - Original app: `app/streamlit_app.py` remains the complete analytical research workbench
@@ -40,3 +40,18 @@ A passing local/CI build is not evidence of a live Vercel deployment. A personal
 ## Rollback
 
 If the site release causes problems, disable the linked Vercel project or revert the site change in Git; the original Streamlit analytical app is unchanged and remains the fallback. Keep source/data privacy audits intact.
+
+
+## Deployment evidence (2026-10-10)
+
+The portfolio front door is now deployed from GitLab `fadhilrusydih/basketlens`, branch `main`, commit `3cf2ca5`, via connected Vercel project `prj_BiqgK3ZnFN9vKURIftb5m1dxB8wF`. The production URL is https://basketlens-fadhil-9768s-projects.vercel.app/ and Vercel reported READY after cloning and running the declared build. GitLab remains source of truth; GitHub `Fadhilstat/BasketLens` is the portfolio mirror. Node is pinned to major version 22 to prevent automatic major upgrades. Production authentication is disabled while preview authentication stays enabled. Signed-out guest interaction is a separate CI release gate and must not be inferred from READY.
+
+
+## Anonymous release proof
+
+GitLab CI job https://gitlab.com/fadhilrusydih/basketlens/-/jobs/17080255194 used a fresh unauthenticated Chromium browser against https://basketlens-fadhil-9768s-projects.vercel.app/ and returned PASS at desktop 1440 px, mobile 390 px and narrow mobile 320 px. Every page responded HTTP 200, with the expected case-study heading, training/holdout control, keyboard navigation, non-overflow layout and methodology section. Screenshots and a JSON summary are stored as expiring job artifacts. This proves the Vercel portfolio page for the inspected deployment, not the external Streamlit dashboard or any commercial uplift.
+
+
+## Public CTA correction
+
+The separate Streamlit hosted guest test failed to load its dashboard on desktop/mobile in GitLab job 17080255195. The Vercel dossier therefore replaces its secondary hero CTA with the accessible GitHub consulting case study. Publication remains evidence-first: the Vercel case study is independently accessible, while deeper hosted Streamlit exploration is an open operational issue.

@@ -11,7 +11,9 @@ test('source-backed research figures and honest evidence boundary', () => {
     assert.ok(html.includes(fact), `Expected documented fact: ${fact}`);
   }
   assert.match(html, /not incremental revenue|not an experiment/i);
-  assert.match(html, /access has not yet been independently verified/i);
+  assert.ok(html.includes('Interactive analysis and reproducible methods are documented in the source repository.'));
+  assert.ok(html.includes('Read full case study'));
+  assert.doesNotMatch(html, /basketlens-retail\.streamlit\.app/);
 });
 
 test('internal links target existing anchors', () => {

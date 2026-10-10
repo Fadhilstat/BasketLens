@@ -198,3 +198,20 @@ No changes to validated Python analytics, Streamlit workflows, raw UCI data, or 
 Local tests: 4/4 Node standard tests; static build; Chromium interactions across desktop/tablet/mobile including keyboard focus and no horizontal overflow. These local results do not prove the Vercel-hosted URL.
 Release gates: GitLab MR unit/public UI/full UCI and bundle parity, GitHub PR checks, diff and privacy review, then verified merge and mirrors. Vercel project import and signed-out smoke check remain separate.
 NEXT_ACTION: Verify M6.3 exact-head MR and PR CI, merge only on green, then connect `site/` to Vercel and verify anonymous production site before publishing the link.
+
+
+## M6.4 hosted release verification (2026-10-10)
+Milestone: M6.4 Vercel production guest and reproducible release gate
+Status: PENDING_REMOTE_GUEST_QA
+Approval: user granted APPROVE PUSH and APPROVE MERGE in current turn.
+Baseline GitLab main: 3cf2ca5086671f3d8ee33b3d807750803c3f0488; GitHub main: e9c81660ecc01b70dd12a696f9e8053e8bd57b2b.
+Vercel team: team_EaaiSPOJWbSimQAe1AzNVd39; project: prj_BiqgK3ZnFN9vKURIftb5m1dxB8wF; production deployment dpl_33yyNrDmzfaFU7jJfMg7m91GbbTG (READY); alias: https://basketlens-fadhil-9768s-projects.vercel.app/
+The Vercel build log verified GitLab clone at 3cf2ca5, package build, completed output, and Node engine warning. Follow-up pins Node 22, documents GitLab auto deployment, and adds a remote guest browser test (plus optional Streamlit guest probe).
+No modification to UCI source, analytical models, data validation or aggregate-only public bundle.
+NEXT_ACTION: Run M6.4 GitLab MR real-dataset + hosted-guest Chromium checks, inspect screenshots and Streamlit access, update published evidence, sync GitHub mirror, merge only on green mandatory QA, and confirm Vercel redeploy on main.
+
+
+M6.4 verified hosted evidence (2026-10-10): GitLab guest Chromium job 17080255194 PASSED at 1440, 390 and 320 pixels, HTTP 200, live Vercel URL https://basketlens-fadhil-9768s-projects.vercel.app/, correct evidence controls and keyboard focus, zero horizontal overflow. Test artifact: https://gitlab.com/fadhilrusydih/basketlens/-/jobs/17080255194. Python unit and Vercel site jobs also passed at first checkpoint; full-UCI and Streamlit guest probe were still running when this documentation update was committed. Keep the Streamlit status distinct from the Vercel front door.
+
+
+M6.4 risk correction: Streamlit guest probe 17080255195 FAILED on desktop and mobile because required dashboard content did not load. Cause unknown, do not assert a login redirect. To prevent a dead public CTA, the Vercel dossier now links to the available GitHub consulting case study. The Python Streamlit source remains unchanged. Hosted guest QA permits the prior published CTA on merge-request pipelines, while post-merge main CI must require the corrected CTA. NEXT_ACTION: verify updated source and real-UCI CI, sync GitHub, merge under approvals, then verify the corrected Vercel production CTA.

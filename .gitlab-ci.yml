@@ -80,3 +80,42 @@ portfolio_site_tests:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+
+
+hosted_portfolio_smoke:
+  image: python:3.11-slim
+  stage: verify
+  needs: [portfolio_site_tests]
+  before_script:
+    - python -m pip install --upgrade pip
+    - python -m pip install 'playwright>=1.50,<2'
+    - python -m playwright install chromium --with-deps
+  script:
+    - python site/tests/hosted_smoke.py --url https://basketlens-fadhil-9768s-projects.vercel.app/ --report reports/vercel-guest
+  artifacts:
+    when: always
+    expire_in: 7 days
+    paths:
+      - reports/vercel-guest/
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+
+streamlit_guest_probe:
+  image: python:3.11-slim
+  stage: verify
+  needs: [unit_tests]
+  allow_failure: true
+  before_script:
+    - python -m pip install --upgrade pip
+    - python -m pip install 'playwright>=1.50,<2'
+    - python -m playwright install chromium --with-deps
+  script:
+    - python scripts/hosted_smoke.py --url https://basketlens-retail.streamlit.app/ --report reports/streamlit-guest
+  artifacts:
+    when: always
+    expire_in: 7 days
+    paths:
+      - reports/streamlit-guest/
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'

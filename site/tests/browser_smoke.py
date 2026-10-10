@@ -34,6 +34,10 @@ def run() -> None:
                 assert not page.evaluate('document.documentElement.scrollWidth > document.documentElement.clientWidth + 1'), f'Horizontal overflow at {width}px'
                 assert not errors, f'JS errors at {width}px: {errors}'
                 assert page.locator('.hero-banner').bounding_box()['width'] > 250
+                for selector in ('.source-link', '.primary-link', '.secondary-link', '.evidence-tabs button', '.text-action'):
+                    assert page.locator(selector).first.bounding_box()['height'] >= 44, f'Small touch target {selector} at {width}px'
+                if width <= 900:
+                    assert page.locator('.sidebar-nav a').first.bounding_box()['height'] >= 44
                 # Test layout without including scroll-induced sticky-position artifacts.
                 page.evaluate('window.scrollTo({top:0,behavior:"instant"})')
                 page.wait_for_timeout(100)

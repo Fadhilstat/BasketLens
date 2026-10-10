@@ -89,6 +89,7 @@
 
   async function load() {
     const request = ++generation;
+    window.BasketLensPublicDatasetStatus = 'loading';
     error.hidden = true;
     retry.hidden = true;
     summary.textContent = 'Loading 1,500 audited rules...';
@@ -103,12 +104,18 @@
           !/^[a-f0-9]{64}$/.test(payload.exhibitSha256)) throw new Error('Invalid dataset version');
       if (request !== generation) return;
       dataset = payload;
+      window.BasketLensPublicDataset = payload;
+      window.BasketLensPublicDatasetStatus = 'ready';
+      window.dispatchEvent(new CustomEvent('basketlens:dataset-ready', { detail: payload }));
       fingerprint.textContent = `Exhibit SHA256 ${payload.exhibitSha256.slice(0, 12)}... / 1,500 training-selected rules`;
       visible = 8;
       render();
     } catch {
       if (request !== generation) return;
       dataset = null;
+      window.BasketLensPublicDataset = null;
+      window.BasketLensPublicDatasetStatus = 'error';
+      window.dispatchEvent(new Event('basketlens:dataset-error'));
       results.replaceChildren();
       summary.textContent = 'The published rule table could not be loaded.';
       empty.hidden = true;

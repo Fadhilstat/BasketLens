@@ -14,6 +14,9 @@
   const more = document.getElementById('rule-more');
   const retry = document.getElementById('rule-retry');
   const fingerprint = document.getElementById('rule-fingerprint');
+  // Pin this public version to the checksum and cohort audited in the site build.
+  // A plausible-looking but mismatched fingerprint must not be labelled audited.
+  const expectedExhibitSha256 = '5303df81bb5d8c5c4eb452a774d1c9d42233ff9bf56d6319021eefc6dfd69b20';
   let dataset = null;
   let visible = 8;
   let generation = 0;
@@ -99,9 +102,13 @@
       const response = await fetch('./explorer.v1.json', { cache: 'no-store', signal: controller.signal });
       if (!response.ok) throw new Error('Dataset unavailable');
       const payload = await response.json();
-      if (payload.schema !== 'basketlens.rule-explorer.v1' || payload.ruleCount !== 1500 ||
+      if (!payload || payload.schema !== 'basketlens.rule-explorer.v1' || payload.ruleCount !== 1500 ||
           !Array.isArray(payload.rules) || payload.rules.length !== 1500 ||
-          !/^[a-f0-9]{64}$/.test(payload.exhibitSha256)) throw new Error('Invalid dataset version');
+          payload.exhibitSha256 !== expectedExhibitSha256 ||
+          !payload.cohort || payload.cohort.baskets !== 40280 ||
+          payload.cohort.earlier !== 32224 || payload.cohort.later !== 8056) {
+        throw new Error('Invalid dataset version');
+      }
       if (request !== generation) return;
       dataset = payload;
       window.BasketLensPublicDataset = payload;

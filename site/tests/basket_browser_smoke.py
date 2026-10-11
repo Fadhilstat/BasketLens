@@ -73,6 +73,45 @@ def run(report: Path) -> None:
             assert failed.get_by_role("link", name="Rule Explorer").count() >= 1
             failed.close()
             print("BASKET_ERROR_PASS explicit failed-data state", flush=True)
+
+            # Invalid but well-formed metadata must fail closed. A subsequent
+            # retry should recover both the Rule Explorer and Basket Builder.
+            for mismatch in ("fingerprint", "cohort"):
+                invalid = json.loads(DATA)
+                if mismatch == "fingerprint":
+                    invalid["exhibitSha256"] = "b" * 64
+                else:
+                    invalid["cohort"]["earlier"] = 32225
+                counter = [0]
+
+                def invalid_then_valid(route):
+                    if urlsplit(route.request.url).path == "/explorer.v1.json":
+                        response = json.dumps(invalid) if counter[0] == 0 else DATA
+                        counter[0] += 1
+                        route.fulfill(status=200, body=response, content_type="application/json")
+                    else:
+                        route_asset(route)
+
+                page = browser.new_page()
+                errors = []
+                page.on("pageerror", lambda err: errors.append(str(err)))
+                page.route("**/*", invalid_then_valid)
+                page.goto("https://basketlens.local/", wait_until="load")
+                page.locator("#rule-error").wait_for(state="visible", timeout=12000)
+                assert page.locator(".rule-row").count() == 0
+                assert page.locator("#basket-error").is_visible()
+                assert page.locator("#basket-search").is_disabled()
+                page.get_by_role("button", name="Retry loading").click()
+                page.locator(".rule-row").first.wait_for(timeout=12000)
+                assert page.locator("#rule-error").is_hidden()
+                assert page.locator("#basket-error").is_hidden()
+                assert page.locator("#basket-search").is_enabled()
+                page.get_by_role("button", name="Load published example").click()
+                assert "85099B" in page.locator("#basket-candidates").inner_text()
+                assert counter[0] == 2
+                assert not errors, errors
+                page.close()
+                print(f"BASKET_RECOVERY_PASS {mismatch} rejected, retry restored both explorers", flush=True)
         finally:
             browser.close()
 

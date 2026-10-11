@@ -6,6 +6,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -17,6 +18,21 @@ jobs:
       - run: python -m pytest -q
       - run: python scripts/check_public_demo.py
       - run: python -m pip check
+      # GitLab shared CI quota can block MR Chromium jobs before execution.
+      # Reuse the Python test environment to preserve an independent browser gate.
+      - name: Install Chromium smoke dependencies (pull requests)
+        if: github.event_name == 'pull_request'
+        run: |
+          python -m pip install 'playwright>=1.50,<2'
+          python -m playwright install chromium --with-deps
+      - name: Public Chromium regression and research workbench (pull requests)
+        if: github.event_name == 'pull_request'
+        run: |
+          python -m unittest discover -s site/tests -p provenance_guard_test.py
+          python scripts/browser_smoke.py --data data/processed --report reports/quick-public
+          python site/tests/browser_smoke.py
+          python site/tests/explorer_browser_smoke.py
+          python site/tests/basket_browser_smoke.py
 
   portfolio-site:
     runs-on: ubuntu-latest

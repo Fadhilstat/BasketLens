@@ -1,6 +1,6 @@
 # BasketLens | LinkedIn post
 
-Publish with the three numbered M6.2 PNG slides. The Vercel case-study front door passed independent anonymous desktop/mobile CI on 2026-10-10. The separate Streamlit dashboard has its own guest-access check.
+Use the three numbered M6.2 PNG slides and Vercel as the sole public demo. M7.3 passed signed-out guest QA and GitLab source SHA verification on 2026-10-11. Recheck current deployment before posting; the Python/Streamlit workbench remains local, not hosted on Streamlit Cloud.
 
 A product pairing is interesting. But is it consistent enough to deserve a business experiment?
 
@@ -12,7 +12,7 @@ One example: Jumbo Bag Pink Polkadot and Jumbo Bag Red Retrospot had 63.1% train
 
 That does not prove a bundle or adjacent display would increase sales. It suggests a hypothesis worth testing, after checking inventory and contribution margins.
 
-I built a reproducible Python analysis pipeline, FP-Growth association research with chronological holdout, an interactive Streamlit research application, privacy-safe public aggregates, and a Vercel portfolio front door backed by unit and browser QA.
+I built reproducible Python/Streamlit research tools for local analysis, plus a public Vercel dashboard with a searchable Rule Explorer, example Basket Builder and privacy-safe aggregates. The Vercel release has source checks and real browser QA.
 
 Read the publicly verified case study: https://basketlens-fadhil-9768s-projects.vercel.app/
 Source and method: https://github.com/Fadhilstat/BasketLens

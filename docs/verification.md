@@ -43,20 +43,20 @@ The `verify` command requires a processed artifact directory. Without a real wor
 - [ ] Full-data FP-Growth run completed and validated
 - [ ] Candidate SKU/basket coverage reviewed and exclusions explained
 - [ ] Holdout rule diagnostics and confidence bounds reviewed
-- [ ] Actual Streamlit UI verified on mobile/desktop with keyboard
-- [ ] CI executed after authorized push
+- [ ] Local Streamlit research UI tested at desktop/mobile widths if the analytical workbench is in scope
+- [ ] Exact-head CI and Vercel guest/source SHA checks verified after approved changes
 - [ ] No sensitive data, credentials, or raw retail data committed
 - [ ] Repository, release, and screenshots match actual verified functionality
 
 Do not claim sales or profit uplift from historical co-occurrence. Product trials would require prospective randomized experiments.
 
-## CI full-source quality gate
+## CI full-source quality gate (selective)
 
-GitLab MR CI runs `scripts/source_conflict_audit.py` before full-data builds. On the initial full-data attempt, the fail-closed invoice consistency check detected 83 invoices with conflicting dates or countries. The revised CI job records date and country conflict counts and the fraction of eligible sale lines that would be lost. It fails if the affected fraction exceeds 1%. Only when the cap passes does the job explicitly use `--inconsistent-policy quarantine` for both pairwise and FP-Growth, then compares matching one-to-one rules and runs Streamlit headless. All published evidence is aggregate. A green unit test job alone is not the real-source release gate. Browser/mobile QA and actual public deployment remain distinct release tasks.
+The GitLab `real_dataset_audit` runs automatically for analytics/CI/research changes, but is manual and non-blocking on docs/presentation-only MRs. Other unit, frontend, UI smoke and hosted Vercel jobs still run. When invoked, the full audit downloads the original UCI workbook, checks contradictions (83 source invoices identified during the initial real-data run), rejects excessive quarantine loss above 1%, rebuilds pairwise and FP-Growth and validates parity. A green pipeline without that executed job does **not** establish a new full-UCI audit. Inspect actual job status and source scope.
 
 ## Browser-level release smoke
 
-The CI full-source job also starts the real-data Streamlit server and runs Chromium Playwright on desktop (1440x900) and mobile (390x844). It checks the main heading, the four primary tabs and product affinity controls, keyboard focus, runtime error visibility, and exports screenshots as short-lived CI artifacts. Browser smoke does not replace a full WCAG audit or user acceptance testing. Do not call the site publicly deployed before a real hosting URL is verified.
+When a full UCI audit is run, Chromium exercises the **local research Streamlit workbench** with real generated artifacts. This is distinct from public deployment QA. GitLab `public_ui_smoke` checks the Vercel frontend using synthetic UI fixtures across five widths; `hosted_portfolio_smoke` independently checks the live unauthenticated Vercel alias and, on main, validates the `/release.json` GitLab commit identity. None of these are a full accessibility audit or a measured sales experiment.
 
 
 ### Public exhibit release gate
@@ -71,4 +71,4 @@ The CI full-source job also starts the real-data Streamlit server and runs Chrom
 6. Run Chromium browser smoke tests in public-only mode on desktop and mobile.
 7. Copy only the checked public bundle into the repository. Never commit raw UCI
    XLSX, invoice-level processed CSV, temporary audit folders or credentials.
-8. Verify GitLab/GitHub parity and Streamlit Community Cloud live URL.
+8. Verify GitLab/GitHub reviewed file parity and the public Vercel URL, including exact GitLab main `gitSha` and exhibit fingerprint in `/release.json`. Streamlit Cloud is not an active public target.

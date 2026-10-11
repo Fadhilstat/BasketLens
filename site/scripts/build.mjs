@@ -9,7 +9,7 @@ import { gunzipSync } from 'node:zlib';
 const root = resolve(import.meta.dirname, '..');
 const target = resolve(root, 'dist');
 const exhibit = resolve(root, 'data', 'basketlens_public_v1.b64');
-const canonical = resolve(root, '..', '..', 'data', 'public_demo', 'basketlens_public_v1.b64');
+const canonical = resolve(root, '..', 'data', 'public_demo', 'basketlens_public_v1.b64');
 const expectedHash = '5303df81bb5d8c5c4eb452a774d1c9d42233ff9bf56d6319021eefc6dfd69b20';
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
 const finite = (value, label) => {

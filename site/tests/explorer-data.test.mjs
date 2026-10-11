@@ -40,3 +40,11 @@ test('published Pink Polkadot pair is linked to actual later observations', () =
   assert.equal(rule.hits, 279);
   assert.ok(Math.abs(rule.holdoutConfidence - 279 / 416) < 0.00001);
 });
+test('canonical exhibit path resolves within repository and matches site mirror', () => {
+  const siteMirror = resolve(root, 'data', 'basketlens_public_v1.b64');
+  const canonical = resolve(root, '..', 'data', 'public_demo', 'basketlens_public_v1.b64');
+  const build = readFileSync(resolve(root, 'scripts', 'build.mjs'), 'utf8');
+  assert.match(build, /const canonical = resolve\(root, '\.\.', 'data', 'public_demo'/);
+  assert.equal(readFileSync(siteMirror, 'utf8').trim(), readFileSync(canonical, 'utf8').trim(),
+    'Public site mirror differs from canonical data');
+});

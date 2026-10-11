@@ -39,12 +39,16 @@ Artifacts never contain customer IDs. They contain item-level catalogue data, ag
 
 ## UI interaction contract
 
+**Local Python/Streamlit research workbench:**
+
 - Overview country filter changes historical sales KPI and trend only.
 - Rule explorer filters existing model output by lift and co-occurrence count.
 - Basket builder selects known SKUs and triggers exact antecedent subset matches.
 - Data quality view exposes all exclusion counts and manifest settings.
 - CSV and JSON export buttons operate on real files loaded into the session.
 - Empty artifact or empty rule outputs display useful guidance rather than invented examples.
+
+**Public Vercel static dashboard:** interactive training/holdout tabs, searchable 1,500-rule exhibit, hypothetical three-item Basket Builder, meaningful empty/error/retry states. No public invoice upload, checkout or CSV export. It reads validated aggregate-only static assets.
 
 ## Threat model and bounds
 
@@ -57,9 +61,9 @@ Artifacts never contain customer IDs. They contain item-level catalogue data, ag
 
 ## Deployment options
 
-The MVP can run locally or on a Streamlit host with prepared read-only artifacts. A dataset licensing check and hosting memory measurement must precede production publication. If public hosting cannot ship the generated artifacts as part of a controlled deployment, connect a private artifact store or create a smaller clearly labeled demonstration cohort after actual-data verification.
+**Supported public deployment:** GitLab `main` deploys a static aggregate-only `site/` build to Vercel, with the reviewed GitHub mirror and `/release.json` commit identity. No VPS, backend or Streamlit Cloud runtime is needed for visitors.
 
-Do not add a database, hosted backend, or external AI service unless measurements justify it.
+**Local research mode:** Python/Streamlit works with verified research artifacts but is not advertised as a second public host. A database, private artifact service or full Python web backend would require measured needs and an explicit privacy/resource review, not automatic deployment.
 
 ## Source quality failure behaviour
 

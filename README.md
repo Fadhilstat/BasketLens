@@ -42,20 +42,22 @@ The application also generates this decision brief dynamically from validated ru
 
 ## What the dashboard lets you do
 
-| Screen | Why it matters |
+The supported public experience is the [BasketLens Vercel dashboard](https://basketlens-fadhil-9768s-projects.vercel.app/). It uses audited aggregate-only data and does not mine the official workbook in visitors' browsers.
+
+| Public Vercel screen | Available interaction |
 | --- | --- |
-| **Sales overview** | See eligible merchandise activity, basket composition, historical product ranking, and a concrete analyst decision brief. |
-| **Association explorer** | Search products and SKUs, filter by confidence evidence and lift, inspect interpretable pair cards, access the filtered rule table and optional network. |
-| **Build a basket** | Construct an example set of products and explore later-period evidence-ranked candidates with CSV export. |
-| **Data quality & methodology** | Inspect exclusions, invoice quarantine, chronological validation, source scope, and analytical limitations. |
+| **Research overview** | Inspect historical basket KPIs, switch earlier training/later holdout evidence and review a controlled-test hypothesis. |
+| **Rule Explorer** | Search 1,500 published associations by SKU/name, filter using training evidence and examine descriptive later-period counts. |
+| **Example Basket Builder** | Select up to three published products and view matching historical candidates. It is not checkout or a causal recommender. |
+| **Methodology** | Review exclusions, data provenance, limitations and source links. |
 
-The public Streamlit app uses a **checksum-verified aggregate-only exhibit**. Raw source workbooks, customer IDs, invoice IDs and transaction-level records are not published. Public hosted access should be checked from an anonymous browser before social promotion.
+The Python/Streamlit application at `app/streamlit_app.py` remains a **local research workbench** with deeper analysis and exports, not an actively supported public Streamlit Cloud demo. Public pages do not expose raw invoices, customer IDs or transaction rows.
 
-## Portfolio frontend for Vercel (M6.3)
+## Public deployment and release verification
 
-The `site/` folder provides a separate, recruiter-first portfolio dossier with responsive editorial design, an accessible train/holdout comparison, and links to the complete Streamlit research workbench. The frontend is a **read-only analytical companion** with an interactive published Rule Explorer. It does not replace Python mining, load raw customer information, or claim conversion or revenue uplift.
+**Vercel is the sole maintained public frontend.** It builds static `site/` assets from GitLab `main` (Root Directory `site`, output `dist`). [GitHub](https://github.com/Fadhilstat/BasketLens) is the reviewed portfolio mirror. Rule Explorer and Basket Builder share one browser-side audited dataset request.
 
-To test it locally: `npm --prefix site test` and `npm --prefix site run build`. The prebuilt `site/dist/` directory can be deployed as a static Vercel project with **Root Directory = site**. Vercel production is deployed from GitLab `main` to [BasketLens portfolio](https://basketlens-fadhil-9768s-projects.vercel.app/) (deployment `dpl_33yyNrDmzfaFU7jJfMg7m91GbbTG`, status READY). Anonymous access PASSED an external Chromium guest check on 2026-10-10 (HTTP 200, desktop 1440 px, mobile 390 px, and narrow mobile 320 px; tabs, keyboard, and overflow). [View verified CI evidence](https://gitlab.com/fadhilrusydih/basketlens/-/jobs/17080255194). The separate Streamlit workbench retains its own access/interaction gate. See [Vercel frontend contract](docs/vercel-frontend.md).
+Run `npm --prefix site test` and `npm --prefix site run build` locally. GitLab CI checks browser behavior and the anonymous production experience. The live [release manifest](https://basketlens-fadhil-9768s-projects.vercel.app/release.json) publishes the deployed Git SHA, public exhibit fingerprint and rule count. Compare its **full `gitSha` with current GitLab `main`** rather than relying on an old deployment identifier or READY badge. See [publication checklist](docs/publication-readiness.md) and [Vercel frontend contract](docs/vercel-frontend.md).
 
 ## Reproducible architecture
 
@@ -69,7 +71,8 @@ Official UCI Online Retail II XLSX
    -> later confidence, lift and uncertainty diagnostics
    -> independently verified artifact bundle
    -> aggregate-only, SHA-256-checked public exhibit
-   -> Streamlit decision brief and research dashboard
+   -> local Python/Streamlit analytical workbench
+   -> aggregate-only static Vercel Explorer and Basket Builder
 ~~~
 
 **Core stack:** Python, Pandas, NumPy, SciPy, mlxtend, Plotly, Streamlit, Pytest, Chromium/Playwright, GitLab CI and GitHub Actions.
@@ -103,7 +106,7 @@ python scripts/check_public_demo.py
 python -m pip check
 ~~~
 
-GitHub Actions runs source compilation, unit tests, dependency checks and public-exhibit verification. GitLab merge-request CI additionally downloads the full official dataset, checks conflict policy, runs pairwise and FP-Growth validations, checks aggregate exhibit parity and executes real Streamlit browser tests in desktop/mobile viewports. Review actual successful pipeline results instead of treating CI configuration as proof.
+GitHub Actions tests Python research code and the public frontend. GitLab MRs retain mandatory unit, frontend/browser and Vercel guest smoke tests. The expensive UCI download, pairwise/FP-Growth full-source numerical audit, conflict check and Streamlit research QA run automatically only for data, analytics, research-test or CI changes. A docs/presentation-only MR retains a **manual, non-blocking** full audit. Confirm the actual jobs and SHA rather than inferring the audit ran from a green pipeline.
 
 ## Limitations and next step
 
@@ -134,24 +137,20 @@ Application code: [MIT](LICENSE).
 
 ## Sharing this portfolio
 
-The M6.2 release package contains exactly three consulting slides as 1920 x 1080 PNG files, an editable PowerPoint and a caption ready for review. These binary publication assets are delivered separately rather than checked into the source repo. See the [three-slide narrative](docs/social/three-slide-story.md), [LinkedIn post](docs/social/linkedin-post.md) and [publication readiness checklist](docs/publication-readiness.md).
+Share the [guest-verified Vercel dashboard](https://basketlens-fadhil-9768s-projects.vercel.app/) and the source case study, not an unverified Streamlit Cloud URL. The M6.2 publication kit contains three consulting slides as separate 1920 x 1080 PNGs and an editable deck, not binaries committed to Git. See the [three-slide narrative](docs/social/three-slide-story.md), [LinkedIn copy](docs/social/linkedin-post.md) and [publication checklist](docs/publication-readiness.md).
 
-The application has passed source CI and simulated public-data browser QA. **This is not proof of anonymous Streamlit Community Cloud access.** Verify the hosted app in a logged-out incognito window before sharing it.
-
-
-**Hosted workbench limitation (2026-10-10):** the separate Streamlit URL did not load the required dashboard content for a fresh anonymous visitor on desktop or mobile (GitLab probe [17080255195](https://gitlab.com/fadhilrusydih/basketlens/-/jobs/17080255195)). The cause is not yet established; do not promise this hosted deep dive to public viewers. The audited Python source, data contracts and methodology remain reproducible from the repository. The public Vercel dossier passed independent guest QA.
-
+Historical issue: the former Streamlit hosted URL failed anonymous QA on 2026-10-10 ([GitLab evidence](https://gitlab.com/fadhilrusydih/basketlens/-/jobs/17080255195)). The local Python/Streamlit source remains reproducible, but that failed public URL is not promoted. The later M7.3 Vercel main guest/provenance checks passed.
 
 ## M6.5 dashboard-style portfolio experience
 
-The public Vercel front door has a dedicated **retail intelligence dashboard** layout rather than a generic case-study page: responsive research navigation, source-verified KPI tiles, training/holdout comparison, product-pair diagram, methods and a controlled-test decision brief. The Python/Streamlit analysis remains the reproducible research engine and is not replaced by a static frontend. The Vercel deployment should be checked again as an anonymous guest after the M6.5 merge before claiming that the redesign is live.
+The public Vercel front door has a dedicated **retail intelligence dashboard** layout rather than a generic case-study page: responsive research navigation, source-verified KPI tiles, training/holdout comparison, product-pair diagram, methods and a controlled-test decision brief. The Python/Streamlit analysis remains the reproducible research engine and is not replaced by a static frontend. The M6.5 redesign is historical; M7.3 subsequently passed production guest and exact-commit verification. Recheck each new release.
 
 
 ## M6.6: Rule Explorer on Vercel
 
 The production-facing dashboard now exposes an interactive explorer for the **1,500 training-selected public rules**. Visitors can search stock codes or product names, filter the earlier-period training lift and co-purchase count, distinguish one- and two-product antecedents, and inspect later-period observational hits/fires. Results never rank or filter based on later-period performance. The interface includes genuine empty/error/retry states and progressive display for mobile readability.
 
-The browser receives only whitelisted aggregate rule fields derived at build time from a SHA256-verified copy of `data/public_demo/basketlens_public_v1.b64`. No raw UCI invoices or personal identifiers are served. The canonical artifact remains under `data/public_demo/`, and site build CI rejects divergent hashes. Commands: `npm --prefix site test`, `npm --prefix site run build`, `python site/tests/explorer_browser_smoke.py`. The live URL should be treated as M6.6 only after post-merge anonymous guest CI passes.
+The browser receives only whitelisted aggregate rule fields derived at build time from a SHA256-verified copy of `data/public_demo/basketlens_public_v1.b64`. No raw UCI invoices or personal identifiers are served. The canonical artifact remains under `data/public_demo/`, and site build CI rejects divergent hashes. Commands: `npm --prefix site test`, `npm --prefix site run build`, `python site/tests/explorer_browser_smoke.py`. Later releases, including M7.3, passed post-merge anonymous production QA for the Rule Explorer.
 
 
 ## M6.7: Basket Builder (example, not checkout)

@@ -1,10 +1,10 @@
-# M6.3 | BasketLens public portfolio companion
+# BasketLens | Public Vercel frontend contract
 
 ## Decision and scope
 
-This is a small, separate, static Vercel-compatible reader experience. The authoritative Python analytics application and the original Streamlit interface remain untouched. The new `site/` surface is a non-sensitive, aggregate-only *case study*, not an interactive replacement for the dashboard. A cleanly separated public front door makes the project easier for a recruiter or business stakeholder to evaluate without waiting on historical dataset processing.
+BasketLens publicly serves a **static, interactive retail intelligence dashboard** from `site/` on Vercel. M6.3 first introduced the companion, but it now includes the earlier/later comparison, a searchable 1,500-rule Explorer and a hypothetical Basket Builder. It serves only reviewed aggregate historical evidence, with no invoice-level queries or live model inference.
 
-The dossier reflects the existing BasketLens visual direction (forest green, restrained paper background, editorial hierarchy), rather than importing a generic template or rebranding the research. It has only one meaningful interactive visualization: a keyboard-operated earlier/later evidence comparison.
+The Python/Streamlit workbench in `app/streamlit_app.py` is kept for local reproducibility, **not** an actively maintained public Streamlit Cloud app. GitLab `main` is the canonical source and GitHub is the public code mirror. The restrained pine-and-paper design remains project-specific.
 
 ## Verified input facts
 
@@ -18,16 +18,16 @@ No actual experiment was conducted. Association confidence is not causal convers
 - The two period tabs update confidence, lift, counts, bar width, descriptive copy and progressbar accessible values. ArrowLeft/ArrowRight/Home/End work without a mouse.
 - The copy-evidence action uses the native clipboard API when available, with useful fallback text if copying is denied.
 - Native `details` show the data exclusions.
-- External source, dataset and original application links are real. The original Streamlit app is marked as guest-access unverified.
+- Public source links target the official UCI dataset, GitHub case study and research code. No hosted Streamlit Cloud URL is promised as a second public demo.
 - Responsive at 320, 390, 768, 1024 and 1440 px with no document overflow in Chromium. Reduced-motion and visible focus styles are included.
 
 ## Architecture and deployment
 
 - Source: `site/index.html` (self-contained HTML, CSS and JS for predictable static delivery)
-- Build: `node site/scripts/build.mjs` copies the audited entrypoint to `site/dist/`
+- Build: `node site/scripts/build.mjs` emits audited static HTML/JS, `explorer.v1.json`, Basket Builder modules and the public `release.json` commit fingerprint under `site/dist/`
 - Tests: Node built-in test runner and Playwright Chromium smoke
 - Vercel: Hobby project linked to GitLab source `fadhilrusydih/basketlens`, root directory `site`, framework Other, Node 22, output `dist`, committed `vercel.json`; GitHub remains the public mirror
-- No environment variables, user login, server functions, database or external trackers
+- No application secrets, login, server functions, database or external trackers. The Vercel Git build uses platform `VERCEL_GIT_COMMIT_SHA`, while GitLab CI uses `CI_COMMIT_SHA` for exact-source evidence.
 - No new ML inference, data upload or on-request Python mining
 - Original app: `app/streamlit_app.py` remains the complete analytical research workbench
 
@@ -35,17 +35,18 @@ This static approach is intentionally smaller than Next.js. If portfolio traffic
 
 ## Publication gate
 
-A passing local/CI build is not evidence of a live Vercel deployment. A personal Vercel project and anonymous production URL must be independently verified before it is announced on LinkedIn. In particular, verify links, the data toggle, keyboard access, mobile overflow, and Streamlit guest access status. The GitLab source of truth and GitHub public mirror should match before production goes live.
+A build PASS or deployment READY alone does not prove public availability. Before promotion, independently test signed-out navigation, train/holdout tabs, Explorer and Basket Builder, keyboard and mobile behavior, then compare the public `release.json` SHA with GitLab `main` and confirm reviewed GitHub mirror parity. The retired hosted Streamlit URL is not a release gate.
 
 ## Rollback
 
-If the site release causes problems, disable the linked Vercel project or revert the site change in Git; the original Streamlit analytical app is unchanged and remains the fallback. Keep source/data privacy audits intact.
+If the static site regresses, redeploy a previously tested READY Vercel release or revert the scoped GitLab change through a reviewed MR, then rerun the anonymous guest/provenance checks. The local Streamlit research workbench is not a public failover. No database migration is required.
 
 
 ## Deployment evidence (2026-10-10)
 
-The portfolio front door is now deployed from GitLab `fadhilrusydih/basketlens`, branch `main`, commit `3cf2ca5`, via connected Vercel project `prj_BiqgK3ZnFN9vKURIftb5m1dxB8wF`. The production URL is https://basketlens-fadhil-9768s-projects.vercel.app/ and Vercel reported READY after cloning and running the declared build. GitLab remains source of truth; GitHub `Fadhilstat/BasketLens` is the portfolio mirror. Node is pinned to major version 22 to prevent automatic major upgrades. Production authentication is disabled while preview authentication stays enabled. Signed-out guest interaction is a separate CI release gate and must not be inferred from READY.
+**Historical M6.3 checkpoint:** the original GitLab `main` commit `3cf2ca5` deployed on 2026-10-10. This historical SHA is not the current production target.
 
+**Verified M7.3 checkpoint (2026-10-11):** GitLab main `54dd759c40d364214223de2f25b2f81a03b63adb`, Vercel production `dpl_3yoPq1manXE6926wXximwnYzzw1j` READY, [GitLab pipeline 2935480963](https://gitlab.com/fadhilrusydih/basketlens/-/pipelines/2935480963) SUCCESS and [GitHub Actions 38126462439](https://github.com/Fadhilstat/BasketLens/actions/runs/38126462439) SUCCESS. Public `release.json` matched the canonical SHA and approved exhibit fingerprint. After a newer deployment, establish its identity from the live [release manifest](https://basketlens-fadhil-9768s-projects.vercel.app/release.json) and current GitLab main.
 
 ## Anonymous release proof
 
@@ -54,7 +55,7 @@ GitLab CI job https://gitlab.com/fadhilrusydih/basketlens/-/jobs/17080255194 use
 
 ## Public CTA correction
 
-The separate Streamlit hosted guest test failed to load its dashboard on desktop/mobile in GitLab job 17080255195. The Vercel dossier therefore replaces its secondary hero CTA with the accessible GitHub consulting case study. Publication remains evidence-first: the Vercel case study is independently accessible, while deeper hosted Streamlit exploration is an open operational issue.
+Historical Streamlit hosted guest QA failed in GitLab job 17080255195. The public Vercel site points visitors to the reproducible GitHub case study, not that retired hosted URL. Python/Streamlit source remains available for local analysis.
 
 
 ## M6.5 design decision: retail intelligence dashboard

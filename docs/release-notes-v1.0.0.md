@@ -1,10 +1,10 @@
 # BasketLens v1.0.0 | Release candidate notes
 
-Status: DRAFT. The Vercel portfolio front door is guest-verified, but this draft does not publish a tag or GitHub Release, nor verify the separate Streamlit workbench. Review the [guest access checklist](publication-readiness.md) before publishing a release.
+Status: **DRAFT, NOT PUBLISHED**. This candidate note is not evidence that a `v1.0.0` tag or GitHub Release exists. Review the [Vercel guest checklist](publication-readiness.md) before any release. The Python/Streamlit workbench is local reproducible code, not a second hosted public demo.
 
 ## Highlights
 
-- Public Vercel editorial research case study, guest-verified at desktop/mobile, with reproducible Streamlit application source (separate hosted workbench guest access not yet passing).
+- Guest-verified static Vercel intelligence dashboard with train/holdout tabs, Rule Explorer, example Basket Builder and reproducible local Python/Streamlit research source.
 - 1,067,371 audited UCI Online Retail II source lines, resulting in 40,280 eligible baskets.
 - FP-Growth association analysis on earlier orders and descriptive chronological holdout diagnostics.
 - A privacy-safe, SHA-256-verified public exhibit of 1,500 training-selected rules.
@@ -13,6 +13,6 @@ Status: DRAFT. The Vercel portfolio front door is guest-verified, but this draft
 No incremental revenue, conversion, margin or profit effects are measured. The data describe retail transactions collected from 2009 to 2011.
 
 Public portfolio: https://basketlens-fadhil-9768s-projects.vercel.app/
-Research dashboard (separate access gate): https://basketlens-retail.streamlit.app/
+Local research workbench source: https://github.com/Fadhilstat/BasketLens/blob/main/app/streamlit_app.py (not a maintained public Streamlit Cloud URL)
 Repository: https://github.com/Fadhilstat/BasketLens
 UCI original data: https://archive.ics.uci.edu/dataset/502/online+retail+ii

@@ -4,9 +4,12 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urlsplit
+from urllib.request import Request, urlopen
 
 DEFAULT_URL = "https://basketlens-fadhil-9768s-projects.vercel.app/"
 ALLOWED_HOSTS = {
@@ -179,15 +182,55 @@ def check_page(page, url: str) -> dict:
             "dashboard": "redesigned" if dashboard else "previous_production"}
 
 
+EXPECTED_EXHIBIT_SHA256 = "5303df81bb5d8c5c4eb452a774d1c9d42233ff9bf56d6319021eefc6dfd69b20"
+
+
+def validate_release_provenance(payload: object, expected_sha: str) -> dict:
+    if not re.fullmatch(r"[0-9a-f]{40}", expected_sha):
+        raise ValueError("Expected source SHA must be a full 40-character lowercase Git SHA")
+    if not isinstance(payload, dict) or payload.get("schema") != "basketlens.release-provenance.v1":
+        raise AssertionError("Missing BasketLens release provenance contract")
+    if payload.get("source") != "vercel-git" or payload.get("gitSha") != expected_sha:
+        raise AssertionError("Production source SHA does not match GitLab main")
+    if payload.get("exhibitSha256") != EXPECTED_EXHIBIT_SHA256 or payload.get("ruleCount") != 1500:
+        raise AssertionError("Production published data fingerprint or rule count changed")
+    return {"status": "PASS", "gitSha": expected_sha, "exhibitSha256": EXPECTED_EXHIBIT_SHA256}
+
+
+def verify_deployed_provenance(url: str, expected_sha: str, timeout_seconds: int = 120) -> dict:
+    # The GitLab main pipeline and Vercel Git build start independently.
+    # Retry the public alias for a bounded time instead of reporting a deployment race.
+    deadline = time.monotonic() + timeout_seconds
+    last_error = "not available"
+    while True:
+        try:
+            request = Request(url.rstrip("/") + "/release.json", headers={
+                "Accept": "application/json", "Cache-Control": "no-cache",
+            })
+            with urlopen(request, timeout=12) as response:
+                if response.status != 200:
+                    raise AssertionError("Release manifest did not return HTTP 200")
+                body = response.read(4097)
+            if len(body) > 4096:
+                raise AssertionError("Release manifest exceeded size limit")
+            return validate_release_provenance(json.loads(body), expected_sha)
+        except (OSError, ValueError, AssertionError) as exc:
+            last_error = type(exc).__name__ if isinstance(exc, OSError) else str(exc)[:100]
+        if time.monotonic() >= deadline:
+            raise AssertionError("Vercel release provenance not verified: " + last_error)
+        time.sleep(min(5, max(0, deadline - time.monotonic())))
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--url", default=DEFAULT_URL)
     parser.add_argument("--report", type=Path, default=Path("reports/vercel-guest"))
+    parser.add_argument("--expected-sha", default=None, help="GitLab main commit required in production")
     args = parser.parse_args()
     url = clean_url(args.url)
     args.report.mkdir(parents=True, exist_ok=True)
     report = {"url": url, "at_utc": datetime.now(timezone.utc).isoformat(),
-              "status": "FAIL", "viewports": []}
+              "status": "FAIL", "viewports": [], "provenance": {"status": "NOT_RUN"}}
     try:
         from playwright.sync_api import sync_playwright
         with sync_playwright() as playwright:
@@ -216,8 +259,14 @@ def main() -> int:
     except Exception as exc:
         report["viewports"].append({"viewport": "setup", "status": "FAIL",
                                      "reason": type(exc).__name__})
+    if args.expected_sha:
+        try:
+            report["provenance"] = verify_deployed_provenance(url, args.expected_sha)
+        except (OSError, ValueError, AssertionError) as exc:
+            report["provenance"] = {"status": "FAIL", "reason": str(exc)[:240]}
     report["status"] = ("PASS" if len(report["viewports"]) == len(VIEWPORTS)
                         and all(v["status"] == "PASS" for v in report["viewports"])
+                        and (not args.expected_sha or report["provenance"]["status"] == "PASS")
                         else "FAIL")
     (args.report / "summary.json").write_text(
         json.dumps(report, indent=2) + "\n", encoding="utf-8")

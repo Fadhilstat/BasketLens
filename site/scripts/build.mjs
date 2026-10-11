@@ -4,6 +4,7 @@ import { existsSync } from 'node:fs';
 import { copyFile, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { gunzipSync } from 'node:zlib';
+import { buildProvenance } from './provenance.mjs';
 
 // The source is the audited aggregate-only public exhibit, not UCI invoice data.
 const root = resolve(import.meta.dirname, '..');
@@ -112,5 +113,7 @@ await Promise.all([
   copyFile(resolve(root, 'basket-matcher.mjs'), resolve(target, 'basket-matcher.mjs')),
   copyFile(resolve(root, 'basket-builder.mjs'), resolve(target, 'basket-builder.mjs')),
   writeFile(resolve(target, 'explorer.v1.json'), JSON.stringify(output) + '\n', 'utf8'),
+  writeFile(resolve(target, 'release.json'),
+    JSON.stringify(buildProvenance(process.env, actualHash, output.ruleCount)) + '\n', 'utf8'),
 ]);
 console.log(`Built verified BasketLens explorer: ${output.ruleCount} rules, source SHA256 ${actualHash}`);

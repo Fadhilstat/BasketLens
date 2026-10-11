@@ -111,14 +111,9 @@ hosted_portfolio_smoke:
   script:
     - |
       if [ "${CI_COMMIT_BRANCH:-}" = "${CI_DEFAULT_BRANCH:-}" ]; then
-        python site/tests/hosted_smoke.py \\
-          --url https://basketlens-fadhil-9768s-projects.vercel.app/ \\
-          --report reports/vercel-guest \\
-          --expected-sha "$CI_COMMIT_SHA"
+        python site/tests/hosted_smoke.py --url https://basketlens-fadhil-9768s-projects.vercel.app/ --report reports/vercel-guest --expected-sha "$CI_COMMIT_SHA"
       else
-        python site/tests/hosted_smoke.py \\
-          --url https://basketlens-fadhil-9768s-projects.vercel.app/ \\
-          --report reports/vercel-guest
+        python site/tests/hosted_smoke.py --url https://basketlens-fadhil-9768s-projects.vercel.app/ --report reports/vercel-guest
       fi
   artifacts:
     when: always

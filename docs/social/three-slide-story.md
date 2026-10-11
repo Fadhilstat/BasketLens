@@ -31,3 +31,10 @@ No causal revenue, conversion or profit uplift has been measured. Data are histo
 Alt text: A three-stage consulting recommendation and a prominent warning that no incremental commercial impact was measured.
 
 Traceability: [methodology](../methodology.md), [case study](../portfolio-case-study.md), [guest check](../publication-readiness.md).
+
+
+## M7.5 publication export checkpoint (2026-10-11)
+
+A separate M7.5 version was exported for this continuation run, with exactly three 1920x1080 PNGs, one editable PPTX, alt text and a concise LinkedIn caption. The named files are \`BasketLens_M75_01.png\`, \`BasketLens_M75_02.png\`, \`BasketLens_M75_03.png\`, and \`BasketLens_M75_Consulting_Deck.pptx\`. They are delivered as a downloadable chat artifact under \`BasketLens_M75_LinkedIn_Pack.zip\`, **not** committed to the source repository and **not** a replacement for the previously delivered M6.2 package.
+
+The M7.5 story retains the three beats above: audited source scale; the training-selected Pink Polkadot / Red Retrospot pairing checked on a later holdout; and the recommendation to run a margin- and inventory-gated controlled test, without asserting causal uplift. Bar graphics compare 63.1% and 67.1% confidence on a common 0-100% scale. The 279 of 416 later-basket count is explicitly descriptive. Slide notes cite the canonical UCI case study. A future agent cannot assume availability of earlier conversation ZIP files; request the owner to reattach the pack before modifying binary assets.

@@ -10,7 +10,7 @@ This checklist is the authoritative distinction between source quality and publi
 
 ## Mandatory Vercel guest check for each new public release
 
-1. Open **https://basketlens-fadhil-9768s-projects.vercel.app/** in a signed-out incognito browser. Confirm HTTP 200, correct dashboard and no authentication gate.
+1. Open **https://basketlens-fadhil-9768s-projects.vercel.app/** in a signed-out incognito browser. Confirm HTTP 200, the correct dashboard and no login prompt or Vercel authentication gate.
 2. Exercise Earlier training / Later holdout tabs with pointer and keyboard. Confirm numbers match the [case study](portfolio-case-study.md).
 3. Search and filter Rule Explorer, then use Basket Builder to load SKU 22386 and inspect the 85099B candidate. Later co-occurrence must never be described as incremental uplift.
 4. Check desktop, mobile and narrow-mobile layouts, navigation, methodology links and absence of horizontal overflow.

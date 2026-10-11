@@ -25,7 +25,7 @@ test('public-facing documentation uses Vercel rather than retired Streamlit Clou
 
 test('release instructions reflect exact-commit provenance and selective UCI audit', () => {
   assert.ok(read('README.md').includes(publicUrl + 'release.json'));
-  assert.match(read('docs/publication-readiness.md'), /current GitLab/);
+  assert.match(read('docs/publication-readiness.md'), /\/commits\/main/);
   assert.match(read('docs/verification.md'), /full-source quality gate \(selective\)/);
   assert.match(read('docs/architecture.md'), /Supported public deployment/);
   assert.match(read('docs/vercel-frontend.md'), /VERCEL_GIT_COMMIT_SHA/);

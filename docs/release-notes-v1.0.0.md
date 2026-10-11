@@ -1,6 +1,6 @@
 # BasketLens v1.0.0 | Release candidate notes
 
-Status: **DRAFT, NOT PUBLISHED**. This candidate note is not evidence that a `v1.0.0` tag or GitHub Release exists. Review the [Vercel guest checklist](publication-readiness.md) before any release. The Python/Streamlit workbench is local reproducible code, not a second hosted public demo.
+Status: DRAFT, NOT PUBLISHED. This document does not publish a tag or GitHub Release; `v1.0.0` remains a candidate rather than an issued release. Review the [Vercel guest checklist](publication-readiness.md) before any release. The Python/Streamlit workbench is local reproducible code, not a second hosted public demo.
 
 ## Highlights
 

@@ -182,3 +182,12 @@ Source-of-truth at start: GitLab main `54dd759c`, GitHub mirror `d2f374a2`, post
 ## M7.4 quota-blocked GitLab runner, cross-platform smoke gate
 
 Canonical GitLab MR !26 source `0cbb82d4` could not run `public_ui_smoke`: initial CI job `17091925495` failed `stuck_pending_no_matching_runners` without ever starting, and a scoped retry `17092856820` failed immediately `ci_quota_exceeded`. All other required GitLab MR jobs previously passed; local 27 Node / 4 Python publication tests passed at the branch SHA. To retain actual Chromium coverage without using a VPS, the same browser suite was attached as pull-request-only steps to the existing GitHub Actions Python job, reusing its dependencies and imposing a 25-minute maximum. There are no data or frontend runtime changes. Do not claim GitLab pipeline PASS or merge before the exact-head GitHub browser and site steps complete, mirror parity is verified and Vercel provenance/guest state remains sound. Read RUN_STATE M7.4 incident and final NEXT_ACTION.
+
+
+## M7.5 LinkedIn publication pack and recoverability
+
+M7.4 is already merged: GitLab main \`b36a1e8a\`, GitHub main \`09198cd5\`, Vercel READY and /release.json matches GitLab. GitHub PR Chromium suite succeeded; GitLab main CI failed before execution due to exhausted quota, not an observed app regression. No open MR/PR at M7.5 recovery. Earlier Windows worktrees and existing M6.2 deck must remain untouched.
+
+A new, separate M7.5 package was generated for posting: three evidence-led 1920x1080 PNGs, editable PPTX with speaker note sources, LinkedIn caption, alt text, QA statement and reproducible slide source. It is a conversation download, not a binary committed to the repository; retain or reattach the ZIP for future work. Source metrics come from docs/portfolio-case-study.md. Use the Vercel-only public site and avoid stating increased sales or causal uplift. The old M6.2 package is not replaced.
+
+Scope of this checkpoint is only continuity and docs/social/three-slide-story.md. No data, model, runtime, CI YAML, VPS, containers, API or UI logic changed. Check actual exact-head GitHub CI/Chromium and file parity before merge, and follow RUN_STATE M7.5 NEXT_ACTION.

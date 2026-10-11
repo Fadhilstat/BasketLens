@@ -23,7 +23,11 @@ def fixture() -> dict:
             "joint": max(1, 600 - number // 3), "confidence": .4,
             "lift": 1.5, "fires": 0, "hits": 0, "holdoutConfidence": None, "holdoutLift": None,
         })
-    return {"schema": "basketlens.rule-explorer.v1", "exhibitSha256": "a" * 64,
+    # This fixture uses the approved metadata contract but synthetic rule rows.
+    # It is for UI behavior only, never analytical or checksum verification.
+    return {"schema": "basketlens.rule-explorer.v1",
+            "exhibitSha256": "5303df81bb5d8c5c4eb452a774d1c9d42233ff9bf56d6319021eefc6dfd69b20",
+            "cohort": {"baskets": 40280, "earlier": 32224, "later": 8056},
             "ruleCount": len(rules), "rules": rules}
 
 

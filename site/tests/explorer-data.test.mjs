@@ -48,3 +48,12 @@ test('canonical exhibit path resolves within repository and matches site mirror'
   assert.equal(readFileSync(siteMirror, 'utf8').trim(), readFileSync(canonical, 'utf8').trim(),
     'Public site mirror differs from canonical data');
 });
+test('browser pins the audited exhibit fingerprint and chronological cohort', () => {
+  const client = readFileSync(resolve(root, 'explorer.js'), 'utf8');
+  assert.ok(client.includes(`const expectedExhibitSha256 = '${data.exhibitSha256}'`));
+  assert.match(client, /payload\.exhibitSha256 !== expectedExhibitSha256/);
+  for (const [period, expected] of Object.entries(data.cohort)) {
+    assert.ok(client.includes(`payload.cohort.${period} !== ${expected}`),
+      `Browser does not pin audited cohort ${period}`);
+  }
+});
